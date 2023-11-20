@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Tutorial } from '../models/tutorial.model';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Tutorial} from '../models/tutorial.model';
 
 const baseUrl = 'http://localhost:8080/api/v1/tutorials';
 
@@ -36,6 +36,6 @@ export class TutorialService {
   }
 
   findByTitle(title: any): Observable<Tutorial[]> {
-    return this.http.get<Tutorial[]>(`${baseUrl}?title=${title}`);
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?title=${title}`);
   }
 }

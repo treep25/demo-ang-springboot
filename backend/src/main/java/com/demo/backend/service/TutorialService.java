@@ -25,7 +25,7 @@ public class TutorialService {
         return tutorialRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    public Tutorial saveTutorial(TutorialDto tutorialDto){
+    public Tutorial saveTutorial(TutorialDto tutorialDto) {
         Tutorial preSavedTutorial = Tutorial
                 .builder()
                 .title(tutorialDto.getTitle())
@@ -33,5 +33,19 @@ public class TutorialService {
                 .build();
 
         return tutorialRepository.save(preSavedTutorial);
+    }
+
+    public void deleteTutorialById(long id) {
+        getTutorialById(id);
+
+        tutorialRepository.deleteById(id);
+    }
+
+    public void deleteAllTutorials() {
+        tutorialRepository.deleteAll();
+    }
+
+    public List<Tutorial> findTutorialByTitle(String title) {
+        return tutorialRepository.findByTitle(title);
     }
 }
