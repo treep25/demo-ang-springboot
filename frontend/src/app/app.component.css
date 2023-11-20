@@ -1,0 +1,77 @@
+/* Global Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  margin-top: 20px;
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #343a40;
+}
+
+.navbar-brand {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.navbar-nav .nav-item {
+  margin-right: 10px;
+}
+
+.navbar-nav .nav-link {
+  color: #ffffff;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #adb5bd;
+}
+
+/* Page Content Styles */
+.page-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tutorials Component Styles */
+.tutorials-list {
+  list-style: none;
+  padding: 0;
+}
+
+.tutorial-item {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.tutorial-title {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.tutorial-description {
+  color: #6c757d;
+}
+
+/* Add Tutorial Component Styles */
+.add-tutorial-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .navbar-nav .nav-item {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
