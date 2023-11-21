@@ -4,7 +4,7 @@
       <input
         type="text"
         class="form-control"
-        placeholder="Search by title"
+        [placeholder]="'searchPlaceholder' | translate"
         [(ngModel)]="title"
       />
       <div class="input-group-append">
@@ -13,13 +13,13 @@
           type="button"
           (click)="searchTitle()"
         >
-          Search
+          {{ 'buttons.search' | translate }}
         </button>
       </div>
     </div>
   </div>
   <div class="col-md-6">
-    <h4>Tutorials List</h4>
+    <h4>{{ 'tutorialsList' | translate }}</h4>
     <ul class="list-group">
       <li
         class="list-group-item"
@@ -32,7 +32,7 @@
     </ul>
 
     <button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()">
-      Remove All
+      {{ 'buttons.removeAll' | translate }}
     </button>
   </div>
   <div class="col-md-6">

@@ -2,7 +2,7 @@
   <div class="submit-form">
     <div *ngIf="!submitted">
       <div class="form-group">
-        <label for="title">Title</label>
+        <label for="title">{{ 'form.title' | translate }}</label>
         <input
           type="text"
           class="form-control"
@@ -14,7 +14,7 @@
       </div>
 
       <div class="form-group">
-        <label for="description">Description</label>
+        <label for="description">{{ 'form.description' | translate }}</label>
         <input
           class="form-control"
           id="description"
@@ -24,12 +24,12 @@
         />
       </div>
 
-      <button (click)="saveTutorial()" class="btn btn-success">Submit</button>
+      <button (click)="saveTutorial()" class="btn btn-success">{{ 'form.submit' | translate }}</button>
     </div>
 
     <div *ngIf="submitted">
-      <h4>Tutorial was submitted successfully!</h4>
-      <button class="btn btn-success" (click)="newTutorial()">Add</button>
+      <h4>{{ 'form.successMessage' | translate }}</h4>
+      <button class="btn btn-success" (click)="newTutorial()">{{ 'form.addButton' | translate }}</button>
     </div>
   </div>
 </div>
