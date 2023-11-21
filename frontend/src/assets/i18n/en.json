@@ -1,0 +1,36 @@
+{
+  "navbar": {
+    "brand": "Tutorials Angular",
+    "tutorials": "Tutorials",
+    "add": "Add"
+  },
+  "buttons": {
+    "english": "English",
+    "russian": "Russian",
+    "unpublish": "UnPublish",
+    "publish": "Publish",
+    "delete": "Delete",
+    "update": "Update",
+    "removeAll": "Remove all",
+    "search": "search"
+  },
+  "form": {
+    "title": "Title",
+    "description": "Description",
+    "submit": "Submit",
+    "successMessage": "Tutorial was submitted successfully!",
+    "addButton": "Add"
+  },
+  "searchPlaceholder": "Search by title",
+  "tutorialsList": "Tutorials List",
+  "removeAll": "Remove All",
+  "titles": {
+    "title": "Title",
+    "tutorial": "Tutorial",
+    "description": "Description",
+    "status": "Status",
+    "edit": "Edit",
+    "pleaseClick": "Please click on a Tutorial...",
+    "cannotAccess": "Cannot access this Tutorial..."
+  }
+}

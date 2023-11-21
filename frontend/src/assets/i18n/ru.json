@@ -1,0 +1,36 @@
+{
+  "navbar": {
+    "brand": "Туториалы по Angular",
+    "tutorials": "Туториалы",
+    "add": "Добавить"
+  },
+  "buttons": {
+    "english": "Английский",
+    "russian": "Русский",
+    "unpublish": "UnPublish",
+    "publish": "Publish",
+    "delete": "Delete",
+    "update": "Update",
+    "removeAll": "Удалить все",
+    "search": "искать"
+  },
+  "form": {
+    "title": "Заголовок",
+    "description": "Описание",
+    "submit": "Подтвердить",
+    "successMessage": "Туториал успешно создан!",
+    "addButton": "Добавить"
+  },
+  "searchPlaceholder": "Поиск по заголовку",
+  "tutorialsList": "Список туториалов",
+  "removeAll": "Удалить всё",
+  "titles": {
+    "tutorial": "Туториал",
+    "title": "Заголовок",
+    "description": "Описание",
+    "status": "Статус",
+    "edit": "Изменить",
+    "pleaseClick": "Пожалуйста, нажмите на туториал",
+    "cannotAccess": "Нет доступа к данному туториалу"
+  }
+}
