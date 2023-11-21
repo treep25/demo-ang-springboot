@@ -6,6 +6,15 @@ body {
   padding: 0;
 }
 
+.btn-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
 .container {
   margin-top: 20px;
 }
