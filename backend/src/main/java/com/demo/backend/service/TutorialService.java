@@ -48,4 +48,15 @@ public class TutorialService {
     public List<Tutorial> findTutorialByTitle(String title) {
         return tutorialRepository.findByTitle(title);
     }
+
+    public Tutorial updateTutorialById(long id, TutorialDto tutorialDto) {
+        Tutorial tutorialById = getTutorialById(id);
+        if (!tutorialDto.getDescription().isEmpty()) {
+            tutorialById.setDescription(tutorialDto.getDescription());
+        }
+        if (!tutorialDto.getTitle().isEmpty()) {
+            tutorialById.setTitle(tutorialDto.getTitle());
+        }
+        return tutorialRepository.save(tutorialById);
+    }
 }

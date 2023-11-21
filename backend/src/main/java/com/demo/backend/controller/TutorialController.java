@@ -59,5 +59,12 @@ public class TutorialController {
 
         return ResponseEntity.ok(tutorialService.findTutorialByTitle(title));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateTutorialById(@PathVariable long id, @RequestBody TutorialDto tutorialDto) {
+        DataValidation.validateInputParamsOrElseThrowException(id);
+
+        return ResponseEntity.ok(tutorialService.updateTutorialById(id, tutorialDto));
+    }
 }
 
