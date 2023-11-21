@@ -19,9 +19,13 @@ import org.springframework.web.bind.annotation.*;
 public class TutorialController {
 
     private final TutorialService tutorialService;
+//    private final Map<Predicate<String>, BiFunction<String, TutorialService, List<Tutorial>>> searchingMap = new HashMap<>(){{
+//        put(value -> value != null && !value.isEmpty() && !value.isBlank(), (inputParam, service) -> service);
+//    }};
+
 
     @GetMapping
-    public ResponseEntity<?> getAllTutorials(){
+    public ResponseEntity<?> getAllTutorials() {
         return ResponseEntity.ok(tutorialService.getAllTutorials());
     }
 
@@ -54,8 +58,12 @@ public class TutorialController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> findTutorialByTitle(@RequestParam("title") String title) {
+    public ResponseEntity<?> findTutorialByTitle(
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "sorting_type", required = false) String sortedTypeTitle) {
         DataValidation.validateInputParamsOrElseThrowException(title);
+
 
         return ResponseEntity.ok(tutorialService.findTutorialByTitle(title));
     }
