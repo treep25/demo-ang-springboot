@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Tutorial } from 'src/app/models/tutorial.model';
-import { TutorialService } from 'src/app/services/tutorial.service';
+import {Component} from '@angular/core';
+import {Tutorial} from 'src/app/models/tutorial.model';
+import {TutorialService} from 'src/app/services/tutorial.service';
 
 @Component({
   selector: 'app-add-tutorial',
@@ -8,6 +8,7 @@ import { TutorialService } from 'src/app/services/tutorial.service';
   styleUrls: ['./add-tutorial.component.css'],
 })
 export class AddTutorialComponent {
+  isModalOpen = false;
   tutorial: Tutorial = {
     title: '',
     description: '',
@@ -18,6 +19,7 @@ export class AddTutorialComponent {
   constructor(private tutorialService: TutorialService) {}
 
   saveTutorial(): void {
+    this.openModal();
     const data = {
       title: this.tutorial.title,
       description: this.tutorial.description
@@ -30,6 +32,14 @@ export class AddTutorialComponent {
       },
       error: (e) => console.error(e)
     });
+  }
+
+  openModal(): void {
+    this.isModalOpen = true;
+  }
+
+  handleModalClose(): void {
+    this.isModalOpen = false;
   }
 
   newTutorial(): void {

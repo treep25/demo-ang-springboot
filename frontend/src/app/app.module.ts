@@ -10,6 +10,7 @@ import {AppComponent} from './app.component';
 import {AddTutorialComponent} from './components/add-tutorial/add-tutorial.component';
 import {TutorialDetailsComponent} from './components/tutorial-details/tutorial-details.component';
 import {TutorialsListComponent} from './components/tutorials-list/tutorials-list.component';
+import {ModalComponent} from './modal/modal.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -19,7 +20,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     AddTutorialComponent,
     TutorialDetailsComponent,
-    TutorialsListComponent
+    TutorialsListComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

@@ -32,4 +32,13 @@
       <button class="btn btn-success" (click)="newTutorial()">{{ 'form.addButton' | translate }}</button>
     </div>
   </div>
+  <div>
+    <button (click)="openModal()">Open Modal</button>
+    <app-modal
+      *ngIf="isModalOpen"
+      [title]="'Sample Modal'"
+      [message]="'This is a sample modal window.'"
+      (close)="handleModalClose()"
+    ></app-modal>
+  </div>
 </div>
