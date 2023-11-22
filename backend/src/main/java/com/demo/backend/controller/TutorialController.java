@@ -57,7 +57,8 @@ public class TutorialController {
     @GetMapping("/search")
     public ResponseEntity<?> findTutorialByTitle(
             @RequestParam(value = "title", required = false) String title,
-            @RequestParam(value = "description", required = false) String description) {
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "sortedType", required = false) String sortedType) {
 
 //        DataValidation.validateInputParamsOrElseThrowException(title);
 
@@ -65,6 +66,7 @@ public class TutorialController {
                 .builder()
                 .title(title)
                 .description(description)
+                .sortingType(sortedType)
                 .build();
 
         return ResponseEntity.ok(tutorialService.findTutorialByDifferentParams(searchingTutorialRequest));
@@ -75,6 +77,13 @@ public class TutorialController {
         DataValidation.validateInputParamsOrElseThrowException(id);
 
         return ResponseEntity.ok(tutorialService.updateTutorialById(id, tutorialDto));
+    }
+
+    @PatchMapping("status/{id}")
+    public ResponseEntity<?> updateTutorialStatusById(@PathVariable long id, @RequestBody boolean data) {
+        DataValidation.validateInputParamsOrElseThrowException(id);
+
+        return ResponseEntity.ok(tutorialService.updateTutorialById(id, data));
     }
 }
 
