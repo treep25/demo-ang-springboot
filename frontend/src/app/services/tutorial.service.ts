@@ -38,4 +38,8 @@ export class TutorialService {
   findByTitle(title: any): Observable<Tutorial[]> {
     return this.http.get<Tutorial[]>(`${baseUrl}/search?title=${title}`);
   }
+
+  findByDescription(description: any): Observable<Tutorial[]> {
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?description=${description}`);
+  }
 }

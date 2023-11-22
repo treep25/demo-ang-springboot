@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Tutorial } from 'src/app/models/tutorial.model';
-import { TutorialService } from 'src/app/services/tutorial.service';
+import {Component} from '@angular/core';
+import {Tutorial} from 'src/app/models/tutorial.model';
+import {TutorialService} from 'src/app/services/tutorial.service';
 
 @Component({
   selector: 'app-tutorials-list',
@@ -12,6 +12,7 @@ export class TutorialsListComponent {
   currentTutorial: Tutorial = {};
   currentIndex = -1;
   title = '';
+  description = '';
 
   constructor(private tutorialService: TutorialService) {}
 
@@ -55,6 +56,19 @@ export class TutorialsListComponent {
     this.currentIndex = -1;
 
     this.tutorialService.findByTitle(this.title).subscribe({
+      next: (data) => {
+        this.tutorials = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+
+  searchDescription(): void {
+    this.currentTutorial = {};
+    this.currentIndex = -1;
+
+    this.tutorialService.findByDescription(this.description).subscribe({
       next: (data) => {
         this.tutorials = data;
         console.log(data);
