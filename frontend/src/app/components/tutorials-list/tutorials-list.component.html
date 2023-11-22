@@ -16,23 +16,21 @@
           {{ 'buttons.search' | translate }}
         </button>
       </div>
-    </div>
-  </div>
-  <div class="input-group mb-3">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Search by description"
-      [(ngModel)]="description"
-    />
-    <div class="input-group-append">
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        (click)="searchDescription()"
-      >
-        {{ 'buttons.search' | translate }}
-      </button>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by description"
+        [(ngModel)]="description"
+      />
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="searchDescription()"
+        >
+          {{ 'buttons.search' | translate }}
+        </button>
+      </div>
     </div>
   </div>
   <div class="col-md-6">
@@ -50,6 +48,9 @@
 
     <button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()">
       {{ 'buttons.removeAll' | translate }}
+    </button>
+    <button class="m-3 btn btn-sm btn-danger" (click)="sortTutorialsByTitle()">
+      Sort by Title
     </button>
   </div>
   <div class="col-md-6">

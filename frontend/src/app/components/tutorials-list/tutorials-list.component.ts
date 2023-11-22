@@ -13,6 +13,7 @@ export class TutorialsListComponent {
   currentIndex = -1;
   title = '';
   description = '';
+  sortedTitleType = '';
 
   constructor(private tutorialService: TutorialService) {}
 
@@ -75,5 +76,21 @@ export class TutorialsListComponent {
       },
       error: (e) => console.error(e)
     });
+  }
+
+  toggleSortOrder(): void {
+    this.sortedTitleType = this.sortedTitleType === 'ASC' ? 'DESC' : 'ASC';
+  }
+
+  sortTutorialsByTitle(): void {
+    this.toggleSortOrder();
+    this.tutorialService.getAllSortedByTitle(this.sortedTitleType).subscribe({
+      next: (data) => {
+        this.tutorials = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+
   }
 }

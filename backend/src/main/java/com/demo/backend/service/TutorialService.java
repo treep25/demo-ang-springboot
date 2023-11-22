@@ -1,16 +1,14 @@
 package com.demo.backend.service;
 
 import com.demo.backend.model.SearchingTutorialRequest;
+import com.demo.backend.model.Status;
 import com.demo.backend.model.Tutorial;
 import com.demo.backend.model.dto.TutorialDto;
 import com.demo.backend.repository.TutorialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -25,6 +23,10 @@ public class TutorialService {
     private final Map<Predicate<SearchingTutorialRequest>, BiFunction<SearchingTutorialRequest, TutorialRepository, List<Tutorial>>> searchingMap = new HashMap<>() {{
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTitle()), (request, repository) -> repository.findByTitle(request.getTitle()));
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getDescription()), (request, repository) -> repository.findByDescription(request.getDescription()));
+        put(request -> verifyRequestParamsNotEmptyAndBlank(request.getSortingType()), (request, repository)
+                -> request.isNaturalOrderSortingType() ?
+                getAllTutorials().stream().sorted(Comparator.comparing(Tutorial::getTitle)).toList() :
+                getAllTutorials().stream().sorted(Comparator.comparing(Tutorial::getTitle).reversed()).toList());
     }};
 
     private boolean verifyRequestParamsNotEmptyAndBlank(String request) {
@@ -79,6 +81,14 @@ public class TutorialService {
         if (!tutorialDto.getTitle().isEmpty()) {
             tutorialById.setTitle(tutorialDto.getTitle());
         }
+
+        return tutorialRepository.save(tutorialById);
+    }
+
+    public Tutorial updateTutorialById(long id, boolean published) {
+        Tutorial tutorialById = getTutorialById(id);
+        tutorialById.setStatus(Status.fromBoolean(published));
+
         return tutorialRepository.save(tutorialById);
     }
 }
