@@ -1,38 +1,53 @@
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
+/* modal.component.css */
 
-.modal-content {
-  position: absolute;
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  max-height: 80vh; /* Максимальная высота вьюпорта (80% от высоты окна) */
+  width: 100%;
+  height: auto;
+}
+
+.modal-content {
+  color: black;
 }
 
 .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ccc;
+  color: black;
+}
+
+.modal-title {
+  color: black;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .modal-body {
-  padding: 10px 0;
+  color: red;
 }
 
 .modal-footer {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
   display: flex;
   justify-content: flex-end;
-  padding-top: 10px;
 }
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: black; /* Белый цвет крестика закрытия */
+  cursor: pointer;
+}
+
+/* Дополнительные стили, если необходимо */
