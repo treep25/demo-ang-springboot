@@ -1,5 +1,6 @@
 package com.demo.backend.controller;
 
+import com.demo.backend.model.SearchingTutorialRequest;
 import com.demo.backend.model.dto.TutorialDto;
 import com.demo.backend.service.TutorialService;
 import com.demo.backend.utils.DataValidation;
@@ -19,10 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class TutorialController {
 
     private final TutorialService tutorialService;
-//    private final Map<Predicate<String>, BiFunction<String, TutorialService, List<Tutorial>>> searchingMap = new HashMap<>(){{
-//        put(value -> value != null && !value.isEmpty() && !value.isBlank(), (inputParam, service) -> service);
-//    }};
-
 
     @GetMapping
     public ResponseEntity<?> getAllTutorials() {
@@ -60,12 +57,17 @@ public class TutorialController {
     @GetMapping("/search")
     public ResponseEntity<?> findTutorialByTitle(
             @RequestParam(value = "title", required = false) String title,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "sorting_type", required = false) String sortedTypeTitle) {
-        DataValidation.validateInputParamsOrElseThrowException(title);
+            @RequestParam(value = "description", required = false) String description) {
 
+//        DataValidation.validateInputParamsOrElseThrowException(title);
 
-        return ResponseEntity.ok(tutorialService.findTutorialByTitle(title));
+        SearchingTutorialRequest searchingTutorialRequest = SearchingTutorialRequest
+                .builder()
+                .title(title)
+                .description(description)
+                .build();
+
+        return ResponseEntity.ok(tutorialService.findTutorialByDifferentParams(searchingTutorialRequest));
     }
 
     @PatchMapping("/{id}")
