@@ -27,6 +27,10 @@ export class TutorialService {
     return this.http.patch(`${baseUrl}/${id}`, data);
   }
 
+  updateStatus(id: any, data: boolean): Observable<any> {
+    return this.http.patch(`${baseUrl}/status/${id}`, data);
+  }
+
   delete(id: any): Observable<any> {
     return this.http.delete(`${baseUrl}/${id}`);
   }
@@ -41,5 +45,9 @@ export class TutorialService {
 
   findByDescription(description: any): Observable<Tutorial[]> {
     return this.http.get<Tutorial[]>(`${baseUrl}/search?description=${description}`);
+  }
+
+  getAllSortedByTitle(sortedType: any): Observable<Tutorial[]> {
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?sortedType=${sortedType}`);
   }
 }
