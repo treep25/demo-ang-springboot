@@ -24,5 +24,5 @@ public class Tutorial {
     @NotBlank(message = "Description is required")
     @Size(min = 5, max = 100, message = "Description must be between 5 and 100 characters")
     private String description;
-    private boolean published;
+    private Status status = Status.PENDING;
 }
