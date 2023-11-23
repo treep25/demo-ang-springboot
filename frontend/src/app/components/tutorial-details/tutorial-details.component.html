@@ -17,6 +17,11 @@
        routerLink="/tutorials/{{ currentTutorial.id }}">
       {{ 'titles.edit' | translate }}
     </a>
+
+    <a class="badge badge-warning"
+       routerLink="/tutorials/info/{{ currentTutorial.id }}">
+      view details
+    </a>
   </div>
 </div>
 <div *ngIf="!currentTutorial">
