@@ -61,7 +61,7 @@ public class TutorialController {
             @RequestParam(value = "sortedType", required = false) String sortedType,
             @RequestParam(value = "status", required = false) String tutorialStatus) {
 
-//        DataValidation.validateInputParamsOrElseThrowException(title);
+        DataValidation.preUpdateValidationOfFields(title, description, sortedType, tutorialStatus);
 
         SearchingTutorialRequest searchingTutorialRequest = SearchingTutorialRequest
                 .builder()

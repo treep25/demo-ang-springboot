@@ -1,6 +1,10 @@
 package com.demo.backend.utils;
 
+import com.demo.backend.model.Status;
 import com.demo.backend.model.dto.TutorialDto;
+
+import java.util.List;
+import java.util.Optional;
 
 public class DataValidation {
 
@@ -10,12 +14,35 @@ public class DataValidation {
         }
     }
 
-    public static void validateInputParamsOrElseThrowException(String title) {
-        if (title == null
-                || title.isBlank()
-                || title.isEmpty()) {
-            throw new RuntimeException("Title should be string");
-        }
+    public static void preUpdateValidationOfFields(String title, String description, String sortedType, String tutorialStatus) {
+        validateParameter(title, "Invalid parameter title");
+        validateParameter(description, "Invalid parameter description");
+        validateSortingType(sortedType, "Invalid parameter sortedType [ASC, DESC]");
+        validateTutorialStatus(tutorialStatus, "Invalid parameter tutorialStatus [PENDING, PUBLISHED]");
+    }
+
+    private static void validateParameter(String parameter, String errorMessage) {
+        Optional.ofNullable(parameter)
+                .filter(p -> !p.trim().isEmpty())
+                .orElseThrow(() -> new RuntimeException(errorMessage));
+    }
+
+    private static void validateSortingType(String sortedType, String errorMessage) {
+        Optional.ofNullable(sortedType)
+                .filter(s -> !s.trim().isEmpty())
+                .filter(DataValidation::isSortingTypeValid)
+                .orElseThrow(() -> new RuntimeException(errorMessage));
+    }
+
+    private static void validateTutorialStatus(String tutorialStatus, String errorMessage) {
+        Optional.ofNullable(tutorialStatus)
+                .filter(s -> !s.trim().isEmpty())
+                .filter(s -> !Status.fromTextStatusValid(s))
+                .orElseThrow(() -> new RuntimeException(errorMessage));
+    }
+
+    private static boolean isSortingTypeValid(String sortedType) {
+        return List.of("ASC", "DESC").contains(sortedType.toUpperCase());
     }
 
     public static void validateTutorialDtoRequest(TutorialDto tutorialDto) {
