@@ -2,5 +2,10 @@ export class Tutorial {
   id?: any;
   title?: string;
   description?: string;
-  published?: boolean;
+  status?: string;
+}
+
+export enum Status {
+  PENDING = 'PENDING',
+  PUBLISHED = 'PUBLISHED'
 }
