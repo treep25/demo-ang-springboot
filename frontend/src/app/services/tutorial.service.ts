@@ -9,7 +9,8 @@ const baseUrl = 'http://localhost:8080/api/v1/tutorials';
   providedIn: 'root',
 })
 export class TutorialService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getAll(): Observable<Tutorial[]> {
     return this.http.get<Tutorial[]>(baseUrl);
@@ -17,6 +18,10 @@ export class TutorialService {
 
   get(id: any): Observable<Tutorial> {
     return this.http.get<Tutorial>(`${baseUrl}/${id}`);
+  }
+
+  getImageData(imagePath: any): Observable<ArrayBuffer> {
+    return this.http.post(`${baseUrl}/getImage`, imagePath, {responseType: 'arraybuffer'});
   }
 
   create(data: any): Observable<any> {
