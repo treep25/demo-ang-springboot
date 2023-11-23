@@ -11,17 +11,21 @@ import {AddTutorialComponent} from './components/add-tutorial/add-tutorial.compo
 import {TutorialDetailsComponent} from './components/tutorial-details/tutorial-details.component';
 import {TutorialsListComponent} from './components/tutorials-list/tutorials-list.component';
 import {ModalComponent} from './modal/modal.component';
+import {TutorialsInformationComponent} from './tutorials.information/tutorials.information.component';
+import {NgOptimizedImage} from "@angular/common";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
 @NgModule({
   declarations: [
     AppComponent,
     AddTutorialComponent,
     TutorialDetailsComponent,
     TutorialsListComponent,
-    ModalComponent
+    ModalComponent,
+    TutorialsInformationComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +38,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    NgOptimizedImage
   ],
   providers: [],
   bootstrap: [AppComponent]
