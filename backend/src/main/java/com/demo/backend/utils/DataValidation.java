@@ -15,10 +15,28 @@ public class DataValidation {
     }
 
     public static void preUpdateValidationOfFields(String title, String description, String sortedType, String tutorialStatus) {
-        validateParameter(title, "Invalid parameter title");
-        validateParameter(description, "Invalid parameter description");
-        validateSortingType(sortedType);
-        validateTutorialStatus(tutorialStatus);
+        validateOptionalParameter(title, "Invalid parameter title");
+        validateOptionalParameter(description, "Invalid parameter description");
+        validateOptionalSortingType(sortedType);
+        validateOptionalTutorialStatus(tutorialStatus);
+    }
+
+    private static void validateOptionalParameter(String parameter, String errorMessage) {
+        if (parameter != null && !parameter.trim().isEmpty()) {
+            validateParameter(parameter, errorMessage);
+        }
+    }
+
+    private static void validateOptionalSortingType(String sortedType) {
+        if (sortedType != null && !sortedType.trim().isEmpty()) {
+            validateSortingType(sortedType);
+        }
+    }
+
+    private static void validateOptionalTutorialStatus(String tutorialStatus) {
+        if (tutorialStatus != null && !tutorialStatus.trim().isEmpty()) {
+            validateTutorialStatus(tutorialStatus);
+        }
     }
 
     private static void validateParameter(String parameter, String errorMessage) {
@@ -37,7 +55,7 @@ public class DataValidation {
     private static void validateTutorialStatus(String tutorialStatus) {
         Optional.ofNullable(tutorialStatus)
                 .filter(s -> !s.trim().isEmpty())
-                .filter(s -> !Status.fromTextStatusValid(s))
+                .filter(Status::fromTextStatusValid)
                 .orElseThrow(() -> new RuntimeException("Invalid parameter tutorialStatus [PENDING, PUBLISHED]"));
     }
 
