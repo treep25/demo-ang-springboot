@@ -1,0 +1,98 @@
+/* Общие стили */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to right, #ff6361, #ffa07a);
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Стили для формы и ее элементов */
+form {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: bold;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Стили для кнопок */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(to right, #3cb371, #00fa9a);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 10px;
+  transition: background 0.3s ease-in-out;
+}
+
+button:hover {
+  background: linear-gradient(to right, #00fa9a, #3cb371);
+}
+
+/* Стили для сообщения об ошибке или успехе */
+.message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.success {
+  background-color: #4caf50;
+}
+
+.error {
+  background-color: #e74c3c;
+}
+
+/* Стили для блока с информацией */
+.info {
+  background-color: #3498db;
+}
+
+/* Анимация для кнопок */
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+button.pulse {
+  animation: buttonPulse 1s infinite;
+}
