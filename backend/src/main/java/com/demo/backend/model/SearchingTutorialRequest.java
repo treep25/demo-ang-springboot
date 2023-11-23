@@ -11,7 +11,7 @@ public class SearchingTutorialRequest {
     private String title;
     private String description;
     private String sortingType;
-
+    private String tutorialStatus;
     public boolean isNaturalOrderSortingType() {
         return sortingType.equals("ASC");
     }
