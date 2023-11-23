@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {TutorialService} from 'src/app/services/tutorial.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Tutorial} from 'src/app/models/tutorial.model';
+import {Status, Tutorial} from 'src/app/models/tutorial.model';
 
 @Component({
   selector: 'app-tutorial-details',
@@ -14,7 +14,7 @@ export class TutorialDetailsComponent {
   @Input() currentTutorial: Tutorial = {
     title: '',
     description: '',
-    published: false
+    status: Status.PENDING
   };
 
   message = '';
@@ -42,13 +42,20 @@ export class TutorialDetailsComponent {
     });
   }
 
+  whatStatus(status: boolean): Status {
+    if (status) {
+      return Status.PUBLISHED;
+    }
+    return Status.PENDING;
+  }
+
   updatePublished(data: boolean): void {
     this.message = '';
 
     this.tutorialService.updateStatus(this.currentTutorial.id, data).subscribe({
       next: (res) => {
         console.log(res);
-        this.currentTutorial.published = data;
+        this.currentTutorial.status = this.whatStatus(data);
         this.message = res.message
           ? res.message
           : 'The status was updated successfully!';

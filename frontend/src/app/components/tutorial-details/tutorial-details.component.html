@@ -10,7 +10,7 @@
     </div>
     <div>
       <label><strong>{{ 'titles.status' | translate }}:</strong></label>
-      {{ currentTutorial.published ? "Published" : "Pending" }}
+      {{ currentTutorial.status }}
     </div>
 
     <a class="badge badge-warning"
@@ -52,19 +52,19 @@
 
       <div class="form-group">
         <label><strong>{{ 'titles.status' | translate }}:</strong></label>
-        {{ currentTutorial.published ? "Published" : "Pending" }}
+        {{ currentTutorial.status}}
       </div>
     </form>
 
     <button
       class="badge badge-primary mr-2"
-      *ngIf="currentTutorial.published"
+      *ngIf="currentTutorial.status == 'PUBLISHED' "
       (click)="updatePublished(false)"
     >
       {{ 'buttons.unpublish' | translate }}
     </button>
     <button
-      *ngIf="!currentTutorial.published"
+      *ngIf="currentTutorial.status == 'PENDING'"
       class="badge badge-primary mr-2"
       (click)="updatePublished(true)"
     >
