@@ -1,10 +1,9 @@
 <div>
   <div>
-    <button (click)="openModal()">Open Modal</button>
     <app-modal
       *ngIf="isModalOpen"
-      [title]="'Sample Modal'"
-      [message]="'This is a sample modal window.'"
+      [title]="'Error occupies during the request'"
+      [message]="this.errorMessage"
       (close)="handleModalClose()"
     ></app-modal>
   </div>

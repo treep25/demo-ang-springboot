@@ -15,11 +15,11 @@ export class AddTutorialComponent {
     status: Status.PENDING
   };
   submitted = false;
+  errorMessage = '';
 
   constructor(private tutorialService: TutorialService) {}
 
   saveTutorial(): void {
-    this.openModal();
     const data = {
       title: this.tutorial.title,
       description: this.tutorial.description
@@ -30,12 +30,13 @@ export class AddTutorialComponent {
         console.log(res);
         this.submitted = true;
       },
-      error: (e) => console.error(e)
+      error: (e) => this.openModal(e)
     });
   }
 
-  openModal(): void {
+  openModal(errorMessage: string): void {
     this.isModalOpen = true;
+    this.errorMessage = errorMessage
   }
 
   handleModalClose(): void {
