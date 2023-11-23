@@ -17,8 +17,8 @@ public class DataValidation {
     public static void preUpdateValidationOfFields(String title, String description, String sortedType, String tutorialStatus) {
         validateParameter(title, "Invalid parameter title");
         validateParameter(description, "Invalid parameter description");
-        validateSortingType(sortedType, "Invalid parameter sortedType [ASC, DESC]");
-        validateTutorialStatus(tutorialStatus, "Invalid parameter tutorialStatus [PENDING, PUBLISHED]");
+        validateSortingType(sortedType);
+        validateTutorialStatus(tutorialStatus);
     }
 
     private static void validateParameter(String parameter, String errorMessage) {
@@ -27,18 +27,18 @@ public class DataValidation {
                 .orElseThrow(() -> new RuntimeException(errorMessage));
     }
 
-    private static void validateSortingType(String sortedType, String errorMessage) {
+    private static void validateSortingType(String sortedType) {
         Optional.ofNullable(sortedType)
                 .filter(s -> !s.trim().isEmpty())
                 .filter(DataValidation::isSortingTypeValid)
-                .orElseThrow(() -> new RuntimeException(errorMessage));
+                .orElseThrow(() -> new RuntimeException("Invalid parameter sortedType [ASC, DESC]"));
     }
 
-    private static void validateTutorialStatus(String tutorialStatus, String errorMessage) {
+    private static void validateTutorialStatus(String tutorialStatus) {
         Optional.ofNullable(tutorialStatus)
                 .filter(s -> !s.trim().isEmpty())
                 .filter(s -> !Status.fromTextStatusValid(s))
-                .orElseThrow(() -> new RuntimeException(errorMessage));
+                .orElseThrow(() -> new RuntimeException("Invalid parameter tutorialStatus [PENDING, PUBLISHED]"));
     }
 
     private static boolean isSortingTypeValid(String sortedType) {
