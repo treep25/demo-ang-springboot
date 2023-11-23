@@ -6,4 +6,8 @@ public enum Status {
     public static Status fromBoolean(boolean published) {
         return published ? PUBLISHED : PENDING;
     }
+
+    public static Status fromTextStatus(String published) {
+        return Status.valueOf(published.toUpperCase());
+    }
 }
