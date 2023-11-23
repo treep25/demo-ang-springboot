@@ -16,6 +16,7 @@
           {{ 'buttons.search' | translate }}
         </button>
       </div>
+
       <input
         type="text"
         class="form-control"
@@ -29,6 +30,25 @@
           (click)="searchDescription()"
         >
           {{ 'buttons.search' | translate }}
+        </button>
+      </div>
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="setStatus('PUBLISHED')"
+        >
+          Published
+        </button>
+      </div>
+
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="setStatus('PENDING')"
+        >
+          Pending
         </button>
       </div>
     </div>

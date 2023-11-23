@@ -58,7 +58,8 @@ public class TutorialController {
     public ResponseEntity<?> findTutorialByTitle(
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "sortedType", required = false) String sortedType) {
+            @RequestParam(value = "sortedType", required = false) String sortedType,
+            @RequestParam(value = "status", required = false) String tutorialStatus) {
 
 //        DataValidation.validateInputParamsOrElseThrowException(title);
 
@@ -67,6 +68,7 @@ public class TutorialController {
                 .title(title)
                 .description(description)
                 .sortingType(sortedType)
+                .tutorialStatus(tutorialStatus)
                 .build();
 
         return ResponseEntity.ok(tutorialService.findTutorialByDifferentParams(searchingTutorialRequest));

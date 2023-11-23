@@ -50,4 +50,8 @@ export class TutorialService {
   getAllSortedByTitle(sortedType: any): Observable<Tutorial[]> {
     return this.http.get<Tutorial[]>(`${baseUrl}/search?sortedType=${sortedType}`);
   }
+
+  getTutorialByStatus(status: any): Observable<Tutorial[]> {
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?status=${status}`);
+  }
 }

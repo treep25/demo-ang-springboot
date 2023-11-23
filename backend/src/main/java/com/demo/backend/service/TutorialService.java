@@ -23,6 +23,7 @@ public class TutorialService {
     private final Map<Predicate<SearchingTutorialRequest>, BiFunction<SearchingTutorialRequest, TutorialRepository, List<Tutorial>>> searchingMap = new HashMap<>() {{
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTitle()), (request, repository) -> repository.findByTitle(request.getTitle()));
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getDescription()), (request, repository) -> repository.findByDescription(request.getDescription()));
+        put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTutorialStatus()), (request, repository) -> repository.findByStatus(Status.fromTextStatus(request.getTutorialStatus())));
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getSortingType()), (request, repository)
                 -> request.isNaturalOrderSortingType() ?
                 getAllTutorials().stream().sorted(Comparator.comparing(Tutorial::getTitle)).toList() :
@@ -48,6 +49,7 @@ public class TutorialService {
                 .builder()
                 .title(tutorialDto.getTitle())
                 .description(tutorialDto.getDescription())
+                .status(Status.PENDING)
                 .build();
 
         return tutorialRepository.save(preSavedTutorial);

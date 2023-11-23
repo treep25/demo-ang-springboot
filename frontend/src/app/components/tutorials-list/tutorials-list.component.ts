@@ -79,7 +79,7 @@ export class TutorialsListComponent {
   }
 
   toggleSortOrder(): void {
-    this.sortedTitleType = this.sortedTitleType === 'ASC' ? 'DESC' : 'ASC';
+    this.sortedTitleType = this.sortedTitleType === 'DESC' ? 'ASC' : 'DESC';
   }
 
   sortTutorialsByTitle(): void {
@@ -91,6 +91,16 @@ export class TutorialsListComponent {
       },
       error: (e) => console.error(e)
     });
-
   }
+
+  setStatus(status: any): void {
+    this.tutorialService.getTutorialByStatus(status).subscribe({
+      next: (data) => {
+        this.tutorials = data;
+        console.log(data);
+      },
+      error: (e) => console.error(e)
+    });
+  }
+
 }
