@@ -3,7 +3,7 @@
     <app-modal
       *ngIf="isModalOpen"
       [title]="'Error occupies during the request'"
-      [message]="this.errorMessage"
+      [message]="errorMessage"
       (close)="handleModalClose()"
     ></app-modal>
   </div>
@@ -29,6 +29,36 @@
           required
           [(ngModel)]="tutorial.description"
           name="description"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="overview">{{ 'form.overview' | translate }}</label>
+        <textarea
+          class="form-control"
+          id="overview"
+          [(ngModel)]="tutorial.overview"
+          name="overview"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="content">{{ 'form.content' | translate }}</label>
+        <textarea
+          class="form-control"
+          id="content"
+          [(ngModel)]="tutorial.content"
+          name="content"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Image</label>
+        <input
+          type="file"
+          id="image"
+          accept="image/*"
+          (change)="onFileChange($event)"
         />
       </div>
 

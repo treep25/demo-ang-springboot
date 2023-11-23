@@ -3,6 +3,11 @@ export class Tutorial {
   title?: string;
   description?: string;
   status?: string;
+  overview?: string;
+  content?: string;
+  image?: File | null
+  imagePath?: string
+
 }
 
 export enum Status {

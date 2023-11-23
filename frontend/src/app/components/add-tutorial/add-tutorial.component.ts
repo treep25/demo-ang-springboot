@@ -20,12 +20,16 @@ export class AddTutorialComponent {
   constructor(private tutorialService: TutorialService) {}
 
   saveTutorial(): void {
-    const data = {
-      title: this.tutorial.title,
-      description: this.tutorial.description
-    };
+    const tutorialDto = new FormData();
+    tutorialDto.append('title', this.tutorial.title || '');
+    tutorialDto.append('description', this.tutorial.description || '');
+    tutorialDto.append('overview', this.tutorial.overview || '');
+    tutorialDto.append('content', this.tutorial.content || '');
+    if (this.tutorial.image) {
+      tutorialDto.append('image', this.tutorial.image, this.tutorial.image.name);
+    }
 
-    this.tutorialService.create(data).subscribe({
+    this.tutorialService.create(tutorialDto).subscribe({
       next: (res) => {
         console.log(res);
         this.submitted = true;
@@ -43,6 +47,20 @@ export class AddTutorialComponent {
     this.isModalOpen = false;
   }
 
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+
+    if (file) {
+      this.tutorial.image = file;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageDataUrl = e.target?.result as string;
+        console.log('Image data URL:', imageDataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
   newTutorial(): void {
     this.submitted = false;
     this.tutorial = {
