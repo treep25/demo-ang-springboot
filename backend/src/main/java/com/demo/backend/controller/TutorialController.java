@@ -4,12 +4,18 @@ import com.demo.backend.model.SearchingTutorialRequest;
 import com.demo.backend.model.dto.TutorialDto;
 import com.demo.backend.service.TutorialService;
 import com.demo.backend.utils.DataValidation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
 
 
 @CrossOrigin(origins = "http://localhost:8081")
@@ -34,8 +40,21 @@ public class TutorialController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveTutorial(@Valid @RequestBody TutorialDto tutorialDto) {
-        return ResponseEntity.ok(tutorialService.saveTutorial(tutorialDto));
+    public ResponseEntity<?> saveTutorial(@RequestParam("title") String title,
+                                          @RequestParam("description") String description,
+                                          @RequestParam("overview") String overview,
+                                          @RequestParam("content") String content,
+                                          @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+
+        TutorialDto build = TutorialDto
+                .builder()
+                .image(image)
+                .description(description)
+                .content(content)
+                .overview(overview)
+                .title(title)
+                .build();
+        return ResponseEntity.ok(tutorialService.saveTutorial(build));
     }
 
     @DeleteMapping("/{id}")
@@ -86,6 +105,21 @@ public class TutorialController {
         DataValidation.validateInputParamsOrElseThrowException(id);
 
         return ResponseEntity.ok(tutorialService.updateTutorialById(id, data));
+    }
+
+    //todo fix it
+    @PostMapping("getImage")
+    public ResponseEntity<byte[]> getImage(@RequestBody String imagePath) throws IOException {
+        imagePath = "backend/images/1700743629279_photo_2023-11-14_11-29-25.jpg";
+
+        ClassPathResource resource = new ClassPathResource(imagePath);
+
+        byte[] imageBytes = Files.readAllBytes(resource.getFile().toPath());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 }
 

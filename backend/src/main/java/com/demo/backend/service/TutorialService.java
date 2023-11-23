@@ -6,8 +6,14 @@ import com.demo.backend.model.Tutorial;
 import com.demo.backend.model.dto.TutorialDto;
 import com.demo.backend.repository.TutorialRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
@@ -19,6 +25,8 @@ import java.util.stream.StreamSupport;
 public class TutorialService {
 
     private final TutorialRepository tutorialRepository;
+    @Value("${upload.path}")
+    private String uploadPath;
 
     private final Map<Predicate<SearchingTutorialRequest>, BiFunction<SearchingTutorialRequest, TutorialRepository, List<Tutorial>>> searchingMap = new HashMap<>() {{
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTitle()), (request, repository) -> repository.findByTitle(request.getTitle()));
@@ -44,13 +52,23 @@ public class TutorialService {
         return tutorialRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    public Tutorial saveTutorial(TutorialDto tutorialDto) {
+    public Tutorial saveTutorial(TutorialDto tutorialDto) throws IOException {
         Tutorial preSavedTutorial = Tutorial
                 .builder()
                 .title(tutorialDto.getTitle())
                 .description(tutorialDto.getDescription())
                 .status(Status.PENDING)
+                .content(tutorialDto.getContent())
+                .overview(tutorialDto.getOverview())
                 .build();
+        if (tutorialDto.getImage() != null && !tutorialDto.getImage().isEmpty()) {
+            // TODO: 11/23/2023 refactored this
+            String fileName = System.currentTimeMillis() + "_" + tutorialDto.getImage().getOriginalFilename();
+            Path filePath = Paths.get(uploadPath, fileName);
+            Files.copy(tutorialDto.getImage().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            preSavedTutorial.setImagePath(filePath.toString());
+        }
 
         return tutorialRepository.save(preSavedTutorial);
     }

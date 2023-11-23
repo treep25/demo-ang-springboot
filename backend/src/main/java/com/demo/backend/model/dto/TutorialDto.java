@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @RequiredArgsConstructor
@@ -19,4 +20,7 @@ public class TutorialDto {
     @Size(min = 5, max = 100, message = "Description must be between 5 and 100 characters")
     private String description;
     private boolean published;
+    private String overview;
+    private String content;
+    private MultipartFile image;
 }

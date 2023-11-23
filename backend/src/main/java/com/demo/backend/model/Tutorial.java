@@ -25,4 +25,9 @@ public class Tutorial {
     @Size(min = 5, max = 100, message = "Description must be between 5 and 100 characters")
     private String description;
     private Status status;
+    @NotBlank(message = "Description is required")
+    private String overview;
+    @NotBlank(message = "Description is required")
+    private String content;
+    private String imagePath;
 }
