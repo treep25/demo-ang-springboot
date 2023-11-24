@@ -5,7 +5,6 @@ import com.demo.backend.model.dto.TutorialDto;
 import com.demo.backend.service.TutorialService;
 import com.demo.backend.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
 
 
 @CrossOrigin(origins = "http://localhost:8081")
@@ -74,7 +72,7 @@ public class TutorialController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> findTutorialByTitle(
+    public ResponseEntity<?> findTutorialByAnyParameter(
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "sortedType", required = false) String sortedType,
@@ -101,25 +99,23 @@ public class TutorialController {
     }
 
     @PatchMapping("status/{id}")
-    public ResponseEntity<?> updateTutorialStatusById(@PathVariable long id, @RequestBody boolean data) {
+    public ResponseEntity<?> updateTutorialStatusById(@PathVariable long id, @RequestBody String status) {
         DataValidation.validateInputParamsOrElseThrowException(id);
+        DataValidation.validateStatus(status);
 
-        return ResponseEntity.ok(tutorialService.updateTutorialById(id, data));
+        return ResponseEntity.ok(tutorialService.updateTutorialById(id, status));
     }
 
-    //todo fix it
-    @PostMapping("getImage")
-    public ResponseEntity<byte[]> getImage(@RequestBody String imagePath) throws IOException {
-        imagePath = "backend/images/1700743629279_photo_2023-11-14_11-29-25.jpg";
+    @GetMapping("getImage/{id}")
+    public ResponseEntity<?> getImage(@PathVariable long id) {
+        DataValidation.validateInputParamsOrElseThrowException(id);
 
-        ClassPathResource resource = new ClassPathResource(imagePath);
-
-        byte[] imageBytes = Files.readAllBytes(resource.getFile().toPath());
+        byte[] tutorialImage = tutorialService.getTutorialImage(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
 
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        return new ResponseEntity<>(tutorialImage, headers, HttpStatus.OK);
     }
 }
 

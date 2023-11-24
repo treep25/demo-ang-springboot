@@ -38,7 +38,7 @@ export class TutorialsInformationComponent {
     this.tutorialService.get(id).subscribe({
       next: (data) => {
         this.currentTutorial = data;
-        this.tutorialService.getImageData(this.currentTutorial.imagePath).subscribe(
+        this.tutorialService.getImageData(this.currentTutorial.id).subscribe(
           {
             next: (data) => {
               this.imageData = data

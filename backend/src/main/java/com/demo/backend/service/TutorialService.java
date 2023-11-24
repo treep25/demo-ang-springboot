@@ -6,16 +6,11 @@ import com.demo.backend.model.Tutorial;
 import com.demo.backend.model.dto.TutorialDto;
 import com.demo.backend.repository.TutorialRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
@@ -25,17 +20,23 @@ import java.util.stream.StreamSupport;
 public class TutorialService {
 
     private final TutorialRepository tutorialRepository;
-    @Value("${upload.path}")
-    private String uploadPath;
+    private final ImageService imageService;
 
     private final Map<Predicate<SearchingTutorialRequest>, BiFunction<SearchingTutorialRequest, TutorialRepository, List<Tutorial>>> searchingMap = new HashMap<>() {{
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTitle()), (request, repository) -> repository.findByTitle(request.getTitle()));
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getDescription()), (request, repository) -> repository.findByDescription(request.getDescription()));
-        put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTutorialStatus()), (request, repository) -> repository.findByStatus(Status.fromTextStatus(request.getTutorialStatus())));
+        put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTutorialStatus()), (request, repository) -> repository.findByStatus(Status.getStatusFromText(request.getTutorialStatus())));
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getSortingType()), (request, repository)
                 -> request.isNaturalOrderSortingType() ?
                 getAllTutorials().stream().sorted(Comparator.comparing(Tutorial::getTitle)).toList() :
                 getAllTutorials().stream().sorted(Comparator.comparing(Tutorial::getTitle).reversed()).toList());
+    }};
+
+    private final Map<Predicate<TutorialDto>, BiConsumer<Tutorial, TutorialDto>> updatesMap = new HashMap<>() {{
+        put(tutorialDto -> verifyRequestParamsNotEmptyAndBlank(tutorialDto.getTitle()), (tutorial, tutorialDto) -> tutorial.setTitle(tutorialDto.getTitle()));
+        put(tutorialDto -> verifyRequestParamsNotEmptyAndBlank(tutorialDto.getDescription()), (tutorial, tutorialDto) -> tutorial.setDescription(tutorialDto.getDescription()));
+        put(tutorialDto -> verifyRequestParamsNotEmptyAndBlank(tutorialDto.getOverview()), (tutorial, tutorialDto) -> tutorial.setOverview(tutorialDto.getOverview()));
+        put(tutorialDto -> verifyRequestParamsNotEmptyAndBlank(tutorialDto.getContent()), (tutorial, tutorialDto) -> tutorial.setContent(tutorialDto.getContent()));
     }};
 
     private boolean verifyRequestParamsNotEmptyAndBlank(String request) {
@@ -52,7 +53,7 @@ public class TutorialService {
         return tutorialRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    public Tutorial saveTutorial(TutorialDto tutorialDto) throws IOException {
+    public Tutorial saveTutorial(TutorialDto tutorialDto) {
         Tutorial preSavedTutorial = Tutorial
                 .builder()
                 .title(tutorialDto.getTitle())
@@ -62,15 +63,18 @@ public class TutorialService {
                 .overview(tutorialDto.getOverview())
                 .build();
         if (tutorialDto.getImage() != null && !tutorialDto.getImage().isEmpty()) {
-            // TODO: 11/23/2023 refactored this
-            String fileName = System.currentTimeMillis() + "_" + tutorialDto.getImage().getOriginalFilename();
-            Path filePath = Paths.get(uploadPath, fileName);
-            Files.copy(tutorialDto.getImage().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            preSavedTutorial.setImagePath(filePath.toString());
+            preSavedTutorial.setImagePath(
+                    imageService.uploadImage(tutorialDto.getImage()).toString());
         }
 
         return tutorialRepository.save(preSavedTutorial);
+    }
+
+    public byte[] getTutorialImage(long id) {
+        Tutorial tutorialById = getTutorialById(id);
+
+        return imageService.downloadImage(tutorialById.getImagePath());
     }
 
     public void deleteTutorialById(long id) {
@@ -95,19 +99,20 @@ public class TutorialService {
 
     public Tutorial updateTutorialById(long id, TutorialDto tutorialDto) {
         Tutorial tutorialById = getTutorialById(id);
-        if (!tutorialDto.getDescription().isEmpty()) {
-            tutorialById.setDescription(tutorialDto.getDescription());
-        }
-        if (!tutorialDto.getTitle().isEmpty()) {
-            tutorialById.setTitle(tutorialDto.getTitle());
-        }
+        updatesMap.forEach(
+                (tutorialDtoPredicate, tutorialTutorialDtoBiConsumer) -> {
+                    if (tutorialDtoPredicate.test(tutorialDto)) {
+                        tutorialTutorialDtoBiConsumer.accept(tutorialById, tutorialDto);
+                    }
+                }
+        );
 
         return tutorialRepository.save(tutorialById);
     }
 
-    public Tutorial updateTutorialById(long id, boolean published) {
+    public Tutorial updateTutorialById(long id, String status) {
         Tutorial tutorialById = getTutorialById(id);
-        tutorialById.setStatus(Status.fromBoolean(published));
+        tutorialById.setStatus(Status.getStatusFromText(status));
 
         return tutorialRepository.save(tutorialById);
     }

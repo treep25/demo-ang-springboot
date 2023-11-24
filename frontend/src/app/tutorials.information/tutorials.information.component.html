@@ -1,62 +1,67 @@
-<!--<div *ngIf="currentTutorial.id">-->
-<!--  <h4>{{ 'titles.tutorial' | translate }}</h4>-->
-<!--  <div>-->
-<!--    <label><strong>{{ 'titles.title' | translate }}:</strong></label> {{ currentTutorial.title }}-->
-<!--  </div>-->
-<!--  <div>-->
-<!--    <label><strong>{{ 'titles.description' | translate }}:</strong></label>-->
-<!--    {{ currentTutorial.description }}-->
-<!--  </div>-->
-<!--  <div>-->
-<!--    <label><strong>OverView:</strong></label>-->
-<!--    {{ currentTutorial.overview }}-->
-<!--  </div>-->
-<!--  <div>-->
-<!--    <label><strong>Getting started:</strong></label>-->
-<!--    {{ currentTutorial.overview }}-->
-<!--  </div>-->
-<!--</div>-->
-<div>
-  <h4>Title:</h4>
+<div *ngIf="currentTutorial.id">
+  <h4>{{ 'titles.tutorial' | translate }}</h4>
   <div>
-    <label><strong>Introduction to Angular</strong></label>
+    <label><strong>{{ 'titles.title' | translate }}:</strong></label> {{ currentTutorial.title }}
   </div>
   <div>
-    <label><strong>Description:</strong></label>
-    Angular, developed and maintained by Google, is a powerful open-source framework for building dynamic web applications. Known for its flexibility and scalability, Angular has gained popularity
-    among developers for creating modern, feature-rich, and maintainable applications.
+    <label><strong>{{ 'titles.description' | translate }}:</strong></label>
+    {{ currentTutorial.description }}
   </div>
   <div>
-    <label><strong>Overview:</strong></label>
-    Angular is a front-end framework that utilizes TypeScript, a superset of JavaScript, to enhance the development experience. It follows the Model-View-Controller (MVC) architectural pattern,
-    providing a structured and organized approach to building web applications. With a rich set of tools and libraries, Angular simplifies common development tasks, allowing developers to focus on
-    creating robust applications.
+    <label><strong>OverView:</strong></label>
+    {{ currentTutorial.overview }}
   </div>
   <div>
-    <label><strong>Getting Started:</strong></label>
-    To start working with Angular, you need to have Node.js and npm (Node Package Manager) installed on your machine. Angular applications are built and managed using the Angular CLI (Command Line
-    Interface). Once the prerequisites are in place, you can create a new Angular project with a single command, setting you up for efficient development.
-  </div>
-  <div>
-    <label><strong>Main Part and Features:</strong></label>
-    The core strength of Angular lies in its declarative templates, dependency injection, end-to-end tooling, and integrated best practices. Declarative templates enable developers to express the
-    structure of the application effortlessly. Angular's dependency injection system promotes modular and maintainable code by efficiently managing component dependencies.
-
-    Angular's two-way data binding ensures seamless communication between the model and the view, providing a real-time interactive experience for users. The framework also facilitates the creation of
-    dynamic single-page applications (SPAs), where content is loaded dynamically as the user navigates through the app, resulting in a smooth and responsive user interface.
-  </div>
-  <div>
-    <label><strong>Self-razz:</strong></label>
-    Angular's extensive library of pre-built components and the ability to create custom components empower developers to design complex UIs with ease. The framework's robust testing capabilities and
-    integration with popular testing tools contribute to building reliable and bug-free applications.
-  </div>
-  <div>
-    <label><strong>In conclusion:</strong></label>
-    Angular is a comprehensive framework that streamlines the development of modern web applications. Whether you are a beginner or an experienced developer, Angular's rich features and robust
-    architecture make it a go-to choice for building scalable and efficient applications.
+    <label><strong>Let`s start</strong></label>
+    {{ currentTutorial.content }}
   </div>
   <div *ngIf="imageData">
     <label><strong>Image:</strong></label>
     <img [src]="displayImage()" alt="Image">
   </div>
 </div>
+
+<!--<div>-->
+<!--  <h4>Title:</h4>-->
+<!--  <div>-->
+<!--    <label><strong>Introduction to Angular</strong></label>-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    <label><strong>Description:</strong></label>-->
+<!--    Angular, developed and maintained by Google, is a powerful open-source framework for building dynamic web applications. Known for its flexibility and scalability, Angular has gained popularity-->
+<!--    among developers for creating modern, feature-rich, and maintainable applications.-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    <label><strong>Overview:</strong></label>-->
+<!--    Angular is a front-end framework that utilizes TypeScript, a superset of JavaScript, to enhance the development experience. It follows the Model-View-Controller (MVC) architectural pattern,-->
+<!--    providing a structured and organized approach to building web applications. With a rich set of tools and libraries, Angular simplifies common development tasks, allowing developers to focus on-->
+<!--    creating robust applications.-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    <label><strong>Getting Started:</strong></label>-->
+<!--    To start working with Angular, you need to have Node.js and npm (Node Package Manager) installed on your machine. Angular applications are built and managed using the Angular CLI (Command Line-->
+<!--    Interface). Once the prerequisites are in place, you can create a new Angular project with a single command, setting you up for efficient development.-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    <label><strong>Main Part and Features:</strong></label>-->
+<!--    The core strength of Angular lies in its declarative templates, dependency injection, end-to-end tooling, and integrated best practices. Declarative templates enable developers to express the-->
+<!--    structure of the application effortlessly. Angular's dependency injection system promotes modular and maintainable code by efficiently managing component dependencies.-->
+
+<!--    Angular's two-way data binding ensures seamless communication between the model and the view, providing a real-time interactive experience for users. The framework also facilitates the creation of-->
+<!--    dynamic single-page applications (SPAs), where content is loaded dynamically as the user navigates through the app, resulting in a smooth and responsive user interface.-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    <label><strong>Self-razz:</strong></label>-->
+<!--    Angular's extensive library of pre-built components and the ability to create custom components empower developers to design complex UIs with ease. The framework's robust testing capabilities and-->
+<!--    integration with popular testing tools contribute to building reliable and bug-free applications.-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    <label><strong>In conclusion:</strong></label>-->
+<!--    Angular is a comprehensive framework that streamlines the development of modern web applications. Whether you are a beginner or an experienced developer, Angular's rich features and robust-->
+<!--    architecture make it a go-to choice for building scalable and efficient applications.-->
+<!--  </div>-->
+<!--  <div *ngIf="imageData">-->
+<!--    <label><strong>Image:</strong></label>-->
+<!--    <img [src]="displayImage()" alt="Image">-->
+<!--  </div>-->
+<!--</div>-->

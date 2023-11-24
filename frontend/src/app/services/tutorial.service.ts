@@ -20,8 +20,8 @@ export class TutorialService {
     return this.http.get<Tutorial>(`${baseUrl}/${id}`);
   }
 
-  getImageData(imagePath: any): Observable<ArrayBuffer> {
-    return this.http.post(`${baseUrl}/getImage`, imagePath, {responseType: 'arraybuffer'});
+  getImageData(id: any): Observable<ArrayBuffer> {
+    return this.http.get(`${baseUrl}/getImage/${id}`, {responseType: 'arraybuffer'});
   }
 
   create(data: any): Observable<any> {
@@ -32,8 +32,8 @@ export class TutorialService {
     return this.http.patch(`${baseUrl}/${id}`, data);
   }
 
-  updateStatus(id: any, data: boolean): Observable<any> {
-    return this.http.patch(`${baseUrl}/status/${id}`, data);
+  updateStatus(id: any, status: any): Observable<any> {
+    return this.http.patch(`${baseUrl}/status/${id}`, status);
   }
 
   delete(id: any): Observable<any> {

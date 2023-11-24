@@ -64,14 +64,14 @@
     <button
       class="badge badge-primary mr-2"
       *ngIf="currentTutorial.status == 'PUBLISHED' "
-      (click)="updatePublished(false)"
+      (click)="updatePublished('PENDING')"
     >
       {{ 'buttons.unpublish' | translate }}
     </button>
     <button
       *ngIf="currentTutorial.status == 'PENDING'"
       class="badge badge-primary mr-2"
-      (click)="updatePublished(true)"
+      (click)="updatePublished('PUBLISHED')"
     >
       {{ 'buttons.publish' | translate }}
     </button>

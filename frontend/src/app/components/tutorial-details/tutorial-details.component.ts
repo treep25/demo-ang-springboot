@@ -42,20 +42,13 @@ export class TutorialDetailsComponent {
     });
   }
 
-  whatStatus(status: boolean): Status {
-    if (status) {
-      return Status.PUBLISHED;
-    }
-    return Status.PENDING;
-  }
-
-  updatePublished(data: boolean): void {
+  updatePublished(status: any): void {
     this.message = '';
 
-    this.tutorialService.updateStatus(this.currentTutorial.id, data).subscribe({
+    this.tutorialService.updateStatus(this.currentTutorial.id, status).subscribe({
       next: (res) => {
         console.log(res);
-        this.currentTutorial.status = this.whatStatus(data);
+        this.currentTutorial.status = status.toString();
         this.message = res.message
           ? res.message
           : 'The status was updated successfully!';
