@@ -13,8 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -42,7 +40,7 @@ public class TutorialController {
                                           @RequestParam("description") String description,
                                           @RequestParam("overview") String overview,
                                           @RequestParam("content") String content,
-                                          @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+                                          @RequestParam(value = "image", required = false) MultipartFile image) {
 
         TutorialDto build = TutorialDto
                 .builder()
