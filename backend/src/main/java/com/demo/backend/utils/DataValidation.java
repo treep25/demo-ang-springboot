@@ -14,6 +14,12 @@ public class DataValidation {
         }
     }
 
+    public static void validateStatus(String status) {
+        if (!Status.iStatusValidFromText(status)) {
+            throw new RuntimeException("Invalid parameter tutorialStatus [PENDING, PUBLISHED]");
+        }
+    }
+
     public static void preUpdateValidationOfFields(String title, String description, String sortedType, String tutorialStatus) {
         validateOptionalParameter(title, "Invalid parameter title");
         validateOptionalParameter(description, "Invalid parameter description");
@@ -55,7 +61,7 @@ public class DataValidation {
     private static void validateTutorialStatus(String tutorialStatus) {
         Optional.ofNullable(tutorialStatus)
                 .filter(s -> !s.trim().isEmpty())
-                .filter(Status::fromTextStatusValid)
+                .filter(Status::iStatusValidFromText)
                 .orElseThrow(() -> new RuntimeException("Invalid parameter tutorialStatus [PENDING, PUBLISHED]"));
     }
 
