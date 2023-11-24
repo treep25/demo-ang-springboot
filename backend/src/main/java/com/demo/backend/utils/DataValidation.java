@@ -1,7 +1,7 @@
 package com.demo.backend.utils;
 
-import com.demo.backend.model.Status;
-import com.demo.backend.model.dto.TutorialDto;
+import com.demo.backend.tutorial.model.Status;
+import com.demo.backend.tutorial.model.dto.TutorialDto;
 
 import java.util.List;
 import java.util.Optional;
