@@ -1,7 +1,7 @@
-package com.demo.backend.repository;
+package com.demo.backend.tutorial.repository;
 
-import com.demo.backend.model.Status;
-import com.demo.backend.model.Tutorial;
+import com.demo.backend.tutorial.model.Status;
+import com.demo.backend.tutorial.model.Tutorial;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

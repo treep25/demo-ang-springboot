@@ -1,4 +1,4 @@
-package com.demo.backend.model;
+package com.demo.backend.tutorial.model;
 
 import lombok.*;
 

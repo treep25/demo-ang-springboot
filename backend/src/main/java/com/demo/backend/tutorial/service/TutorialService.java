@@ -1,10 +1,10 @@
-package com.demo.backend.service;
+package com.demo.backend.tutorial.service;
 
-import com.demo.backend.model.SearchingTutorialRequest;
-import com.demo.backend.model.Status;
-import com.demo.backend.model.Tutorial;
-import com.demo.backend.model.dto.TutorialDto;
-import com.demo.backend.repository.TutorialRepository;
+import com.demo.backend.tutorial.model.SearchingTutorialRequest;
+import com.demo.backend.tutorial.model.Status;
+import com.demo.backend.tutorial.model.Tutorial;
+import com.demo.backend.tutorial.model.dto.TutorialDto;
+import com.demo.backend.tutorial.repository.TutorialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

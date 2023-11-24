@@ -1,4 +1,4 @@
-package com.demo.backend.service;
+package com.demo.backend.tutorial.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

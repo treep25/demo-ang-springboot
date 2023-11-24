@@ -1,4 +1,4 @@
-package com.demo.backend.model;
+package com.demo.backend.tutorial.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +16,7 @@ import lombok.*;
 @ToString
 public class Tutorial {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotBlank(message = "Title is required")
     private String title;

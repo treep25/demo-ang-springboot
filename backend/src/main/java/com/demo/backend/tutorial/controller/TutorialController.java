@@ -1,8 +1,8 @@
-package com.demo.backend.controller;
+package com.demo.backend.tutorial.controller;
 
-import com.demo.backend.model.SearchingTutorialRequest;
-import com.demo.backend.model.dto.TutorialDto;
-import com.demo.backend.service.TutorialService;
+import com.demo.backend.tutorial.model.SearchingTutorialRequest;
+import com.demo.backend.tutorial.model.dto.TutorialDto;
+import com.demo.backend.tutorial.service.TutorialService;
 import com.demo.backend.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

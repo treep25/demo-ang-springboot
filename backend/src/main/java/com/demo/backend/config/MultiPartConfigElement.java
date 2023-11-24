@@ -1,4 +1,4 @@
-package com.demo.backend;
+package com.demo.backend.config;
 
 import jakarta.servlet.MultipartConfigElement;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ public class MultiPartConfigElement {
 
     @Bean
     public MultipartConfigElement multipartConfigElement() {
-        var factory = new MultipartConfigFactory();
+        MultipartConfigFactory factory = new MultipartConfigFactory();
         factory.setMaxFileSize(DataSize.parse(maxFileSize));
         factory.setMaxRequestSize(DataSize.parse(maxFileSize));
         return factory.createMultipartConfig();
