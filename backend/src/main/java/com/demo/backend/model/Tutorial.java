@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
@@ -22,12 +21,11 @@ public class Tutorial {
     @NotBlank(message = "Title is required")
     private String title;
     @NotBlank(message = "Description is required")
-    @Size(min = 5, max = 100, message = "Description must be between 5 and 100 characters")
     private String description;
     private Status status;
-    @NotBlank(message = "Description is required")
+    @NotBlank(message = "Overview is required")
     private String overview;
-    @NotBlank(message = "Description is required")
+    @NotBlank(message = "Content is required")
     private String content;
     private String imagePath;
 }
