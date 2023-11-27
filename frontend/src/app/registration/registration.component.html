@@ -1,0 +1,46 @@
+<!-- register.component.html -->
+<form (ngSubmit)="register()" [formGroup]="registerForm">
+  <div class="form-group">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && registerForm.get('firstName')?.errors }">
+    <div *ngIf="submitted && registerForm.get('firstName')?.hasError('required')" class="invalid-feedback">
+      First Name is required
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && registerForm.get('lastName')?.errors }">
+    <div *ngIf="submitted && registerForm.get('lastName')?.hasError('required')" class="invalid-feedback">
+      Last Name is required
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && registerForm.get('email')?.errors }">
+    <div *ngIf="submitted && registerForm.get('email')?.hasError('required')" class="invalid-feedback">
+      Email is required
+    </div>
+    <div *ngIf="submitted && registerForm.get('email')?.hasError('email')" class="invalid-feedback">
+      Invalid email format
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && registerForm.get('password')?.errors }">
+    <div *ngIf="submitted && registerForm.get('password')?.hasError('required')" class="invalid-feedback">
+      Password is required
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="repeatPassword">Repeat Password:</label>
+    <input type="password" id="repeatPassword" name="repeatPassword" formControlName="repeatPassword" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && registerForm.get('repeatPassword')?.errors }">
+    <div *ngIf="submitted && registerForm.get('repeatPassword')?.hasError('required')" class="invalid-feedback">
+      Repeat Password is required
+    </div>
+    <div *ngIf="submitted && registerForm.hasError('passwordsNotMatch')" class="invalid-feedback">
+      Passwords do not match
+    </div>
+  </div>
+  <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary">Register</button>
+</form>

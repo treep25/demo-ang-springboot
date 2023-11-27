@@ -1,0 +1,16 @@
+form {
+  max-width: 300px;
+  margin: auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.invalid-feedback {
+  color: red;
+}
+
+.btn-primary {
+  margin-top: 10px;
+}

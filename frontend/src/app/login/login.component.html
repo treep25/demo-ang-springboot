@@ -1,0 +1,24 @@
+<form (ngSubmit)="login()" [formGroup]="loginForm">
+  <div class="form-group">
+    <label for="login">Username:</label>
+    <input type="text" id="login" name="login" formControlName="login" class="form-control" [ngClass]="{ 'is-invalid': submitted && loginForm.get('login')?.errors }">
+    <div *ngIf="submitted && loginForm.get('login')?.hasError('required')" class="invalid-feedback">
+      Username is required
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && loginForm.get('password')?.errors }">
+    <div *ngIf="submitted && loginForm.get('password')?.hasError('required')" class="invalid-feedback">
+      Password is required
+    </div>
+  </div>
+  <div class="form-group form-check">
+    <input type="checkbox" id="agree" name="agree" formControlName="agree" class="form-check-input" [ngClass]="{ 'is-invalid': submitted && loginForm.get('agree')?.errors }">
+    <label for="agree" class="form-check-label">I agree to the privacy policy</label>
+    <div *ngIf="submitted && loginForm.get('agree')?.hasError('requiredTrue')" class="invalid-feedback">
+      You must agree to the privacy policy
+    </div>
+  </div>
+  <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary">Login</button>
+</form>
