@@ -1,6 +1,6 @@
 package com.demo.backend.security.jwt;
 
-import com.demo.backend.user.User;
+import com.demo.backend.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

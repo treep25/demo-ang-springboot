@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.InputStream;
-import java.io.OutputStream;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final Object credentials = null;
-
+    private final String accessToken = "accessToken";
     private void authenticateToken(UserDetails userDetails, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 userDetails,
@@ -46,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = null;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("jwtToken".equals(cookie.getName())) {
+                if (accessToken.equals(cookie.getName())) {
                     jwt = cookie.getValue();
                     break;
                 }
@@ -68,15 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception ex) {
-            response.setStatus(response.getStatus());
-            response.setContentType("text/html");
-            request.setAttribute("errorMessage", ex.getMessage());
-            try (InputStream is = getClass().getResourceAsStream("/templates/jwtError.html");
-                 OutputStream os = response.getOutputStream()) {
-                IOUtils.copy(is, os);
-            } catch (java.io.IOException e) {
-                throw new RuntimeException(e);
-            }
+            throw new RuntimeException("Jwt error");
         }
     }
 }
