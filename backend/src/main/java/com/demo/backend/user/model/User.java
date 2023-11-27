@@ -1,5 +1,6 @@
-package com.demo.backend.user;
+package com.demo.backend.user.model;
 
+import com.demo.backend.user.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -57,5 +58,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean is(Role expectedRole) {
+        return role.equals(expectedRole);
     }
 }
