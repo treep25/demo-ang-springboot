@@ -3,12 +3,15 @@ package com.demo.backend.tutorial.controller;
 import com.demo.backend.tutorial.model.SearchingTutorialRequest;
 import com.demo.backend.tutorial.model.dto.TutorialDto;
 import com.demo.backend.tutorial.service.TutorialService;
+import com.demo.backend.user.model.User;
 import com.demo.backend.utils.DataValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +57,8 @@ public class TutorialController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTutorial(@PathVariable long id) {
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> deleteTutorial(@PathVariable long id, @AuthenticationPrincipal User user) {
         DataValidation.validateInputParamsOrElseThrowException(id);
 
         tutorialService.deleteTutorialById(id);
