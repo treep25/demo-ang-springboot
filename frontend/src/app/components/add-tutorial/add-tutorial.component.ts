@@ -31,7 +31,6 @@ export class AddTutorialComponent {
 
     this.tutorialService.create(tutorialDto).subscribe({
       next: (res) => {
-        document.cookie = `jwtToken=hello; path=/; SameSite=None`;
         console.log(res);
         this.submitted = true;
       },

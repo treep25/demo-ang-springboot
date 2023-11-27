@@ -14,6 +14,8 @@ import {ModalComponent} from './modal/modal.component';
 import {TutorialsInformationComponent} from './tutorials.information/tutorials.information.component';
 import {NgOptimizedImage} from "@angular/common";
 import {ImageUploadComponent} from "./image-upload/image-upload.component";
+import {LoginComponent} from './login/login.component';
+import {RegisterComponent} from './registration/registration.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -27,7 +29,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     TutorialsListComponent,
     ModalComponent,
     TutorialsInformationComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
