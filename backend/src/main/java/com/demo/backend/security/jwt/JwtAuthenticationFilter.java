@@ -48,7 +48,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
-        System.out.println(jwt);
         final String username;
         try {
             if (jwt == null) {

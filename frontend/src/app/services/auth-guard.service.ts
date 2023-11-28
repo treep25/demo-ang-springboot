@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, Router} from "@angular/router";
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
 import {AuthService} from "./auth.service";
+import {catchError, map, Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,38 +11,41 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {
   }
 
-  canActivate(): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const accessToken = this.getCookie('accessToken');
     const refreshToken = this.getCookie('refreshToken');
 
     if (accessToken && refreshToken) {
-      //todo this does`nt work
-      this.authService.meInfo().subscribe({
-        next: (res) => {
-          console.log("user info representation")
-        },
-        error: (e) => {
-          console.log(e)
+      return this.authService.meInfo().pipe(
+        map(res => {
+          console.log('User info representation');
+          return true;
+        }),
+        catchError(() => {
+          console.log('Error during getting user info');
 
-          this.authService.refreshToken(refreshToken).subscribe({
-              next: (res) => {
-                return true;
-              },
-              error: (e) => {
-                console.log("Error during refreshing token")
+          return this.authService.refreshToken(refreshToken).pipe(
+            map((res) => {
 
-                this.router.navigate(['/login']);
-                return false;
-              }
-            }
-          )
-        }
-      })
+              document.cookie = `accessToken=${res.accessToken}; path=/; SameSite=None; Secure`;
+              document.cookie = `refreshToken=${res.refreshToken}; path=/; SameSite=None; Secure`;
+
+              return true;
+            }),
+            catchError(() => {
+              console.log('Error during refreshing token');
+              this.router.navigate(['/login']);
+              return [false];
+            })
+          );
+        })
+      );
+    } else {
+      this.router.navigate(['/login']);
+      return of(false);
     }
-    this.router.navigate(['/login']);
-    return false;
-
   }
+
 
   private getCookie(name: string): any {
     const value = `; ${document.cookie}`;
