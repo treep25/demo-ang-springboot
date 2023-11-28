@@ -8,6 +8,7 @@ import {TutorialsInformationComponent} from "./tutorials.information/tutorials.i
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./registration/registration.component";
 import {AuthGuard} from "./services/auth-guard.service";
+import {UserRepresentationComponent} from "./user-representation/user-representation.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'tutorials', pathMatch: 'full'},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'add', component: AddTutorialComponent, canActivate: [AuthGuard]},
   {path: 'error/fatal', component: ModalComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'userInfo', component: UserRepresentationComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent}
 ];
 
