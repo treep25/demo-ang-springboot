@@ -26,7 +26,7 @@ public class JwtService {
     private String SECRET_KEY;
     private static final String ROLES = "roles";
 
-    private static final int ONE_DAY_MILLIS = 1000 * 60 * 60 * 24;
+    private static final int ONE_DAY_MILLIS = (1000 * 60 * 60 * 24) / 12;
     private static final int ONE_DAY_PLUS_15_MINUTES_MILLIS = ONE_DAY_MILLIS + 900 * 1000;
 
     public String extractUsername(String token) {
