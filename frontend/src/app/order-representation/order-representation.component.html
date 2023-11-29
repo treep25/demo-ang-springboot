@@ -1,0 +1,27 @@
+<div *ngIf="order && order.tutorialsOrder && order.tutorialsOrder.length > 0">
+  <h2>User Orders</h2>
+
+  <div>
+    <div class="order-container">
+      <h3>My tutorial in progress</h3>
+
+      <div *ngFor="let tutorial of order.tutorialsOrder">
+        <div class="tutorial-details">
+          <h4>{{ tutorial.title }}</h4>
+          <p>{{ tutorial.description }}</p>
+          <p>Status: {{ tutorial.status }}</p>
+          <p>{{ tutorial.content }}</p>
+          <p>{{ tutorial.overview }}</p>
+          <p>{{ tutorial.image }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <h2>Make Payment</h2>
+  <button (click)="makePayment(1000)">Pay $10</button>
+</div>
+<div *ngIf="!order || !order.tutorialsOrder || order.tutorialsOrder.length === 0">
+  <p>No orders available.</p>
+</div>
