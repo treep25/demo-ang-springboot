@@ -1,61 +1,56 @@
-/* Стили для контейнера формы */
-.submit-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-/* Стили для формы и ее элементов */
-.form-group {
-  margin-bottom: 15px;
+.input-group {
+  margin-bottom: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #333;
-  font-weight: bold;
+.input-group input,
+.input-group button {
+  margin-bottom: 0;
 }
 
-input {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.input-group-separator {
+  margin: 0 10px;
 }
 
-/* Стили для кнопок */
-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #5cb85c;
-  border: none;
-  border-radius: 4px;
+.list-group {
+  list-style: none;
+  padding: 0;
+}
+
+.list-group-item {
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
-}
-
-button:hover {
-  background-color: #4cae4c;
-}
-
-/* Стили для сообщения об успехе */
-.success-message {
-  margin-top: 15px;
   padding: 10px;
-  background-color: #dff0d8;
-  border: 1px solid #d6e9c6;
-  border-radius: 4px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-/* Стили для кнопки "Add" после успешной отправки формы */
-.add-button {
-  margin-top: 15px;
+.list-group-item.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-outline-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-group {
+  margin-bottom: 20px;
 }
