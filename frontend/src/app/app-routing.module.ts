@@ -9,6 +9,7 @@ import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./registration/registration.component";
 import {AuthGuard} from "./services/auth-guard.service";
 import {UserRepresentationComponent} from "./user-representation/user-representation.component";
+import {OrderRepresentationComponent} from "./order-representation/order-representation.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'tutorials', pathMatch: 'full'},
@@ -19,7 +20,8 @@ const routes: Routes = [
   {path: 'error/fatal', component: ModalComponent},
   {path: 'login', component: LoginComponent},
   {path: 'userInfo', component: UserRepresentationComponent, canActivate: [AuthGuard]},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'orders', component: OrderRepresentationComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

@@ -17,6 +17,7 @@ import {ImageUploadComponent} from "./image-upload/image-upload.component";
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './registration/registration.component';
 import {UserRepresentationComponent} from './user-representation/user-representation.component';
+import {OrderRepresentationComponent} from './order-representation/order-representation.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -33,7 +34,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImageUploadComponent,
     LoginComponent,
     RegisterComponent,
-    UserRepresentationComponent
+    UserRepresentationComponent,
+    OrderRepresentationComponent
   ],
   imports: [
     BrowserModule,
