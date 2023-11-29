@@ -6,13 +6,15 @@
         <a routerLink="tutorials" class="nav-link">{{ 'navbar.tutorials' | translate }}</a>
       </li>
       <li class="nav-item">
-        <a routerLink="add" class="nav-link">{{ 'navbar.add' | translate }}</a>
+        <a routerLink="add" class="nav-link" *ngIf="role == 'ADMIN'">{{ 'navbar.add' | translate }}</a>
       </li>
     </div>
     <div class="navbar-nav ml-auto">
       <button class="btn btn-link" (click)="switchLanguage('en')">{{ 'buttons.english' | translate }}</button>
       <button class="btn btn-link" (click)="switchLanguage('ru')">{{ 'buttons.russian' | translate }}</button>
-      <button class="btn btn-link" (click)="redirectToUserRepresentation()">Info</button>
+      <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserRepresentation()">Info</button>
+      <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserOrderRepresentation()">Orders</button>
+      <button class="btn btn-link" (click)="logOut()">logout</button>
     </div>
   </nav>
 
