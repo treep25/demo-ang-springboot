@@ -1,5 +1,6 @@
 package com.demo.backend.user.model;
 
+import com.demo.backend.order.Order;
 import com.demo.backend.user.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -29,6 +30,8 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne
+    private Order order;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
