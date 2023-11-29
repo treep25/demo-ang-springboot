@@ -74,7 +74,7 @@
       </li>
     </ul>
 
-    <button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()">
+    <button class="m-3 btn btn-sm btn-danger" *ngIf="role == 'ADMIN'" (click)="removeAllTutorials()">
       {{ 'buttons.removeAll' | translate }}
     </button>
     <button class="m-3 btn btn-sm btn-danger" (click)="sortTutorialsByTitle()">
@@ -87,7 +87,7 @@
       [currentTutorial]="currentTutorial"
     ></app-tutorial-details>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-6" *ngIf="role == 'ADMIN'">
     <app-image-upload>
 
     </app-image-upload>

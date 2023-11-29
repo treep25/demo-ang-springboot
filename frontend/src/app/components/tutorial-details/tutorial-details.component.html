@@ -63,26 +63,31 @@
 
     <button
       class="badge badge-primary mr-2"
-      *ngIf="currentTutorial.status == 'PUBLISHED' "
+      *ngIf="currentTutorial.status == 'PUBLISHED' && role == 'ADMIN'"
       (click)="updatePublished('PENDING')"
     >
       {{ 'buttons.unpublish' | translate }}
     </button>
     <button
-      *ngIf="currentTutorial.status == 'PENDING'"
+      *ngIf="currentTutorial.status == 'PENDING' && role == 'ADMIN'"
       class="badge badge-primary mr-2"
       (click)="updatePublished('PUBLISHED')"
     >
       {{ 'buttons.publish' | translate }}
     </button>
 
-    <button class="badge badge-danger mr-2" (click)="deleteTutorial()">
+    <button class="badge badge-danger mr-2" *ngIf="role == 'ADMIN'" (click)="deleteTutorial()">
       {{ 'buttons.delete' | translate }}
+    </button>
+
+    <button class="badge badge-success mr-2" (click)="bookTutorial()">
+      book
     </button>
 
     <button
       type="submit"
       class="badge badge-success mb-2"
+      *ngIf="role == 'ADMIN'"
       (click)="updateTutorial()"
     >
       {{ 'buttons.update' | translate }}
