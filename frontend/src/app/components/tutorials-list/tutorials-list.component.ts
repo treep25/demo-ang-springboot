@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Tutorial} from 'src/app/models/tutorial.model';
 import {TutorialService} from 'src/app/services/tutorial.service';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-tutorials-list',
@@ -15,10 +16,18 @@ export class TutorialsListComponent {
   description = '';
   sortedTitleType = '';
 
-  constructor(private tutorialService: TutorialService) {}
+  role? = '';
+
+  constructor(private tutorialService: TutorialService, private authService: AuthService) {
+  }
 
   ngOnInit(): void {
     this.retrieveTutorials();
+    this.authService.meInfo().subscribe(
+      value => {
+        this.role = value.role;
+      }
+    );
   }
 
   retrieveTutorials(): void {

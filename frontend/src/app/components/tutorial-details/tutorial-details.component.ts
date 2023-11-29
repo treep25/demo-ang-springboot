@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {TutorialService} from 'src/app/services/tutorial.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Status, Tutorial} from 'src/app/models/tutorial.model';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-tutorial-details',
@@ -18,8 +19,10 @@ export class TutorialDetailsComponent {
   };
 
   message = '';
+  role? = '';
 
   constructor(
+    private authService: AuthService,
     private tutorialService: TutorialService,
     private route: ActivatedRoute,
     private router: Router
@@ -30,6 +33,11 @@ export class TutorialDetailsComponent {
       this.message = '';
       this.getTutorial(this.route.snapshot.params['id']);
     }
+    this.authService.meInfo().subscribe(
+      value => {
+        this.role = value.role;
+      }
+    );
   }
 
   getTutorial(id: string): void {
@@ -81,5 +89,13 @@ export class TutorialDetailsComponent {
       },
       error: (e) => console.error(e)
     });
+  }
+
+  bookTutorial(): void {
+    this.authService.createOrder(this.currentTutorial).subscribe(value => {
+      console.log(value.tutorialsOrder)
+    }, error => {
+      console.log(error)
+    })
   }
 }
