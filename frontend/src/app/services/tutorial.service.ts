@@ -29,11 +29,11 @@ export class TutorialService {
   }
 
   update(id: any, data: any): Observable<any> {
-    return this.http.patch(`${baseUrl}/${id}`, data);
+    return this.http.patch(`${baseUrl}/${id}`, data, {withCredentials: true});
   }
 
   updateStatus(id: any, status: any): Observable<any> {
-    return this.http.patch(`${baseUrl}/status/${id}`, status);
+    return this.http.patch(`${baseUrl}/status/${id}`, status, {withCredentials: true});
   }
 
   delete(id: any): Observable<any> {
@@ -41,22 +41,22 @@ export class TutorialService {
   }
 
   deleteAll(): Observable<any> {
-    return this.http.delete(baseUrl);
+    return this.http.delete(baseUrl, {withCredentials: true});
   }
 
   findByTitle(title: any): Observable<Tutorial[]> {
-    return this.http.get<Tutorial[]>(`${baseUrl}/search?title=${title}`);
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?title=${title}`, {withCredentials: true});
   }
 
   findByDescription(description: any): Observable<Tutorial[]> {
-    return this.http.get<Tutorial[]>(`${baseUrl}/search?description=${description}`);
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?description=${description}`, {withCredentials: true});
   }
 
   getAllSortedByTitle(sortedType: any): Observable<Tutorial[]> {
-    return this.http.get<Tutorial[]>(`${baseUrl}/search?sortedType=${sortedType}`);
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?sortedType=${sortedType}`, {withCredentials: true});
   }
 
   getTutorialByStatus(status: any): Observable<Tutorial[]> {
-    return this.http.get<Tutorial[]>(`${baseUrl}/search?status=${status}`);
+    return this.http.get<Tutorial[]>(`${baseUrl}/search?status=${status}`, {withCredentials: true});
   }
 }
