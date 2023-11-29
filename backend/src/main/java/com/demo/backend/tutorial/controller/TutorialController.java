@@ -39,11 +39,14 @@ public class TutorialController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveTutorial(@RequestParam("title") String title,
-                                          @RequestParam("description") String description,
-                                          @RequestParam("overview") String overview,
-                                          @RequestParam("content") String content,
-                                          @RequestParam(value = "image", required = false) MultipartFile image) {
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> saveTutorial(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("overview") String overview,
+            @RequestParam("content") String content,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @AuthenticationPrincipal User user) {
 
         TutorialDto build = TutorialDto
                 .builder()
@@ -67,7 +70,8 @@ public class TutorialController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteAllTutorials() {
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> deleteAllTutorials(@AuthenticationPrincipal User user) {
         tutorialService.deleteAllTutorials();
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -94,14 +98,24 @@ public class TutorialController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateTutorialById(@PathVariable long id, @RequestBody TutorialDto tutorialDto) {
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> updateTutorialById(
+            @PathVariable long id,
+            @RequestBody TutorialDto tutorialDto,
+            @AuthenticationPrincipal User user) {
+
         DataValidation.validateInputParamsOrElseThrowException(id);
 
         return ResponseEntity.ok(tutorialService.updateTutorialById(id, tutorialDto));
     }
 
     @PatchMapping("status/{id}")
-    public ResponseEntity<?> updateTutorialStatusById(@PathVariable long id, @RequestBody String status) {
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> updateTutorialStatusById(
+            @PathVariable long id,
+            @RequestBody String status,
+            @AuthenticationPrincipal User user) {
+
         DataValidation.validateInputParamsOrElseThrowException(id);
         DataValidation.validateStatus(status);
 
