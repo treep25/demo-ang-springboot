@@ -38,5 +38,10 @@ export class User {
   lastName?: string;
   email?: string;
   role?: string;
+  order?: Order;
+}
+
+export class Order {
+  tutorialsOrder?: Tutorial[];
 }
 
