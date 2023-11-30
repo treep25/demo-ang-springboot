@@ -32,6 +32,11 @@ public class User implements UserDetails {
     private Role role;
     @OneToOne
     private Order order;
+    private boolean isEnabled;
+
+    public void changeEnableAbility() {
+        isEnabled = !isEnabled;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,7 +65,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 
     public boolean is(Role expectedRole) {
