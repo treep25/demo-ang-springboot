@@ -14,6 +14,7 @@
       <button class="btn btn-link" (click)="switchLanguage('ru')">{{ 'buttons.russian' | translate }}</button>
       <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserRepresentation()">Info</button>
       <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserOrderRepresentation()">Orders</button>
+      <button class="btn btn-link" *ngIf="role == 'ADMIN'" (click)="adminPanel()">Admin Panel</button>
       <button class="btn btn-link" (click)="logOut()">logout</button>
     </div>
   </nav>

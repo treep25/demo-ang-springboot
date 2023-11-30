@@ -28,6 +28,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/orders']);
   }
 
+  adminPanel() {
+    this.router.navigate(['/admin/panel'])
+  }
+
   ngOnInit(): void {
     this.authService.meInfo().subscribe(
       value => {
