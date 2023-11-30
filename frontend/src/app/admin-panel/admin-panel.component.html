@@ -1,0 +1,35 @@
+<div class="search-container">
+  <div class="search-bar">
+    <input type="text" placeholder="Search by First Name" [(ngModel)]="firstName"/>
+    <button class="search-button" (click)="searchByFirstName()">Search</button>
+  </div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search by Last Name" [(ngModel)]="lastName"/>
+    <button class="search-button" (click)="searchByLastName()">Search</button>
+  </div>
+</div>
+<div *ngFor="let user of users" class="user-container">
+  <div class="user-info">
+    <p>{{ user.firstName }} {{ user.lastName }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Role: {{ user.role }}</p>
+    <p>First name: {{ user.firstName }}</p>
+    <p>Last name: {{ user.lastName }}</p>
+  </div>
+  <button class="orders-button" (click)="viewOrders(user)">Orders</button>
+  <ng-container *ngIf="user.isEnabled !== undefined">
+    <button class="block-button" *ngIf="!user.isEnabled" (click)="blockUser(user)">Unblock</button>
+    <button class="block-button" *ngIf="user.isEnabled" (click)="blockUser(user)">Block</button>
+  </ng-container>
+  <div class="orders-view" *ngIf="user.showOrders && user.order">
+    <p>Orders for {{ user.firstName }} {{ user.lastName }}</p>
+    <div *ngFor="let tutorial of user.order?.tutorialsOrder" class="tutorial-info">
+      <p>{{ tutorial.title }}</p>
+      <p>{{ tutorial.description }}</p>
+      <p>{{ tutorial.overview }}</p>
+      <p>{{ tutorial.content }}</p>
+      <p>{{ tutorial.status }}</p>
+    </div>
+  </div>
+  <hr/>
+</div>
