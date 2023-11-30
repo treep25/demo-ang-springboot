@@ -1,5 +1,6 @@
 package com.demo.backend.user.model;
 
+import com.demo.backend.order.Order;
 import com.demo.backend.user.Role;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,4 +19,6 @@ public class UserDto {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Order order;
+    private boolean isEnabled;
 }
