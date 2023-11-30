@@ -34,11 +34,14 @@ export class AuthResponse {
 }
 
 export class User {
+  id?: any;
   firstName?: string;
   lastName?: string;
   email?: string;
   role?: string;
   order?: Order;
+  showOrders?: boolean
+  isEnabled?: any
 }
 
 export class Order {
