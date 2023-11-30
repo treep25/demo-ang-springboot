@@ -20,7 +20,8 @@
 </div>
 <div>
   <h2>Make Payment</h2>
-  <button (click)="makePayment(1000)">Pay $10</button>
+  <button (click)="handlePayment()">Pay $10</button>
+  <div #cardElement></div>
 </div>
 <div *ngIf="!order || !order.tutorialsOrder || order.tutorialsOrder.length === 0">
   <p>No orders available.</p>

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import {Order} from "../models/tutorial.model";
 import {AuthService} from "../services/auth.service";
 import {PaymentStripeService} from "../services/payment-stripe.service";
@@ -9,19 +9,23 @@ import {StripeService} from "ngx-stripe";
   templateUrl: './order-representation.component.html',
   styleUrls: ['./order-representation.component.css']
 })
-export class OrderRepresentationComponent {
+export class OrderRepresentationComponent implements OnInit {
   order: Order = {
     tutorialsOrder: []
   }
+  @ViewChild('cardElement') cardElement?: ElementRef;
 
-  // @ViewChild(StripeCardComponent) card?: StripeCardComponent;
-  // @ViewChild('cardElement') cardElement?: ElementRef;
-  // stripeKey = 'pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z';
+  constructor(
+    private userService: AuthService,
+    private paymentService: PaymentStripeService,
+    private zone: NgZone,
+    private stripeService: StripeService
+  ) {
 
-  constructor(private userService: AuthService, private paymentService: PaymentStripeService, private stripeService: StripeService) {
   }
 
-  ngOnInit(): void {
+
+  async ngOnInit() {
     this.userService.getOrders().subscribe({
       next: (res) => {
         console.log("User orders")
@@ -29,10 +33,43 @@ export class OrderRepresentationComponent {
       },
       error: (e) => console.error("Error during getting user orders")
     });
-    // this.stripeService.setKey(this.stripeKey);
+
+    const stripe = await this.loadStripe();
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount(this.cardElement?.nativeElement);
+
   }
 
-  makePayment(amountCent: any) {
+  private async loadStripe() {
+    return await (window as any).Stripe('pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z');
+  }
 
+  async handlePayment() {
+    const stripe = await this.loadStripe();
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    const {token, error} = await stripe.createToken(card);
+
+    if (error) {
+      console.error(error);
+    } else {
+      this.zone.run(() => {
+        this.submitToken(token.id);
+      });
+    }
+  }
+
+  private submitToken(token: string) {
+    // this.paymentService.createPaymentIntent(token).subscribe(
+    //   response => {
+    //     console.log(response);
+    //     alert('Success');
+    //   },
+    //   error => {
+    //     console.error(error);
+    //     alert('Error');
+    //   }
+    // );
   }
 }
