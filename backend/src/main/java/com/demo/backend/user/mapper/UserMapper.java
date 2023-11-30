@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
@@ -17,5 +20,11 @@ public class UserMapper {
 
     public UserDto convertToUserDto(User user) {
         return modelMapper.map(user, UserDto.class);
+    }
+
+    public List<UserDto> convertUsersToUserDtos(List<User> users) {
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
     }
 }
