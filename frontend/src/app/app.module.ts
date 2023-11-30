@@ -18,6 +18,8 @@ import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './registration/registration.component';
 import {UserRepresentationComponent} from './user-representation/user-representation.component';
 import {OrderRepresentationComponent} from './order-representation/order-representation.component';
+import {NgxStripeModule, StripeService} from "ngx-stripe";
+import {AdminPanelComponent} from './admin-panel/admin-panel.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -35,13 +37,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoginComponent,
     RegisterComponent,
     UserRepresentationComponent,
-    OrderRepresentationComponent
+    OrderRepresentationComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    NgxStripeModule.forRoot('pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z'),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -52,7 +56,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgOptimizedImage,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [StripeService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
