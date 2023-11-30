@@ -15,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -75,4 +77,25 @@ public class UserService {
         throw new RuntimeException("This token is not valid -> could`nt refresh");
     }
 
+    public List<User> getAllUserExcludeCurrent(long userId) {
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> userId != user.getId())
+                .toList();
+    }
+
+    public void changeStatusOfUser(long id) {
+        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+        user.changeEnableAbility();
+
+        userRepository.save(user);
+    }
+
+    public List<User> searchByFirstName(String firstName) {
+        return userRepository.findByFirstName(firstName);
+    }
+
+    public List<User> searchByLastName(String lastName) {
+        return userRepository.findByLastName(lastName);
+    }
 }

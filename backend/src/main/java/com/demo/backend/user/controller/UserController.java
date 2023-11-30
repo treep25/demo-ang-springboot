@@ -4,10 +4,14 @@ import com.demo.backend.order.OrderService;
 import com.demo.backend.tutorial.model.Tutorial;
 import com.demo.backend.user.mapper.UserMapper;
 import com.demo.backend.user.model.User;
+import com.demo.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -17,6 +21,7 @@ public class UserController {
 
     private final UserMapper userMapper;
     private final OrderService orderService;
+    private final UserService userService;
 
     @GetMapping("me/info")
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal User user) {
@@ -33,5 +38,43 @@ public class UserController {
     @GetMapping("/orders")
     public ResponseEntity<?> getOrderOfCurrentPrincipal(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user.getOrder());
+    }
+
+    @GetMapping("/users")
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> getAllUsersExcludeCurrentPrinciple(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userMapper.convertUsersToUserDtos(userService.getAllUserExcludeCurrent(user.getId())));
+    }
+
+    @PostMapping("/{id}")
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> getAllUsersExcludeCurrentPrinciple(
+            @PathVariable("id") long id,
+            @AuthenticationPrincipal User user) {
+
+        userService.changeStatusOfUser(id);
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    //TODO refactore it
+    @GetMapping("/search")
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> searchByFirstName(
+            @AuthenticationPrincipal User user,
+            @RequestParam(name = "firstName", required = false) String firstName,
+            @RequestParam(name = "lastName", required = false) String lastName) {
+
+        if (lastName == null && firstName == null) {
+            throw new RuntimeException("Invalid Params");
+        }
+        List<User> users;
+        if (firstName != null && !firstName.isBlank()) {
+            users = userService.searchByFirstName(firstName);
+        } else {
+            users = userService.searchByLastName(lastName);
+        }
+
+        return ResponseEntity.ok(userMapper.convertUsersToUserDtos(users));
     }
 }
