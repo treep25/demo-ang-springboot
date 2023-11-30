@@ -21,12 +21,29 @@ export class AuthService {
     this.http.post(`${baseUrlAuth}/register`, registerRequest);
   }
 
+  refreshToken(refreshToken: any): Observable<AuthResponse> {
+    return this.http.post(`${baseUrlAuth}/refresh`, refreshToken)
+  }
+
+
   meInfo(): Observable<User> {
     return this.http.get(`${baseUrlUser}/me/info`, {withCredentials: true});
   }
 
-  refreshToken(refreshToken: any): Observable<AuthResponse> {
-    return this.http.post(`${baseUrlAuth}/refresh`, refreshToken)
+  getAllUsersAdmin(): Observable<User[]> {
+    return this.http.get<User[]>(`${baseUrlUser}/users`, {withCredentials: true})
+  }
+
+  blockUser(userId: any): Observable<any> {
+    return this.http.post(`${baseUrlUser}/${userId}`, null, {withCredentials: true})
+  }
+
+  searchByFirstName(firstName: any): Observable<User[]> {
+    return this.http.get<User[]>(`${baseUrlUser}/search?firstName=${firstName}`, {withCredentials: true})
+  }
+
+  searchByLastName(lastName: any): Observable<User[]> {
+    return this.http.get<User[]>(`${baseUrlUser}/search?lastName=${lastName}`, {withCredentials: true})
   }
 
   //TODO remove to another class
