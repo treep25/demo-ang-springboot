@@ -18,12 +18,11 @@
     <p>Role: {{ user.role }}</p>
     <p>First name: {{ user.firstName }}</p>
     <p>Last name: {{ user.lastName }}</p>
+    <p>isEnabled: {{ user.isEnabled}}</p>
   </div>
   <button class="orders-button" (click)="viewOrders(user)">Orders</button>
-  <ng-container *ngIf="user.isEnabled !== undefined">
-    <button class="block-button" *ngIf="!user.isEnabled" (click)="blockUser(user)">Unblock</button>
-    <button class="block-button" *ngIf="user.isEnabled" (click)="blockUser(user)">Block</button>
-  </ng-container>
+  <button class="block-button" *ngIf="user.isEnabled" (click)="blockUser(user)">Block</button>
+  <button class="block-button" *ngIf="user.isEnabled" (click)="blockUser(user)">Unblock</button>
   <div class="orders-view" *ngIf="user.showOrders && user.order">
     <p>Orders for {{ user.firstName }} {{ user.lastName }}</p>
     <div *ngFor="let tutorial of user.order?.tutorialsOrder" class="tutorial-info">
@@ -36,4 +35,4 @@
   </div>
   <hr/>
 </div>
-<pagination-controls (pageChange)="pageChanged($event)" class="pagination"></pagination-controls>
+<pagination-controls (pageChange)="pageChanged($event)" id="DEFAULT_PAGINATION_ID" class="pagination"></pagination-controls>
