@@ -38,8 +38,13 @@ export class LoginComponent {
         document.cookie = `accessToken=${res.accessToken}; path=/; SameSite=None; Secure`;
         document.cookie = `refreshToken=${res.refreshToken}; path=/; SameSite=None; Secure`;
 
-        this.router.navigate(['tutorials']);
+        this.router.navigate(['tutorials']).then(r => window.location.reload());
+
       }
     })
+  }
+
+  makeRequest(): void {
+    this.router.navigate(['/make-request'])
   }
 }

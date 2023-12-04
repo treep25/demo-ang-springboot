@@ -42,14 +42,27 @@ export class OrderRepresentationComponent implements OnInit {
   }
 
   private async loadStripe() {
-    return await (window as any).Stripe('pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z');
+    if (!window.Stripe) {
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      document.body.appendChild(script);
+
+      await new Promise((resolve) => {
+        script.onload = resolve;
+      });
+      return await (window as any).Stripe('pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z');
+    }
   }
 
   async handlePayment() {
     const stripe = await this.loadStripe();
-    const elements = stripe.elements();
-    const card = elements.create('card');
-    const {token, error} = await stripe.createToken(card);
+
+    // @ts-ignore
+    stripe.elements().create('card').then((card) => {
+      card.mount(this.cardElement?.nativeElement);
+    });
+
+    const {token, error} = await stripe.createToken();
 
     if (error) {
       console.error(error);
@@ -61,15 +74,23 @@ export class OrderRepresentationComponent implements OnInit {
   }
 
   private submitToken(token: string) {
-    // this.paymentService.createPaymentIntent(token).subscribe(
-    //   response => {
-    //     console.log(response);
-    //     alert('Success');
-    //   },
-    //   error => {
-    //     console.error(error);
-    //     alert('Error');
-    //   }
-    // );
+    this.paymentService.createFakePayment(token).subscribe(
+      response => {
+        console.log(response);
+        alert('Success');
+      },
+      error => {
+        console.error(error);
+        alert('Error');
+      }
+    );
+  }
+
+
+  clearBucketOrder() {
+    this.userService.clearBucketOrder().subscribe(
+      value => window.location.reload(),
+      error => console.error(error)
+    )
   }
 }

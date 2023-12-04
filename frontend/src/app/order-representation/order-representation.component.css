@@ -45,3 +45,19 @@
   margin-top: 10px;
   display: block;
 }
+
+.clear-orders-button {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.clear-orders-button img {
+  width: 50px;
+  height: 50px;
+}
