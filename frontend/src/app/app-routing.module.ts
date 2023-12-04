@@ -11,6 +11,8 @@ import {AuthGuard} from "./services/auth-guard.service";
 import {UserRepresentationComponent} from "./user-representation/user-representation.component";
 import {OrderRepresentationComponent} from "./order-representation/order-representation.component";
 import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
+import {MakeRequestComponent} from "./make-request/make-request.component";
+import {RequestRepresentationComponent} from "./request-representation/request-representation.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'tutorials', pathMatch: 'full'},
@@ -23,7 +25,9 @@ const routes: Routes = [
   {path: 'userInfo', component: UserRepresentationComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'orders', component: OrderRepresentationComponent, canActivate: [AuthGuard]},
-  {path: 'admin/panel', component: AdminPanelComponent, canActivate: [AuthGuard]}
+  {path: 'admin/panel', component: AdminPanelComponent, canActivate: [AuthGuard]},
+  {path: 'admin/requests', component: RequestRepresentationComponent, canActivate: [AuthGuard]},
+  {path: 'make-request', component: MakeRequestComponent}
 ];
 
 @NgModule({

@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {AuthResponse, Order, User} from "../models/tutorial.model";
+import {AuthResponse, Order, Request, User} from "../models/tutorial.model";
 
 const baseUrlAuth = 'http://localhost:8080/api/v1/auth';
 const baseUrlUser = 'http://localhost:8080/api/v1/user';
+const baseUrlRequest = 'http://localhost:8080/api/v1/request';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class AuthService {
     return this.http.get<User[]>(`${baseUrlUser}/users`, {withCredentials: true})
   }
 
-  blockUser(userId: any): Observable<any> {
+  changeUserStatus(userId: any): Observable<any> {
     return this.http.post(`${baseUrlUser}/${userId}`, null, {withCredentials: true})
   }
 
@@ -44,6 +45,26 @@ export class AuthService {
 
   searchByLastName(lastName: any): Observable<User[]> {
     return this.http.get<User[]>(`${baseUrlUser}/search?lastName=${lastName}`, {withCredentials: true})
+  }
+
+  searchByIsEnabledTrue(): Observable<User[]> {
+    return this.http.get<User[]>(`${baseUrlUser}/enabled`, {withCredentials: true})
+  }
+
+  clearBucketOrder(): Observable<User> {
+    return this.http.delete(`${baseUrlUser}/clear-orders`, {withCredentials: true})
+  }
+
+  createRequest(email: any, issue: any): Observable<any> {
+    return this.http.post(`${baseUrlRequest}`, {email, issue})
+  }
+
+  getALlRequestsWithUsers(): Observable<Request[]> {
+    return this.http.get<Request[]>(`${baseUrlRequest}`, {withCredentials: true})
+  }
+
+  closeRequest(id: any): Observable<any> {
+    return this.http.post(`${baseUrlRequest}/${id}`, {}, {withCredentials: true})
   }
 
   //TODO remove to another class

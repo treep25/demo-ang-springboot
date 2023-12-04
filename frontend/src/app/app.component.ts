@@ -32,6 +32,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/admin/panel'])
   }
 
+  userRequests() {
+    this.router.navigate(['/admin/requests'])
+  }
+
   ngOnInit(): void {
     this.authService.meInfo().subscribe(
       value => {
@@ -44,7 +48,7 @@ export class AppComponent implements OnInit {
     document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(r => window.location.reload());
   }
 
 }

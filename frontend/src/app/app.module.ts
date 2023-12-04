@@ -20,6 +20,9 @@ import {UserRepresentationComponent} from './user-representation/user-representa
 import {OrderRepresentationComponent} from './order-representation/order-representation.component';
 import {NgxStripeModule, StripeService} from "ngx-stripe";
 import {AdminPanelComponent} from './admin-panel/admin-panel.component';
+import {NgxPaginationModule} from "ngx-pagination";
+import {MakeRequestComponent} from './make-request/make-request.component';
+import {RequestRepresentationComponent} from './request-representation/request-representation.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,13 +41,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     RegisterComponent,
     UserRepresentationComponent,
     OrderRepresentationComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
+    MakeRequestComponent,
+    RequestRepresentationComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    NgxPaginationModule,
     NgxStripeModule.forRoot('pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z'),
     TranslateModule.forRoot({
       loader: {
