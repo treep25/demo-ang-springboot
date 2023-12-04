@@ -7,8 +7,11 @@
     <input type="text" placeholder="Search by Last Name" [(ngModel)]="lastName"/>
     <button class="search-button" (click)="searchByLastName()">Search</button>
   </div>
+  <div class="search-bar">
+    <button class="search-button" (click)="getAllStatusEnabled()">Only enabled users</button>
+  </div>
 </div>
-<div *ngFor="let user of users" class="user-container">
+<div *ngFor="let user of pagedUsers" class="user-container">
   <div class="user-info">
     <p>{{ user.firstName }} {{ user.lastName }}</p>
     <p>Email: {{ user.email }}</p>
@@ -33,3 +36,4 @@
   </div>
   <hr/>
 </div>
+<pagination-controls (pageChange)="pageChanged($event)" class="pagination"></pagination-controls>

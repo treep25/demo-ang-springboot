@@ -68,3 +68,9 @@ hr {
   cursor: pointer;
   border-radius: 3px;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
