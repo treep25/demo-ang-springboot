@@ -1,0 +1,43 @@
+.request-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.request-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  width: 300px;
+}
+
+.request-item p {
+  margin: 5px 0;
+}
+
+.request-item button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.request-item button:hover {
+  background-color: #0056b3;
+}
+
+.unlock-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.unlock-button:hover {
+  background-color: #218838;
+}

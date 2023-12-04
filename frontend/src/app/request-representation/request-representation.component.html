@@ -1,0 +1,12 @@
+<div *ngFor="let request of requests" class="request-item">
+  <p>User: {{ request.user?.firstName }} {{ request.user?.lastName }}</p>
+  <p>Email: {{ request.user?.email }}</p>
+  <p>Role: {{ request.user?.role }}</p>
+  <p>Issue: {{ request.issue }}</p>
+  <p>Status:{{ request.status }}</p>
+  <p>Created at: {{ request.createdDate }}</p>
+  <p>Checked at: {{ request.checkDate }}</p>
+  <button *ngIf="request.status !== 'CLOSED' && request.status !== 'CANCELED'" class="unlock-button" (click)="unlockUser(request.user?.id, request.id)">Unblock</button>
+  <button *ngIf="request.status !== 'CLOSED' && request.status !== 'CANCELED'" class="unlock-button" (click)="canceleUserRequest(request.id)">Cancele</button>
+</div>
+
