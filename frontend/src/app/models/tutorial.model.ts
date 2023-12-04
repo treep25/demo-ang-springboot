@@ -48,3 +48,10 @@ export class Order {
   tutorialsOrder?: Tutorial[];
 }
 
+export class Request {
+  user?: User;
+  issue?: string;
+  createdDate?: string;
+  status?: string;
+}
+
