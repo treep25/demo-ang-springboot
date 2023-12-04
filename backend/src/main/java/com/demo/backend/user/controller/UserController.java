@@ -57,7 +57,6 @@ public class UserController {
         return ResponseEntity.ok().body(null);
     }
 
-    //TODO refactore it
     @GetMapping("/search")
     @PreAuthorize("@permissionCheck.hasPermission(#user)")
     public ResponseEntity<?> searchByFirstName(
@@ -76,5 +75,18 @@ public class UserController {
         }
 
         return ResponseEntity.ok(userMapper.convertUsersToUserDtos(users));
+    }
+
+    @GetMapping("/enabled")
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> getAllEnabledUsers(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userMapper.convertUsersToUserDtos(userService.getAllEnabledUsers(user.getId())));
+    }
+
+    @DeleteMapping("/clear-orders")
+    @PreAuthorize("@permissionCheck.hasPermission(#user)")
+    public ResponseEntity<?> clearOrders(@AuthenticationPrincipal User user) {
+        userService.clearOrders(user);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -3,6 +3,8 @@ package com.demo.backend.user.service;
 import com.demo.backend.auth.AuthRequest;
 import com.demo.backend.auth.AuthResponse;
 import com.demo.backend.auth.RegRequest;
+import com.demo.backend.order.Order;
+import com.demo.backend.order.OrderRepository;
 import com.demo.backend.security.jwt.JwtService;
 import com.demo.backend.user.Role;
 import com.demo.backend.user.model.User;
@@ -21,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -97,5 +100,16 @@ public class UserService {
 
     public List<User> searchByLastName(String lastName) {
         return userRepository.findByLastName(lastName);
+    }
+
+    public List<User> getAllEnabledUsers(long currentUserId) {
+        return userRepository.findAllByIsEmableTrue().stream().filter(user -> user.getId() != currentUserId).toList();
+    }
+
+    public void clearOrders(User user) {
+        Order order = user.getOrder();
+        user.setOrder(null);
+        userRepository.save(user);
+        orderRepository.delete(order);
     }
 }
