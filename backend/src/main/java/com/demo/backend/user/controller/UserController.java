@@ -84,7 +84,6 @@ public class UserController {
     }
 
     @DeleteMapping("/clear-orders")
-    @PreAuthorize("@permissionCheck.hasPermission(#user)")
     public ResponseEntity<?> clearOrders(@AuthenticationPrincipal User user) {
         userService.clearOrders(user);
         return ResponseEntity.noContent().build();

@@ -41,7 +41,7 @@ export class User {
   role?: string;
   order?: Order;
   showOrders?: boolean
-  isEnabled?: any
+  isEnabled?: boolean
 }
 
 export class Order {
@@ -49,9 +49,11 @@ export class Order {
 }
 
 export class Request {
+  id?: any;
   user?: User;
   issue?: string;
   createdDate?: string;
+  checkDate?: string;
   status?: string;
 }
 
