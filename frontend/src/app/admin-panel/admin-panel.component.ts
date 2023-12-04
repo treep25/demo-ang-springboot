@@ -12,20 +12,19 @@ export class AdminPanelComponent implements OnInit {
   users: User[] = []
   pagedUsers: User[] = [];
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 1;
   firstName = ''
   lastName = ''
 
 
   constructor(private userService: AuthService) {
-    this.updatePagedUsers();
   }
 
   ngOnInit(): void {
     this.userService.getAllUsersAdmin().subscribe(
       value => {
         this.users = value
-        this.pagedUsers = value
+        this.pagedUsers = this.users.slice(0, 1)
       },
       error => console.error(error)
     )
@@ -59,19 +58,20 @@ export class AdminPanelComponent implements OnInit {
 
   getAllStatusEnabled(): void {
     this.userService.searchByIsEnabledTrue().subscribe(
-      value => this.users = value,
+      value => this.pagedUsers = value,
       error => console.error(error)
     )
   }
 
-  // pagination
-
   pageChanged(event: any): void {
+    console.log('Page changed:', event);
     this.currentPage = event;
     this.updatePagedUsers();
   }
 
   private updatePagedUsers(): void {
+    console.log('Total pages:', Math.ceil(this.users.length / this.itemsPerPage));
+
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.pagedUsers = this.users.slice(startIndex, endIndex);
