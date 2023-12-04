@@ -64,7 +64,11 @@ export class AuthService {
   }
 
   closeRequest(id: any): Observable<any> {
-    return this.http.post(`${baseUrlRequest}/${id}`, {}, {withCredentials: true})
+    return this.http.post(`${baseUrlRequest}/close/${id}`, null, {withCredentials: true})
+  }
+
+  cancelRequest(id: any): Observable<any> {
+    return this.http.post(`${baseUrlRequest}/cancele/${id}`, null, {withCredentials: true})
   }
 
   //TODO remove to another class
