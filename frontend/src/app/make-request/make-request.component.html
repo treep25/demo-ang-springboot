@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form (ngSubmit)="submitForm()" [formGroup]="issueForm">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && issueForm.get('email')?.errors }">
+          <div *ngIf="submitted && issueForm.get('email')?.hasError('required')" class="invalid-feedback">
+            Email is required
+          </div>
+          <div *ngIf="submitted && issueForm?.get('email')?.hasError('email')" class="invalid-feedback">
+            Please enter a valid email address
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="issue">Issue:</label>
+          <textarea id="issue" name="issue" formControlName="issue" class="form-control" [ngClass]="{ 'is-invalid': submitted && issueForm.get('issue')?.errors }"></textarea>
+          <div *ngIf="submitted && issueForm.get('issue')?.hasError('required')" class="invalid-feedback">
+            Issue description is required
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="issueForm.invalid" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
