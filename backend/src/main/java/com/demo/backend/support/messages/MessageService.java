@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,8 +35,12 @@ public class MessageService {
     public List<Message> findConversation(User sender, String emailTo) {
 
         User recipient = userRepository.findByEmail(emailTo).orElseThrow();
-        UUID dialogUUID = messageRepository.findDialogUUIDBySenderAndRecipient(sender, recipient).orElseThrow();
+        Optional<UUID> dialogUUIDBySenderAndRecipient = messageRepository.findDialogUUIDBySenderAndRecipient(sender, recipient);
 
-        return messageRepository.findAllByDialogUUID(dialogUUID);
+        if (dialogUUIDBySenderAndRecipient.isEmpty()) {
+            text(MessageDto.builder().content("").recipient(emailTo).build(), sender);
+        }
+
+        return messageRepository.findAllByDialogUUID(messageRepository.findDialogUUIDBySenderAndRecipient(sender, recipient).orElseThrow());
     }
 }
