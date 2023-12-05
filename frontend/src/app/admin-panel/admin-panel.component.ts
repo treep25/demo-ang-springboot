@@ -21,7 +21,7 @@ export class AdminPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getAllUsersAdmin().subscribe(
+    this.userService.getAllUsers().subscribe(
       value => {
         this.users = value
         this.pagedUsers = this.users.slice(0, 1)

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {AuthResponse, Order, Request, User} from "../models/tutorial.model";
+import {AuthResponse, Message, Order, Request, User} from "../models/tutorial.model";
 
 const baseUrlAuth = 'http://localhost:8080/api/v1/auth';
 const baseUrlUser = 'http://localhost:8080/api/v1/user';
 const baseUrlRequest = 'http://localhost:8080/api/v1/request';
+const baseUrlTexting = 'http://localhost:8080/api/v1/texting';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class AuthService {
     return this.http.get(`${baseUrlUser}/me/info`, {withCredentials: true});
   }
 
-  getAllUsersAdmin(): Observable<User[]> {
+  getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${baseUrlUser}/users`, {withCredentials: true})
   }
 
@@ -69,6 +70,15 @@ export class AuthService {
 
   cancelRequest(id: any): Observable<any> {
     return this.http.post(`${baseUrlRequest}/cancele/${id}`, null, {withCredentials: true})
+  }
+
+  text(content: any, recipient: any): Observable<any> {
+    return this.http.post(`${baseUrlTexting}`, {content, recipient}, {withCredentials: true})
+  }
+
+  getConversationDialogContent(recipientEmail: any): Observable<Message[]> {
+    return this.http.get<Message[]>(`${baseUrlTexting}/find/conversation/${recipientEmail}`, {withCredentials: true})
+
   }
 
   //TODO remove to another class

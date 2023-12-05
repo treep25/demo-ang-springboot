@@ -28,6 +28,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/orders']);
   }
 
+  redirectToChatPage() {
+    this.router.navigate(['/chat']);
+  }
+
   adminPanel() {
     this.router.navigate(['/admin/panel'])
   }

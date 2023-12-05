@@ -13,6 +13,7 @@ import {OrderRepresentationComponent} from "./order-representation/order-represe
 import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
 import {MakeRequestComponent} from "./make-request/make-request.component";
 import {RequestRepresentationComponent} from "./request-representation/request-representation.component";
+import {TextingComponent} from "./texting/texting.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'tutorials', pathMatch: 'full'},
@@ -27,7 +28,8 @@ const routes: Routes = [
   {path: 'orders', component: OrderRepresentationComponent, canActivate: [AuthGuard]},
   {path: 'admin/panel', component: AdminPanelComponent, canActivate: [AuthGuard]},
   {path: 'admin/requests', component: RequestRepresentationComponent, canActivate: [AuthGuard]},
-  {path: 'make-request', component: MakeRequestComponent}
+  {path: 'make-request', component: MakeRequestComponent},
+  {path: 'chat', component: TextingComponent}
 ];
 
 @NgModule({
