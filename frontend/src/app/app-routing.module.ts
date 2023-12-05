@@ -29,7 +29,7 @@ const routes: Routes = [
   {path: 'admin/panel', component: AdminPanelComponent, canActivate: [AuthGuard]},
   {path: 'admin/requests', component: RequestRepresentationComponent, canActivate: [AuthGuard]},
   {path: 'make-request', component: MakeRequestComponent},
-  {path: 'chat', component: TextingComponent}
+  {path: 'chat', component: TextingComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
