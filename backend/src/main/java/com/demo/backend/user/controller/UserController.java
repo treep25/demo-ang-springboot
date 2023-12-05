@@ -89,4 +89,9 @@ public class UserController {
         userService.clearOrders(user);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/message/unread/{email}")
+    public ResponseEntity<?> getAllUnreadMessagesOfCurrentDialod(@AuthenticationPrincipal User user, @PathVariable String email) {
+        return ResponseEntity.ok(userService.getAllUnreadMessagesWith(user, email));
+    }
 }

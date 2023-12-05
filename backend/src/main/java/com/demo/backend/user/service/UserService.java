@@ -6,6 +6,7 @@ import com.demo.backend.auth.RegRequest;
 import com.demo.backend.order.Order;
 import com.demo.backend.order.OrderRepository;
 import com.demo.backend.security.jwt.JwtService;
+import com.demo.backend.support.messages.MessageService;
 import com.demo.backend.user.Role;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
@@ -27,6 +28,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final MessageService messageService;
 
     private void managerAuthentication(AuthRequest authRequest) {
         try {
@@ -111,5 +113,9 @@ public class UserService {
         user.setOrder(null);
         userRepository.save(user);
         orderRepository.delete(order);
+    }
+
+    public long getAllUnreadMessagesWith(User currentUser, String email) {
+        return messageService.getAllUnreadMessagesWith(currentUser, email);
     }
 }
