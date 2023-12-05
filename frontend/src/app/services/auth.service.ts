@@ -81,6 +81,10 @@ export class AuthService {
 
   }
 
+  getUnreadMessagesOfCurrentConversation(email: any): Observable<number> {
+    return this.http.get<number>(`${baseUrlUser}/message/unread/${email}`, {withCredentials: true})
+  }
+
   //TODO remove to another class
   createOrder(tutorial: any): Observable<Order> {
     console.log("creating order")

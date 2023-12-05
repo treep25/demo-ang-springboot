@@ -36,6 +36,9 @@ public class Message {
     @JoinColumn(name = "recipient_id", nullable = false)
     private User recipient;
 
+    @Enumerated(EnumType.STRING)
+    private MessageStatus messageStatus;
+
     @Column(nullable = false)
     @LastModifiedDate
     private LocalDateTime sentDateTime;

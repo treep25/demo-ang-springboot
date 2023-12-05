@@ -25,6 +25,7 @@ public class MessageService {
                 .builder()
                 .content(messageDto.getContent())
                 .dialogUUID(dialogUUID)
+                .messageStatus(MessageStatus.UNREAD)
                 .recipient(recipient)
                 .sender(user)
                 .build();
@@ -41,6 +42,28 @@ public class MessageService {
             text(MessageDto.builder().content("").recipient(emailTo).build(), sender);
         }
 
-        return messageRepository.findAllByDialogUUID(messageRepository.findDialogUUIDBySenderAndRecipient(sender, recipient).orElseThrow());
+        List<Message> allByDialogUUID = messageRepository.findAllByDialogUUID(messageRepository.findDialogUUIDBySenderAndRecipient(sender, recipient).orElseThrow());
+
+        allByDialogUUID
+                .stream()
+                .filter(message -> message.getRecipient().getId() == sender.getId())
+                .forEach(message -> message.setMessageStatus(MessageStatus.READ));
+
+        messageRepository.saveAll(allByDialogUUID);
+        return allByDialogUUID;
+    }
+
+    public long getAllUnreadMessagesWith(User currentUser, String email) {
+        User with = userRepository.findByEmail(email).orElseThrow();
+        UUID uuid = messageRepository.findDialogUUIDBySenderAndRecipient(currentUser, with).orElseThrow();
+
+        long countAmountOfUnreadMessagesOfCurrentConversation = messageRepository
+                .findAllByDialogUUID(uuid)
+                .stream()
+                .filter(message -> message.getRecipient().getId() == currentUser.getId())
+                .filter(message -> message.getMessageStatus().equals(MessageStatus.UNREAD))
+                .count();
+
+        return countAmountOfUnreadMessagesOfCurrentConversation;
     }
 }
