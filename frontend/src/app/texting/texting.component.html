@@ -1,0 +1,13 @@
+<div class="dialog-container">
+  <div class="email-input-container">
+    <input type="text" [(ngModel)]="recipient" placeholder="Enter email...">
+    <button (click)="startDialog()">Start Dialog</button>
+  </div>
+
+  <div *ngFor="let message of messages" class="message-container">
+    <p><strong>{{ message.sender?.firstName }}:</strong> {{ message.content }}</p>
+  </div>
+
+  <textarea [(ngModel)]="newMessage" placeholder="Write text..."></textarea>
+  <button (click)="sendMessage()">Send</button>
+</div>
