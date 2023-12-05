@@ -12,6 +12,7 @@ export class TextingComponent implements OnInit {
   selectedUser: User | null = null;
   messages: Message[] = [];
   newMessage: string = '';
+  unreadMessagesCount: { [key: string]: number } = {};
 
   constructor(private authService: AuthService) {
   }
@@ -20,6 +21,7 @@ export class TextingComponent implements OnInit {
     this.authService.getAllUsers().subscribe(
       value => {
         this.users = value;
+        this.loadUnreadMessagesCount();
       }
     );
   }
@@ -48,5 +50,17 @@ export class TextingComponent implements OnInit {
         this.newMessage = '';
       });
     }
+  }
+
+  loadUnreadMessagesCount() {
+    const usersWithEmail = this.users.filter(user => user.email);
+
+    usersWithEmail.forEach((user) => {
+      this.authService.getUnreadMessagesOfCurrentConversation(user.email!).subscribe(
+        (count) => {
+          this.unreadMessagesCount = {...this.unreadMessagesCount, [user.email!]: count};
+        }
+      );
+    });
   }
 }

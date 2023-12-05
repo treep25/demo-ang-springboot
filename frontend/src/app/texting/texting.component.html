@@ -1,22 +1,25 @@
 <div class="app-container">
   <div class="users-container">
     <h2>Users</h2>
-    <div *ngFor="let user of users" (click)="startDialog(user.email)">
+    <div *ngFor="let user of users" (click)="startDialog(user.email)" [class.selected-user]="user?.email === selectedUser?.email">
       {{ user.firstName }} {{ user.lastName }}
+      <div class="notification-circle" *ngIf="unreadMessagesCount[user.email] !== undefined && unreadMessagesCount[user.email] > 0">{{ unreadMessagesCount[user.email] }}</div>
     </div>
   </div>
 
   <div class="dialog-container">
     <div *ngIf="selectedUser" class="selected-user">
       <h2>{{ selectedUser.firstName }}</h2>
-      <div *ngFor="let message of messages" class="message-container">
-        <p *ngIf="message.content !== ''">
+      <div *ngFor="let message of messages" class="message-container"
+           [ngClass]="{'own-message': message.recipient?.firstName === selectedUser.firstName, 'other-user-message': message.sender?.firstName === selectedUser.firstName}">
+        <p *ngIf=" message.content !== ''">
           <strong *ngIf="message.sender?.firstName === selectedUser.firstName; else notYou">
             {{ message.sender?.firstName }}:
           </strong>
           <ng-template #notYou><strong>You:</strong></ng-template>
           {{ message.content }}
           <br>
+          <span *ngIf="message.messageStatus === 'UNREAD'"><small><small><small><small>*</small></small></small></small></span>
           <small><small>{{ message.sentDateTime | date: 'medium' }}</small></small>
         </p>
       </div>
@@ -26,4 +29,3 @@
     <div *ngIf="!selectedUser" class="placeholder">Select a user to start a dialog</div>
   </div>
 </div>
-

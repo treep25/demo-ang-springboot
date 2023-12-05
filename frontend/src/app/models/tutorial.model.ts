@@ -37,7 +37,7 @@ export class User {
   id?: any;
   firstName?: string;
   lastName?: string;
-  email?: string;
+  email?: any | "";
   role?: string;
   order?: Order;
   showOrders?: boolean
@@ -59,6 +59,7 @@ export class Request {
 
 export class Message {
   dialogUUID?: any;
+  messageStatus?: any
   content?: string;
   sender?: User;
   recipient?: User;

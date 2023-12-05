@@ -49,6 +49,8 @@
   margin: 10px 0;
   border-radius: 8px;
   max-width: 80%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .message-container p {
@@ -68,6 +70,7 @@ textarea {
   border-radius: 8px;
   margin: 10px 0;
   font-size: 16px;
+  width: calc(100% - 22px);
 }
 
 button {
@@ -78,6 +81,7 @@ button {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
 button:hover {
@@ -91,3 +95,58 @@ button:hover {
   border-radius: 8px;
   margin-bottom: 20px;
 }
+
+.own-message {
+  align-self: flex-end;
+  background-color: #4caf50;
+  color: white;
+  margin-left: auto;
+}
+
+
+.users-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-item {
+  position: relative;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.user-item.selected-user {
+  border-bottom: 2px solid #4caf50;
+}
+
+.notification-circle {
+  position: absolute;
+  top: 12.7%;
+  right: 1385px;
+  transform: translateY(-50%);
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-container.other-user-message {
+  background-color: #1094ea;
+  color: white;
+}
+
+
+.message-container.own-message {
+  background-color: #4caf50;
+  color: white;
+}
+
