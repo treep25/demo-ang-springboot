@@ -57,3 +57,11 @@ export class Request {
   status?: string;
 }
 
+export class Message {
+  dialogUUID?: any;
+  content?: string;
+  sender?: User;
+  recipient?: User;
+  sentDateTime?: string;
+}
+

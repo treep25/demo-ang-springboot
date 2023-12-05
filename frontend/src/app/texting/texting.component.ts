@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
-import {Message} from "../models/tutorial.model";
+import {Message, User} from "../models/tutorial.model";
 
 @Component({
   selector: 'app-texting',
@@ -8,46 +8,45 @@ import {Message} from "../models/tutorial.model";
   styleUrls: ['./texting.component.css']
 })
 export class TextingComponent implements OnInit {
+  users: User[] = [];
+  selectedUser: User | null = null;
   messages: Message[] = [];
   newMessage: string = '';
-  recipient: string = '';
 
   constructor(private authService: AuthService) {
-    const storedRecipient = localStorage.getItem('recipient');
-    if (storedRecipient) {
-      this.recipient = storedRecipient;
-    }
-  }
-
-  sendMessage() {
-    this.authService.text(this.newMessage, this.recipient).subscribe(() => {
-      this.authService.getConversationDialogContent(this.recipient).subscribe(
-        value => {
-          this.messages = value;
-        }
-      );
-    });
-
-    this.newMessage = '';
   }
 
   ngOnInit(): void {
-    if (this.recipient) {
-      this.authService.getConversationDialogContent(this.recipient).subscribe(
+    this.authService.getAllUsers().subscribe(
+      value => {
+        this.users = value;
+      }
+    );
+  }
+
+  startDialog(email?: string): void {
+    if (email) {
+      this.authService.getConversationDialogContent(email).subscribe(
         value => {
           this.messages = value;
         }
       );
+      this.selectedUser = this.users.find(user => user.email === email) || null;
+    } else {
+      this.selectedUser = null;
     }
   }
 
-  startDialog() {
-    localStorage.setItem('recipient', this.recipient);
-
-    this.authService.getConversationDialogContent(this.recipient).subscribe(
-      value => {
-        this.messages = value;
-      }
-    );
+  sendMessage(): void {
+    if (this.selectedUser) {
+      this.authService.text(this.newMessage, this.selectedUser.email).subscribe(() => {
+        this.authService.getConversationDialogContent(this.selectedUser!.email).subscribe(
+          value => {
+            this.messages = value;
+          }
+        );
+        this.newMessage = '';
+      });
+    }
   }
 }
