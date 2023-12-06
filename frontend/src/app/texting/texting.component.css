@@ -104,11 +104,6 @@ button:hover {
 }
 
 
-.users-container {
-  display: flex;
-  flex-direction: column;
-}
-
 .user-item {
   position: relative;
   padding: 10px;
@@ -122,11 +117,15 @@ button:hover {
   border-bottom: 2px solid #4caf50;
 }
 
+.users-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .notification-circle {
   position: absolute;
-  top: 12.7%;
-  right: 1385px;
-  transform: translateY(-50%);
+  right: 1300px;
+  transform: translateY(-110%);
   background-color: red;
   color: white;
   border-radius: 50%;
@@ -144,9 +143,14 @@ button:hover {
   color: white;
 }
 
-
 .message-container.own-message {
   background-color: #4caf50;
   color: white;
+}
+
+.conversation-started {
+  font-size: smaller;
+  color: initial !important;
+  border: none !important;
 }
 

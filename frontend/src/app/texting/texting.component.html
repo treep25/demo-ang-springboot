@@ -12,7 +12,7 @@
       <h2>{{ selectedUser.firstName }}</h2>
       <div *ngFor="let message of messages" class="message-container"
            [ngClass]="{'own-message': message.recipient?.firstName === selectedUser.firstName, 'other-user-message': message.sender?.firstName === selectedUser.firstName}">
-        <p *ngIf=" message.content !== ''">
+        <p *ngIf=" message.content !== '' ">
           <strong *ngIf="message.sender?.firstName === selectedUser.firstName; else notYou">
             {{ message.sender?.firstName }}:
           </strong>
@@ -21,6 +21,9 @@
           <br>
           <span *ngIf="message.messageStatus === 'UNREAD'"><small><small><small><small>*</small></small></small></small></span>
           <small><small>{{ message.sentDateTime | date: 'medium' }}</small></small>
+        </p>
+        <p *ngIf="message.content === ''" class="conversation-started">
+          {{message.sender?.firstName}} {{ message.sender?.lastName}} started conversation
         </p>
       </div>
       <textarea [(ngModel)]="newMessage" placeholder="Write text..."></textarea>
