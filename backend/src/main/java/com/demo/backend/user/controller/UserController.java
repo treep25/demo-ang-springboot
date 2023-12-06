@@ -94,4 +94,9 @@ public class UserController {
     public ResponseEntity<?> getAllUnreadMessagesOfCurrentDialod(@AuthenticationPrincipal User user, @PathVariable String email) {
         return ResponseEntity.ok(userService.getAllUnreadMessagesWith(user, email));
     }
+
+    @GetMapping("/message/unread")
+    public ResponseEntity<?> getAllUnreadMessages(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.getAllUnreadMessagesOf(user));
+    }
 }

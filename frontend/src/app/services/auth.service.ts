@@ -85,13 +85,15 @@ export class AuthService {
     return this.http.get<number>(`${baseUrlUser}/message/unread/${email}`, {withCredentials: true})
   }
 
-  //TODO remove to another class
+  getUnreadMessagesOfUser(): Observable<number> {
+    return this.http.get<number>(`${baseUrlUser}/message/unread`, {withCredentials: true})
+  }
+
   createOrder(tutorial: any): Observable<Order> {
     console.log("creating order")
     return this.http.post(`${baseUrlUser}/order`, tutorial, {withCredentials: true})
   }
 
-  //TODO mb into another class
   getOrders(): Observable<Order> {
     return this.http.get(`${baseUrlUser}/orders`, {withCredentials: true});
   }

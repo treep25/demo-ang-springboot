@@ -7,6 +7,7 @@ import com.demo.backend.order.Order;
 import com.demo.backend.order.OrderRepository;
 import com.demo.backend.security.jwt.JwtService;
 import com.demo.backend.support.messages.MessageService;
+import com.demo.backend.support.messages.MessageStatus;
 import com.demo.backend.user.Role;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
@@ -117,5 +118,12 @@ public class UserService {
 
     public long getAllUnreadMessagesWith(User currentUser, String email) {
         return messageService.getAllUnreadMessagesWith(currentUser, email);
+    }
+
+    public long getAllUnreadMessagesOf(User currentUser) {
+        return currentUser.getReceivedMessages()
+                .stream()
+                .filter(message -> message.getMessageStatus().equals(MessageStatus.UNREAD))
+                .count();
     }
 }
