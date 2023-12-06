@@ -2,7 +2,7 @@
   <div class="users-container">
     <h2>Users</h2>
     <div *ngFor="let user of users" (click)="startDialog(user.email)" [class.selected-user]="user?.email === selectedUser?.email">
-      {{ user.firstName }} {{ user.lastName }}
+      {{ user.firstName }} {{ user.lastName }} <small><small>{{user.email}}</small></small>
       <div class="notification-circle" *ngIf="unreadMessagesCount[user.email] !== undefined && unreadMessagesCount[user.email] > 0">{{ unreadMessagesCount[user.email] }}</div>
     </div>
   </div>
