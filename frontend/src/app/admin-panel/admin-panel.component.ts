@@ -44,7 +44,7 @@ export class AdminPanelComponent implements OnInit {
 
   searchByFirstName(): void {
     this.userService.searchByFirstName(this.firstName).subscribe(
-      value => this.users = value,
+      value => this.pagedUsers = value,
       error => console.error(error)
     )
   }
