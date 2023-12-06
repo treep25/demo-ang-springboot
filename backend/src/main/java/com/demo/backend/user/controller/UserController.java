@@ -2,6 +2,7 @@ package com.demo.backend.user.controller;
 
 import com.demo.backend.order.OrderService;
 import com.demo.backend.tutorial.model.Tutorial;
+import com.demo.backend.user.SearchingRequest;
 import com.demo.backend.user.mapper.UserMapper;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.service.UserService;
@@ -10,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -65,17 +64,20 @@ public class UserController {
             @RequestParam(name = "firstName", required = false) String firstName,
             @RequestParam(name = "lastName", required = false) String lastName) {
 
-        if (lastName == null && firstName == null) {
-            throw new RuntimeException("Invalid Params");
-        }
-        List<User> users;
-        if (firstName != null && !firstName.isBlank()) {
-            users = userService.searchByFirstName(firstName);
-        } else {
-            users = userService.searchByLastName(lastName);
+        if (firstName == null && lastName == null) {
+            throw new IllegalArgumentException();
         }
 
-        return ResponseEntity.ok(userMapper.convertUsersToUserDtos(users));
+        return ResponseEntity.ok(
+                userMapper.convertUsersToUserDtos(
+                        userService.searchByFirstNameOrLastName(
+                                SearchingRequest
+                                        .builder()
+                                        .firstName(firstName)
+                                        .lastName(lastName)
+                                        .build())
+                )
+        );
     }
 
     @GetMapping("/enabled")

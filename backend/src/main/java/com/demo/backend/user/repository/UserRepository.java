@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.isEnabled = true")
     List<User> findAllByIsEmableTrue();
+
+    List<User> findByFirstNameAndLastName(String firstName, String lastName);
 }

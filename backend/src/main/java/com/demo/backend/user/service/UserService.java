@@ -9,6 +9,7 @@ import com.demo.backend.security.jwt.JwtService;
 import com.demo.backend.support.messages.MessageService;
 import com.demo.backend.support.messages.MessageStatus;
 import com.demo.backend.user.Role;
+import com.demo.backend.user.SearchingRequest;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +36,21 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final MessageService messageService;
+
+    private final Map<Predicate<SearchingRequest>, BiFunction<SearchingRequest, UserRepository, List<User>>> searchingMap = Map.of(
+            searchingParam -> checkParamssBeforeSearch(searchingParam.getFirstName()) && checkParamssBeforeSearch(searchingParam.getLastName()),
+            (currentSearchingParam, repository) -> repository.findByFirstNameAndLastName(currentSearchingParam.getFirstName(), currentSearchingParam.getLastName()),
+
+            searchingParam -> checkParamssBeforeSearch(searchingParam.getLastName()),
+            (currentSearchingParam, repository) -> repository.findByLastName(currentSearchingParam.getLastName()),
+
+            searchingParam -> checkParamssBeforeSearch(searchingParam.getFirstName()),
+            (currentSearchingParam, repository) -> repository.findByFirstName(currentSearchingParam.getFirstName())
+    );
+
+    private boolean checkParamssBeforeSearch(String param) {
+        return param != null && !param.isEmpty() && !param.isBlank();
+    }
 
     private void managerAuthentication(AuthRequest authRequest) {
         try {
@@ -97,12 +118,17 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<User> searchByFirstName(String firstName) {
-        return userRepository.findByFirstName(firstName);
-    }
+    public List<User> searchByFirstNameOrLastName(SearchingRequest inputParams) {
 
-    public List<User> searchByLastName(String lastName) {
-        return userRepository.findByLastName(lastName);
+        AtomicReference<List<User>> usersBySearchingRequest = new AtomicReference<>(new ArrayList<>());
+        searchingMap.forEach(
+                (searchingRequestPredicate, searchingRequestUserRepositoryListBiFunction) -> {
+                    if (searchingRequestPredicate.test(inputParams)) {
+                        usersBySearchingRequest.set(searchingRequestUserRepositoryListBiFunction.apply(inputParams, userRepository));
+                    }
+                }
+        );
+        return usersBySearchingRequest.get();
     }
 
     public List<User> getAllEnabledUsers(long currentUserId) {
