@@ -15,6 +15,7 @@
       <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserRepresentation()">Info</button>
       <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserOrderRepresentation()">Orders</button>
       <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToChatPage()">Support</button>
+      <div class="notification-circle" (click)="redirectToChatPage()" *ngIf="numberOdUnreadMessaged != undefined && numberOdUnreadMessaged > 0 ">{{ numberOdUnreadMessaged }}</div>
       <button class="btn btn-link" *ngIf="role == 'ADMIN'" (click)="adminPanel()">Admin Panel</button>
       <button class="btn btn-link" *ngIf="role == 'ADMIN'" (click)="userRequests()">Requets</button>
       <button class="btn btn-link" (click)="logOut()">logout</button>

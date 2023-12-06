@@ -19,7 +19,6 @@ body {
   margin-top: 20px;
 }
 
-/* Navbar Styles */
 .navbar {
   background-color: #343a40;
 }
@@ -41,7 +40,6 @@ body {
   color: #adb5bd;
 }
 
-/* Page Content Styles */
 .page-content {
   background-color: #ffffff;
   padding: 20px;
@@ -49,7 +47,6 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Tutorials Component Styles */
 .tutorials-list {
   list-style: none;
   padding: 0;
@@ -71,16 +68,30 @@ body {
   color: #6c757d;
 }
 
-/* Add Tutorial Component Styles */
 .add-tutorial-form {
   max-width: 400px;
   margin: 0 auto;
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   .navbar-nav .nav-item {
     margin-right: 0;
     margin-bottom: 10px;
   }
+}
+
+.notification-circle {
+  position: absolute;
+  right: 285px;
+  transform: translateY(-14%);
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 10px;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

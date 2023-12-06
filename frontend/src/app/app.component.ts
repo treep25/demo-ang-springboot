@@ -11,6 +11,7 @@ import {AuthService} from "./services/auth.service";
 export class AppComponent implements OnInit {
   title = 'Angular tutorials implementation';
   role ? = '';
+  numberOdUnreadMessaged?: number | 0
 
   constructor(private translate: TranslateService, private router: Router, private authService: AuthService) {
     translate.setDefaultLang('en');
@@ -44,6 +45,9 @@ export class AppComponent implements OnInit {
     this.authService.meInfo().subscribe(
       value => {
         this.role = value.role;
+        this.authService.getUnreadMessagesOfUser().subscribe(
+          value1 => this.numberOdUnreadMessaged = value1
+        )
       }
     );
   }
