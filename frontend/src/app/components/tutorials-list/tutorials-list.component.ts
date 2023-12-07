@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Tutorial} from 'src/app/models/tutorial.model';
 import {TutorialService} from 'src/app/services/tutorial.service';
 import {AuthService} from "../../services/auth.service";
@@ -8,7 +8,7 @@ import {AuthService} from "../../services/auth.service";
   templateUrl: './tutorials-list.component.html',
   styleUrls: ['./tutorials-list.component.css'],
 })
-export class TutorialsListComponent {
+export class TutorialsListComponent implements OnInit {
   tutorials?: Tutorial[];
   currentTutorial: Tutorial = {};
   currentIndex = -1;
@@ -19,15 +19,15 @@ export class TutorialsListComponent {
   role? = '';
 
   constructor(private tutorialService: TutorialService, private authService: AuthService) {
-  }
-
-  ngOnInit(): void {
-    this.retrieveTutorials();
     this.authService.meInfo().subscribe(
       value => {
         this.role = value.role;
       }
     );
+  }
+
+  ngOnInit(): void {
+    this.retrieveTutorials();
   }
 
   retrieveTutorials(): void {
