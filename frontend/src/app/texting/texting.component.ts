@@ -63,4 +63,13 @@ export class TextingComponent implements OnInit {
       );
     });
   }
+
+  // showEmojiPicker = true;
+  // toggleEmojiPicker() {
+  //   this.showEmojiPicker = !this.showEmojiPicker;
+  // }
+  //
+  // handleEmojiSelect(event: any) {
+  //   this.newMessage +=  event.emoji.native;
+  // }
 }

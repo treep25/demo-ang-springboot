@@ -10,21 +10,23 @@
   <div class="dialog-container">
     <div *ngIf="selectedUser" class="selected-user">
       <h2>{{ selectedUser.firstName }}</h2>
-      <div *ngFor="let message of messages" class="message-container"
-           [ngClass]="{'own-message': message.recipient?.firstName === selectedUser.firstName, 'other-user-message': message.sender?.firstName === selectedUser.firstName}">
-        <p *ngIf=" message.content !== '' ">
-          <strong *ngIf="message.sender?.firstName === selectedUser.firstName; else notYou">
-            {{ message.sender?.firstName }}:
-          </strong>
-          <ng-template #notYou><strong>You:</strong></ng-template>
-          {{ message.content }}
-          <br>
-          <span *ngIf="message.messageStatus === 'UNREAD'"><small><small><small><small>*</small></small></small></small></span>
-          <small><small>{{ message.sentDateTime | date: 'medium' }}</small></small>
-        </p>
-        <p *ngIf="message.content === ''" class="conversation-started">
-          {{message.sender?.firstName}} {{ message.sender?.lastName}} started conversation
-        </p>
+      <div class="message-container-wrapper">
+        <div *ngFor="let message of messages" class="message-container"
+             [ngClass]="{'own-message': message.recipient?.firstName === selectedUser.firstName, 'other-user-message': message.sender?.firstName === selectedUser.firstName}">
+          <p *ngIf=" message.content !== '' ">
+            <strong *ngIf="message.sender?.firstName === selectedUser.firstName; else notYou">
+              {{ message.sender?.firstName }}:
+            </strong>
+            <ng-template #notYou><strong>You:</strong></ng-template>
+            {{ message.content }}
+            <br>
+            <span *ngIf="message.messageStatus === 'UNREAD'"><small><small><small><small>*</small></small></small></small></span>
+            <small><small>{{ message.sentDateTime | date: 'medium' }}</small></small>
+          </p>
+          <p *ngIf="message.content === ''" class="conversation-started">
+            {{message.sender?.firstName}} {{ message.sender?.lastName}} started conversation
+          </p>
+        </div>
       </div>
       <textarea [(ngModel)]="newMessage" placeholder="Write text..."></textarea>
       <button (click)="sendMessage()">Send</button>
