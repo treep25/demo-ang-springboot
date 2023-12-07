@@ -1,4 +1,4 @@
-package com.demo.backend.order;
+package com.demo.backend.order.model;
 
 import com.demo.backend.tutorial.model.Tutorial;
 import jakarta.persistence.*;
@@ -21,4 +21,6 @@ public class Order {
     private long userId;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tutorial> tutorialsOrder = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 }
