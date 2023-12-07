@@ -54,3 +54,19 @@
 .btn-group {
   margin-bottom: 20px;
 }
+
+
+@media (max-width: 768px) {
+  .list-group-item,
+  .btn-group {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .list-group-item,
+  .btn-group {
+    width: 100%;
+    text-align: center;
+  }
+}

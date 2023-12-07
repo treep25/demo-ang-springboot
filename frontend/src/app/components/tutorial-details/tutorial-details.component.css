@@ -55,3 +55,16 @@ input {
   text-decoration: none;
   color: #007bff;
 }
+
+@media (max-width: 768px) {
+  .edit-form {
+    max-width: 100%;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  input {
+    font-size: 14px;
+  }
+}

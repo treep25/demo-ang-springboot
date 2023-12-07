@@ -1,4 +1,3 @@
-/* Стили для контейнера формы */
 .submit-form {
   max-width: 400px;
   margin: 0 auto;
@@ -9,7 +8,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Стили для формы и ее элементов */
 .form-group {
   margin-bottom: 15px;
 }
@@ -30,7 +28,6 @@ input {
   border-radius: 4px;
 }
 
-/* Стили для кнопок */
 button {
   padding: 10px 15px;
   font-size: 16px;
@@ -46,7 +43,6 @@ button:hover {
   background-color: #4cae4c;
 }
 
-/* Стили для сообщения об успехе */
 .success-message {
   margin-top: 15px;
   padding: 10px;
@@ -55,7 +51,27 @@ button:hover {
   border-radius: 4px;
 }
 
-/* Стили для кнопки "Add" после успешной отправки формы */
 .add-button {
   margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .submit-form {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  input {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 14px;
+  }
 }

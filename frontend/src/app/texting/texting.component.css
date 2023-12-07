@@ -124,7 +124,7 @@ button:hover {
 
 .notification-circle {
   position: absolute;
-  right: 1300px;
+  right: 1290px;
   transform: translateY(-110%);
   background-color: red;
   color: white;
@@ -154,3 +154,33 @@ button:hover {
   border: none !important;
 }
 
+
+.message-container-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+@media only screen and (max-width: 767px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .users-container,
+  .dialog-container {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .notification-circle {
+    right: auto;
+    left: 5px;
+  }
+
+  .message-container-wrapper {
+    max-height: 150px;
+  }
+
+  textarea {
+    width: calc(100% - 20px);
+  }
+}

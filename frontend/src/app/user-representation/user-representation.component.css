@@ -22,3 +22,19 @@ span {
   flex-grow: 1;
   word-break: break-all;
 }
+
+@media only screen and (max-width: 767px) {
+  .user-info {
+    max-width: 100%;
+    margin: 10px auto;
+    padding: 15px;
+  }
+
+  .info-item {
+    flex-direction: column;
+  }
+
+  label {
+    margin-bottom: 5px;
+  }
+}

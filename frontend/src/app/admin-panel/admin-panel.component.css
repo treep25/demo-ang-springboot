@@ -74,3 +74,40 @@ hr {
   justify-content: center;
   margin-top: 20px;
 }
+
+@media (max-width: 768px) {
+  .user-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-container {
+    margin-right: 0;
+  }
+
+  .search-bar input {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .search-button {
+    margin-top: 10px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .user-container {
+    padding: 10px;
+  }
+
+  .orders-button {
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+
+  .tutorial-info {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
