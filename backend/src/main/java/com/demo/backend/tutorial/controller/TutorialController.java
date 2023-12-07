@@ -27,8 +27,8 @@ public class TutorialController {
     private final TutorialService tutorialService;
 
     @GetMapping
-    public ResponseEntity<?> getAllTutorials() {
-        return ResponseEntity.ok(tutorialService.getAllTutorials());
+    public ResponseEntity<?> getAllTutorials(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(tutorialService.getAllTutorials(user.getRole()));
     }
 
     @GetMapping("/{id}")
@@ -82,7 +82,8 @@ public class TutorialController {
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "sortedType", required = false) String sortedType,
-            @RequestParam(value = "status", required = false) String tutorialStatus) {
+            @RequestParam(value = "status", required = false) String tutorialStatus,
+            @AuthenticationPrincipal User user) {
 
         DataValidation.preUpdateValidationOfFields(title, description, sortedType, tutorialStatus);
 
@@ -94,7 +95,7 @@ public class TutorialController {
                 .tutorialStatus(tutorialStatus)
                 .build();
 
-        return ResponseEntity.ok(tutorialService.findTutorialByDifferentParams(searchingTutorialRequest));
+        return ResponseEntity.ok(tutorialService.findTutorialByDifferentParams(searchingTutorialRequest, user.getRole()));
     }
 
     @PatchMapping("/{id}")

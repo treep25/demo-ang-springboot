@@ -5,6 +5,7 @@ import com.demo.backend.tutorial.model.Status;
 import com.demo.backend.tutorial.model.Tutorial;
 import com.demo.backend.tutorial.model.dto.TutorialDto;
 import com.demo.backend.tutorial.repository.TutorialRepository;
+import com.demo.backend.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,8 @@ public class TutorialService {
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getTutorialStatus()), (request, repository) -> repository.findByStatus(Status.getStatusFromText(request.getTutorialStatus())));
         put(request -> verifyRequestParamsNotEmptyAndBlank(request.getSortingType()), (request, repository)
                 -> request.isNaturalOrderSortingType() ?
-                getAllTutorials().stream().sorted(Comparator.comparing(Tutorial::getTitle)).toList() :
-                getAllTutorials().stream().sorted(Comparator.comparing(Tutorial::getTitle).reversed()).toList());
+                StreamSupport.stream(repository.findAll().spliterator(), false).sorted(Comparator.comparing(Tutorial::getTitle)).toList() :
+                StreamSupport.stream(repository.findAll().spliterator(), false).sorted(Comparator.comparing(Tutorial::getTitle).reversed()).toList());
     }};
 
     private final Map<Predicate<TutorialDto>, BiConsumer<Tutorial, TutorialDto>> updatesMap = new HashMap<>() {{
@@ -43,10 +44,17 @@ public class TutorialService {
         return request != null && !request.isEmpty() && !request.isBlank();
     }
 
-    public List<Tutorial> getAllTutorials() {
+    public boolean ifUserCanSeePendingTutorials(Role userRole, Tutorial currentTutorial) {
+        if (Role.ADMIN.equals(userRole)) {
+            return true;
+        }
+        return currentTutorial.getStatus().equals(Status.PUBLISHED);
+    }
+
+    public List<Tutorial> getAllTutorials(Role role) {
         return StreamSupport.stream(
                 tutorialRepository.findAll().spliterator(), false
-        ).toList();
+        ).filter(tutorial -> ifUserCanSeePendingTutorials(role, tutorial)).toList();
     }
 
     public Tutorial getTutorialById(long id) {
@@ -87,14 +95,18 @@ public class TutorialService {
         tutorialRepository.deleteAll();
     }
 
-    public List<Tutorial> findTutorialByDifferentParams(SearchingTutorialRequest searchingTutorialRequest) {
+    public List<Tutorial> findTutorialByDifferentParams(SearchingTutorialRequest searchingTutorialRequest, Role role) {
         AtomicReference<List<Tutorial>> response = new AtomicReference<>(new ArrayList<>());
+        searchingTutorialRequest.setRole(role);
+
         searchingMap.forEach((searchingTutorialRequestPredicate, repositoryAction) -> {
             if (searchingTutorialRequestPredicate.test(searchingTutorialRequest)) {
                 response.set(repositoryAction.apply(searchingTutorialRequest, tutorialRepository));
             }
         });
-        return response.get().isEmpty() ? null : response.get();
+        return response.get().isEmpty() ? null : response.get().stream()
+                .filter(tutorial -> ifUserCanSeePendingTutorials(role, tutorial))
+                .toList();
     }
 
     public Tutorial updateTutorialById(long id, TutorialDto tutorialDto) {

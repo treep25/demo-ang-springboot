@@ -1,5 +1,6 @@
 package com.demo.backend.tutorial.model;
 
+import com.demo.backend.user.Role;
 import lombok.*;
 
 @Data
@@ -12,6 +13,7 @@ public class SearchingTutorialRequest {
     private String description;
     private String sortingType;
     private String tutorialStatus;
+    private Role role;
     public boolean isNaturalOrderSortingType() {
         return sortingType.equals("ASC");
     }
