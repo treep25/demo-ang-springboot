@@ -1,6 +1,6 @@
 package com.demo.backend.user.controller;
 
-import com.demo.backend.order.OrderService;
+import com.demo.backend.order.service.OrderService;
 import com.demo.backend.tutorial.model.Tutorial;
 import com.demo.backend.user.SearchingRequest;
 import com.demo.backend.user.mapper.UserMapper;
@@ -34,13 +34,17 @@ public class UserController {
         return ResponseEntity.ok(orderService.createOrder(tutorial, user));
     }
 
+    @PostMapping("/order/pay")
+    public ResponseEntity<?> payOrder(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(orderService.payOrder(user));
+    }
+
     @GetMapping("/orders")
     public ResponseEntity<?> getOrderOfCurrentPrincipal(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user.getOrder());
     }
 
     @GetMapping("/users")
-    // todo  bad thing
 //    @PreAuthorize("@permissionCheck.hasPermission(#user)")
     public ResponseEntity<?> getAllUsersExcludeCurrentPrinciple(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(userMapper.convertUsersToUserDtos(userService.getAllUserExcludeCurrent(user.getId())));

@@ -1,6 +1,6 @@
 package com.demo.backend.user.model;
 
-import com.demo.backend.order.Order;
+import com.demo.backend.order.model.Order;
 import com.demo.backend.user.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EnumType;
