@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Message, User} from "../models/tutorial.model";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-texting',
@@ -12,16 +13,34 @@ export class TextingComponent implements OnInit {
   selectedUser: User | null = null;
   messages: Message[] = [];
   newMessage: string = '';
+  userIdWhenStatusOfOrderFailed?: number
   unreadMessagesCount: { [key: string]: number } = {};
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const userId = params['userId'];
+      const message = params['message'];
+
+      this.userIdWhenStatusOfOrderFailed = userId;
+      this.newMessage = message;
+    })
+
     this.authService.getAllUsers().subscribe(
       value => {
         this.users = value;
         this.loadUnreadMessagesCount();
+
+        if (this.userIdWhenStatusOfOrderFailed != null || this.newMessage != null) {
+
+          this.users.forEach(value1 => {
+            if (value1.id == this.userIdWhenStatusOfOrderFailed) {
+              this.selectedUser = value1;
+            }
+          })
+        }
       }
     );
   }
@@ -48,6 +67,8 @@ export class TextingComponent implements OnInit {
           }
         );
         this.newMessage = '';
+        this.userIdWhenStatusOfOrderFailed = undefined;
+        this.router.navigate(['/chat'])
       });
     }
   }
@@ -63,13 +84,4 @@ export class TextingComponent implements OnInit {
       );
     });
   }
-
-  // showEmojiPicker = true;
-  // toggleEmojiPicker() {
-  //   this.showEmojiPicker = !this.showEmojiPicker;
-  // }
-  //
-  // handleEmojiSelect(event: any) {
-  //   this.newMessage +=  event.emoji.native;
-  // }
 }

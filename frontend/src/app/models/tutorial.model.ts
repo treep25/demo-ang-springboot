@@ -46,6 +46,7 @@ export class User {
 
 export class Order {
   tutorialsOrder?: Tutorial[];
+  orderStatus?: any;
 }
 
 export class Request {
