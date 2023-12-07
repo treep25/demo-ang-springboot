@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Order, User} from "../models/tutorial.model";
 import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-admin-panel',
@@ -17,7 +18,8 @@ export class AdminPanelComponent implements OnInit {
   lastName = ''
 
 
-  constructor(private userService: AuthService) {
+  constructor(private userService: AuthService, private router: Router) {
+
   }
 
   ngOnInit(): void {
@@ -67,6 +69,13 @@ export class AdminPanelComponent implements OnInit {
     console.log('Page changed:', event);
     this.currentPage = event;
     this.updatePagedUsers();
+  }
+
+  sendMessage(order: Order, user: User) {
+    let message = 'Hi, I am admin, your order status is Failed, maybe you have some tech problems. Your order contains: '
+    order.tutorialsOrder?.forEach(value => message += `${value.title}`)
+
+    this.router.navigate(['/chat'], {queryParams: {userId: user.id, message: message}});
   }
 
   private updatePagedUsers(): void {

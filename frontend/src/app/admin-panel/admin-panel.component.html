@@ -25,12 +25,16 @@
   <button class="block-button" *ngIf="user.isEnabled" (click)="blockUser(user)">Unblock</button>
   <div class="orders-view" *ngIf="user.showOrders && user.order">
     <p>Orders for {{ user.firstName }} {{ user.lastName }}</p>
+    <p>Status {{user.order.orderStatus}}</p>
     <div *ngFor="let tutorial of user.order?.tutorialsOrder" class="tutorial-info">
       <p>{{ tutorial.title }}</p>
       <p>{{ tutorial.description }}</p>
       <p>{{ tutorial.overview }}</p>
       <p>{{ tutorial.content }}</p>
       <p>{{ tutorial.status }}</p>
+      <div *ngIf="user.order.orderStatus == 'FAILED'">
+        <button class="btn-primary" (click)="sendMessage(user.order, user)">Text {{user.firstName}} {{user.lastName}}</button>
+      </div>
     </div>
   </div>
   <hr/>
