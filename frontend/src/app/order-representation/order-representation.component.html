@@ -6,13 +6,30 @@
       <h3>My tutorial in progress</h3>
 
       <div *ngFor="let tutorial of order.tutorialsOrder">
-        <div class="tutorial-details">
-          <h4>{{ tutorial.title }}</h4>
-          <p>{{ tutorial.description }}</p>
-          <p>Status: {{ tutorial.status }}</p>
-          <p>{{ tutorial.content }}</p>
-          <p>{{ tutorial.overview }}</p>
-          <p>{{ tutorial.image }}</p>
+        <div *ngIf="order.orderStatus != 'CANCELED' || order.orderStatus != 'FAILED'">
+          <div class="tutorial-details">
+            <h4>{{ tutorial.title }}</h4>
+            <p>{{ tutorial.description }}</p>
+            <p>Status: {{ tutorial.status }}</p>
+            <p>{{ tutorial.content }}</p>
+            <p>{{ tutorial.overview }}</p>
+            <p>{{ tutorial.image }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="order-container">
+      <h3>Order history</h3>
+      <div *ngFor="let tutorial of order.tutorialsOrder">
+        <div *ngIf="order.orderStatus != 'SUCCESSFULLY' && order.orderStatus != 'OPENLY'">
+          <div class="tutorial-details">
+            <h4>{{ tutorial.title }}</h4>
+            <p>{{ tutorial.description }}</p>
+            <p>Status: {{ tutorial.status }}</p>
+            <p>{{ tutorial.content }}</p>
+            <p>{{ tutorial.overview }}</p>
+            <p>{{ tutorial.image }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -26,6 +43,8 @@
   <button (click)="handlePayment()">Pay $10</button>
   <div #cardElement></div>
 </div>
+<button (click)="cancelOrder(order)">Cancel order</button>
+<button (click)="paidOrder(order)">Paid</button>
 <div *ngIf="!order || !order.tutorialsOrder || order.tutorialsOrder.length === 0">
   <p>No orders available.</p>
 </div>
