@@ -105,4 +105,14 @@ public class UserController {
     public ResponseEntity<?> getAllUnreadMessages(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(userService.getAllUnreadMessagesOf(user));
     }
+
+    @PostMapping("/pay/orders")
+    public ResponseEntity<?> payOrderSuccessfully(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.payOrder(user));
+    }
+
+    @DeleteMapping("/delete/orders")
+    public ResponseEntity<?> cancelOrder(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.cancelOrder(user));
+    }
 }
