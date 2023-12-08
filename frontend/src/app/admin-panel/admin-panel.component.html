@@ -32,9 +32,9 @@
       <p>{{ tutorial.overview }}</p>
       <p>{{ tutorial.content }}</p>
       <p>{{ tutorial.status }}</p>
-      <div *ngIf="user.order.orderStatus == 'FAILED'">
-        <button class="btn-primary" (click)="sendMessage(user.order, user)">Text {{user.firstName}} {{user.lastName}}</button>
-      </div>
+    </div>
+    <div *ngIf="user.order.orderStatus == 'FAILED' || user.order.orderStatus == 'CANCELED'">
+      <button class="btn-primary" (click)="sendMessage(user.order, user)">Text {{user.firstName}} {{user.lastName}}</button>
     </div>
   </div>
   <hr/>
