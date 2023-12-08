@@ -97,4 +97,13 @@ export class AuthService {
   getOrders(): Observable<Order> {
     return this.http.get(`${baseUrlUser}/orders`, {withCredentials: true});
   }
+
+
+  payOrder(): Observable<Order> {
+    return this.http.post(`${baseUrlUser}/pay/orders`, null, {withCredentials: true})
+  }
+
+  cancelOrder(): Observable<any> {
+    return this.http.delete(`${baseUrlUser}/delete/orders`, {withCredentials: true})
+  }
 }
