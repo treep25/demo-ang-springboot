@@ -4,6 +4,7 @@ import com.demo.backend.auth.AuthRequest;
 import com.demo.backend.auth.AuthResponse;
 import com.demo.backend.auth.RegRequest;
 import com.demo.backend.order.model.Order;
+import com.demo.backend.order.model.OrderStatus;
 import com.demo.backend.order.repository.OrderRepository;
 import com.demo.backend.security.jwt.JwtService;
 import com.demo.backend.support.messages.MessageService;
@@ -151,5 +152,29 @@ public class UserService {
                 .stream()
                 .filter(message -> message.getMessageStatus().equals(MessageStatus.UNREAD))
                 .count();
+    }
+
+    public Order payOrder(User user) {
+        Order order = user.getOrder();
+
+        order.setOrderStatus(OrderStatus.SUCCESSFULLY);
+        user.setOrder(order);
+
+        orderRepository.save(order);
+        userRepository.save(user);
+
+        return order;
+    }
+
+    public Order cancelOrder(User user) {
+        Order order = user.getOrder();
+
+        order.setOrderStatus(OrderStatus.CANCELED);
+        user.setOrder(order);
+
+        orderRepository.save(order);
+        userRepository.save(user);
+
+        return order;
     }
 }
