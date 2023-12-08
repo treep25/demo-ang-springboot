@@ -93,4 +93,12 @@ export class OrderRepresentationComponent implements OnInit {
       error => console.error(error)
     )
   }
+
+  paidOrder(order: Order) {
+    this.userService.payOrder().subscribe();
+  }
+
+  cancelOrder(order: Order) {
+    this.userService.cancelOrder().subscribe();
+  }
 }
