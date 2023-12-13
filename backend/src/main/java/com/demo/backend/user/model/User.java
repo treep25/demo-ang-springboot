@@ -39,9 +39,15 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Message> sentMessages = new ArrayList<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Message> receivedMessages = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Message> receivedGroupMessages = new ArrayList<>();
+
     private boolean isEnabled;
 
     public void changeEnableAbility() {

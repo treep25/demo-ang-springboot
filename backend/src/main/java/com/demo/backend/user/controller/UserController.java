@@ -45,7 +45,6 @@ public class UserController {
     }
 
     @GetMapping("/users")
-//    @PreAuthorize("@permissionCheck.hasPermission(#user)")
     public ResponseEntity<?> getAllUsersExcludeCurrentPrinciple(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(userMapper.convertUsersToUserDtos(userService.getAllUserExcludeCurrent(user.getId())));
     }

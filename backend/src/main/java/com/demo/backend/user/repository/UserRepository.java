@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByIsEmableTrue();
 
     List<User> findByFirstNameAndLastName(String firstName, String lastName);
+
+    List<User> findAllByEmailIn(List<String> email);
 }
