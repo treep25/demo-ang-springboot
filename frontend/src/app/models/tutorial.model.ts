@@ -67,3 +67,12 @@ export class Message {
   sentDateTime?: string;
 }
 
+export class GroupMessage {
+  dialogUUID?: any;
+  messageStatus?: any
+  content?: string;
+  sender?: User;
+  recipients?: User[];
+  sentDateTime?: string;
+}
+
