@@ -1,13 +1,44 @@
 <div class="app-container">
   <div class="users-container">
-    <h2>Users</h2>
+    <h2>Users:</h2>
     <div *ngFor="let user of users" (click)="startDialog(user.email)" [class.selected-user]="user?.email === selectedUser?.email">
       {{ user.firstName }} {{ user.lastName }} <small><small>{{user.email}}</small></small>
       <div class="notification-circle" *ngIf="unreadMessagesCount[user.email] !== undefined && unreadMessagesCount[user.email] > 0">{{ unreadMessagesCount[user.email] }}</div>
     </div>
+    <h2>Groups:</h2>
+    <div *ngFor=" let groupMessage of groupMessages">
+      <div (click)="startDialogInGroups(groupMessage.recipients)">
+        <small>{{ getGroupTitle(groupMessage.recipients) }}</small>
+      </div>
+    </div>
   </div>
 
   <div class="dialog-container">
+
+    <div *ngIf="selectedUsers" class="selected-user">
+      <h2>{{ getGroupTitle(selectedUsers) }}</h2>
+      <div *ngFor="let message of contentInGroupMessages" class="message-container-wrapper">
+        <div *ngIf="message != undefined" class="message-container">
+          <p *ngIf="message?.content !== ''">
+            <strong>
+              {{ message?.sender?.firstName }}:
+            </strong>
+            <ng-template #notYou><strong>You:</strong></ng-template>
+            {{ message?.content }}
+            <br>
+            <span *ngIf="message?.messageStatus === 'UNREAD'"><small><small><small><small>*</small></small></small></small></span>
+            <small><small>{{ message?.sentDateTime | date: 'medium' }}</small></small>
+          </p>
+          <p *ngIf="message?.content === ''" class="conversation-started">
+            {{message?.sender?.firstName}} {{ message.sender?.lastName}} started conversation
+          </p>
+        </div>
+      </div>
+      <textarea [(ngModel)]="newMessage" placeholder="Write text..."></textarea>
+      <button (click)="sendMessageGroup()">Send</button>
+    </div>
+
+
     <div *ngIf="selectedUser" class="selected-user">
       <h2>{{ selectedUser.firstName }}</h2>
       <div class="message-container-wrapper">

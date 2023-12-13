@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
-import {Message, User} from "../models/tutorial.model";
+import {GroupMessage, Message, User} from "../models/tutorial.model";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -10,7 +10,10 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class TextingComponent implements OnInit {
   users: User[] = [];
+  groupMessages: GroupMessage[] = [];
+  contentInGroupMessages: GroupMessage[] = [];
   selectedUser: User | null = null;
+  selectedUsers: User[] | undefined;
   messages: Message[] = [];
   newMessage: string = '';
   userIdWhenStatusOfOrderFailed?: number
@@ -34,14 +37,20 @@ export class TextingComponent implements OnInit {
         this.loadUnreadMessagesCount();
 
         if (this.userIdWhenStatusOfOrderFailed != null || this.newMessage != null) {
-
           this.users.forEach(value1 => {
             if (value1.id == this.userIdWhenStatusOfOrderFailed) {
               this.selectedUser = value1;
             }
-          })
+          });
         }
       }
+    );
+    this.authService.getllGroupsOfCurrentUserDialogs().subscribe(
+      value1 => {
+        this.groupMessages = value1;
+        console.log(value1);
+      },
+      error => console.error(error)
     );
   }
 
@@ -58,6 +67,22 @@ export class TextingComponent implements OnInit {
     }
   }
 
+  startDialogInGroups(recipients: User[] | undefined): void {
+    if (recipients) {
+      let emails = recipients.map(value => value.email);
+      this.authService.getConversationDialogContentInGroups(emails).subscribe(
+        value => {
+          this.contentInGroupMessages = value
+          console.log(value);
+        }
+      );
+      this.selectedUsers = this.groupMessages.map(value => value.recipients)
+        .find(user => user === recipients);
+    } else {
+      this.selectedUsers = [];
+    }
+  }
+
   sendMessage(): void {
     if (this.selectedUser) {
       this.authService.text(this.newMessage, this.selectedUser.email).subscribe(() => {
@@ -68,8 +93,24 @@ export class TextingComponent implements OnInit {
         );
         this.newMessage = '';
         this.userIdWhenStatusOfOrderFailed = undefined;
-        this.router.navigate(['/chat'])
+        this.router.navigate(['/chat']);
       });
+    }
+  }
+
+  sendMessageGroup() {
+    // @ts-ignore
+    let emails = this.selectedUsers.map(value => value.email);
+    if (this.selectedUsers) {
+      this.authService.textGroup(emails, this.newMessage).subscribe(
+        () => {
+          this.authService.getConversationDialogContentInGroups(emails)
+            .subscribe(
+              value => this.contentInGroupMessages = value
+            )
+        })
+      this.newMessage = '';
+      this.router.navigate(['/chat']);
     }
   }
 
@@ -83,5 +124,10 @@ export class TextingComponent implements OnInit {
         }
       );
     });
+  }
+
+  getGroupTitle(recipients: User[] | undefined): string {
+    // @ts-ignore
+    return recipients?.map(value => value.firstName + ' ' + value.lastName).join(' & ').toString()
   }
 }
