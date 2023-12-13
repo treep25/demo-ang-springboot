@@ -18,9 +18,12 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private long userId;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Tutorial> tutorialsOrder = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 }
