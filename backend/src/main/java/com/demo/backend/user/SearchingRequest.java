@@ -8,8 +8,6 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class SearchingRequest {
-
     private String firstName;
     private String lastName;
-
 }
