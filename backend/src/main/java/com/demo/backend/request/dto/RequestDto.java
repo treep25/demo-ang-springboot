@@ -1,4 +1,4 @@
-package com.demo.backend.request;
+package com.demo.backend.request.dto;
 
 import lombok.Builder;
 import lombok.Data;

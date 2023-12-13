@@ -1,5 +1,7 @@
-package com.demo.backend.request;
+package com.demo.backend.request.controller;
 
+import com.demo.backend.request.dto.RequestDto;
+import com.demo.backend.request.service.RequestProcessingService;
 import com.demo.backend.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.demo.backend.request;
+package com.demo.backend.request.dto;
 
 public enum RequestStatus {
     CANCELED, OPEN, CLOSED

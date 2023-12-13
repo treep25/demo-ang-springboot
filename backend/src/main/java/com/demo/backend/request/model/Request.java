@@ -1,5 +1,6 @@
-package com.demo.backend.request;
+package com.demo.backend.request.model;
 
+import com.demo.backend.request.dto.RequestStatus;
 import com.demo.backend.user.model.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

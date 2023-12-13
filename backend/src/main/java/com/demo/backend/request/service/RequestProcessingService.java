@@ -1,5 +1,9 @@
-package com.demo.backend.request;
+package com.demo.backend.request.service;
 
+import com.demo.backend.request.dto.RequestDto;
+import com.demo.backend.request.dto.RequestStatus;
+import com.demo.backend.request.model.Request;
+import com.demo.backend.request.repository.RequestProcessingRepository;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
