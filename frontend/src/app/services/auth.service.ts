@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {AuthResponse, Message, Order, Request, User} from "../models/tutorial.model";
+import {AuthResponse, GroupMessage, Message, Order, Request, User} from "../models/tutorial.model";
 
 const baseUrlAuth = 'http://localhost:8080/api/v1/auth';
 const baseUrlUser = 'http://localhost:8080/api/v1/user';
@@ -83,6 +83,18 @@ export class AuthService {
 
   getUnreadMessagesOfCurrentConversation(email: any): Observable<number> {
     return this.http.get<number>(`${baseUrlUser}/message/unread/${email}`, {withCredentials: true})
+  }
+
+  getllGroupsOfCurrentUserDialogs(): Observable<GroupMessage[]> {
+    return this.http.get<GroupMessage[]>(`${baseUrlTexting}/group/messages`, {withCredentials: true})
+  }
+
+  textGroup(recipients?: string[], content?: string): Observable<any> {
+    return this.http.post(`${baseUrlTexting}/group/message`, {content, recipients}, {withCredentials: true})
+  }
+
+  getConversationDialogContentInGroups(recipients?: string[]): Observable<GroupMessage[]> {
+    return this.http.post<GroupMessage[]>(`${baseUrlTexting}/find/conversation/groups`, recipients, {withCredentials: true})
   }
 
   getUnreadMessagesOfUser(): Observable<number> {
