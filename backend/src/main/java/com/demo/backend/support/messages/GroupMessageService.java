@@ -5,10 +5,9 @@ import com.demo.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +17,16 @@ public class GroupMessageService {
     private final UserRepository userRepository;
 
     List<GroupMessage> getAllGroups(User user) {
-        List<GroupMessage> allBySender = messageRepository.findAllBySender(user);
-        allBySender.addAll(messageRepository.findAllByRecipients(user));
-        return allBySender;
+        Set<GroupMessage> allBySender = new HashSet<>(messageRepository.findAllBySender(user));
+        allBySender.addAll(new HashSet<>(messageRepository.findAllByRecipients(user)));
+        return allBySender.stream()
+                .collect(Collectors.toMap
+                        (
+                                GroupMessage::getDialogUUID,
+                                Function.identity(),
+                                (existing, replacement) -> existing)
+                )
+                .values().stream().sorted(Comparator.comparing(GroupMessage::getSentDateTime)).collect(Collectors.toList());
     }
 
     public List<GroupMessage> findConversation(User user, List<String> recipients) {
@@ -30,27 +36,41 @@ public class GroupMessageService {
 
         //todo bad practise
         allByEmail.forEach(
-                recipient -> groupMessageSet.addAll(messageRepository.findGroupMessageBySenderAndRecipient(user, recipient))
+                recipient -> {
+                    groupMessageSet.addAll(messageRepository.findGroupMessageBySenderAndRecipient(user, recipient));
+                    groupMessageSet.addAll(messageRepository.findGroupMessageByRecipientAndSender(user, recipient));
+                }
         );
 
-        groupMessageSet.stream().map(GroupMessage::getSender).map(User::getFirstName).forEach(System.err::println);
-
-        return groupMessageSet.stream().toList();
+        return groupMessageSet.stream().sorted(Comparator.comparing(GroupMessage::getSentDateTime)).toList();
     }
 
     public void textToGroup(MessageDto messageDto, User user) {
 
         List<User> allByEmailIn = userRepository.findAllByEmailIn(messageDto.getRecipients());
+        Set<UUID> firstBySenderAndRecipients = new HashSet<>();
+        allByEmailIn.forEach(
+                user1 -> firstBySenderAndRecipients.add(messageRepository.findFirstBySenderAndRecipients(user, user1))
+        );
 
-        GroupMessage build = GroupMessage
+        GroupMessage buildGroupMessage;
+
+        buildGroupMessage = GroupMessage
                 .builder()
                 .messageStatus(MessageStatus.UNREAD)
                 .recipients(allByEmailIn)
                 .sender(user)
                 .content(messageDto.getContent())
-                .dialogUUID(UUID.fromString("0xEFBBBF00000000000000000000000000"))
+                .dialogUUID(generateOrSetUUIDDialog(firstBySenderAndRecipients))
                 .build();
 
-        messageRepository.save(build);
+        messageRepository.save(buildGroupMessage);
+    }
+
+    private UUID generateOrSetUUIDDialog(Set<UUID> firstBySenderAndRecipients) {
+        if (!firstBySenderAndRecipients.isEmpty()) {
+            return firstBySenderAndRecipients.stream().toList().get(0);
+        }
+        return UUID.randomUUID();
     }
 }

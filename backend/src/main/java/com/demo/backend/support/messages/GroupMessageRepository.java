@@ -20,10 +20,18 @@ public interface GroupMessageRepository extends JpaRepository<GroupMessage, Long
     List<GroupMessage> findAllByRecipients(User recipient);
 
     @Query("SELECT distinct gm FROM GroupMessage gm " +
-            "WHERE (gm.sender = :sender " +
-            "AND :recipient MEMBER OF gm.recipients) " +
-            "OR" +
-            "(gm.sender = :recipient AND :sender = :sender)")
+            "WHERE (gm.sender = :sender AND :recipient MEMBER OF gm.recipients)")
     List<GroupMessage> findGroupMessageBySenderAndRecipient(@Param("sender") User sender,
                                                             @Param("recipient") User recipient);
+
+    @Query("SELECT distinct gm FROM GroupMessage gm " +
+            "WHERE (gm.sender = :recipient AND :sender MEMBER OF gm.recipients)")
+    List<GroupMessage> findGroupMessageByRecipientAndSender(@Param("sender") User sender,
+                                                            @Param("recipient") User recipient);
+
+    @Query("SELECT distinct gm.dialogUUID FROM GroupMessage gm " +
+            "WHERE (gm.sender = :sender " +
+            "AND :recipient MEMBER OF gm.recipients) ")
+    UUID findFirstBySenderAndRecipients(@Param("sender") User sender,
+                                        @Param("recipient") User recipient);
 }

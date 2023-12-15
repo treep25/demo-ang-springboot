@@ -22,6 +22,19 @@ export class TextingComponent implements OnInit {
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
   }
 
+  getRecipientsNames(recipients: User[] | undefined): string {
+    if (!recipients || recipients.length === 0) {
+      return '';
+    }
+
+    const names = recipients.map(user => user.firstName);
+    return names.join(', ');
+  }
+
+  isCurrentUser(user: User | undefined): boolean {
+    return user?.id === this.authService.meInfo();
+  }
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const userId = params['userId'];

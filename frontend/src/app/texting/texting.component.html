@@ -15,16 +15,19 @@
 
   <div class="dialog-container">
 
-    <div *ngIf="selectedUsers" class="selected-user">
-      <h2>{{ getGroupTitle(selectedUsers) }}</h2>
-      <div *ngFor="let message of contentInGroupMessages" class="message-container-wrapper">
-        <div *ngIf="message != undefined" class="message-container">
-          <p *ngIf="message?.content !== ''">
-            <strong>
-              {{ message?.sender?.firstName }}:
-            </strong>
-            <ng-template #notYou><strong>You:</strong></ng-template>
-            {{ message?.content }}
+    <div *ngFor="let message of contentInGroupMessages" class="message-container-wrapper">
+      <div class="message-container">
+        <ng-container *ngIf="message">
+          <p *ngIf="message.content !== ''">
+            <strong>{{ message.sender?.firstName }}:</strong>
+            <ng-container *ngIf="!isCurrentUser(message.sender)">
+              {{ getRecipientsNames(message.recipients) }}
+            </ng-container>
+
+            <ng-container *ngIf="isCurrentUser(message.sender)">
+              {{ getRecipientsNames(message.recipients) }}
+              {{message.recipients}}
+            </ng-container>
             <br>
             <span *ngIf="message?.messageStatus === 'UNREAD'"><small><small><small><small>*</small></small></small></small></span>
             <small><small>{{ message?.sentDateTime | date: 'medium' }}</small></small>
@@ -32,11 +35,14 @@
           <p *ngIf="message?.content === ''" class="conversation-started">
             {{message?.sender?.firstName}} {{ message.sender?.lastName}} started conversation
           </p>
-        </div>
+          <p *ngIf="message.content === ''" class="conversation-started">
+            {{ message.sender?.firstName }} {{ message.sender?.lastName }} started conversation
+          </p>
+        </ng-container>
       </div>
-      <textarea [(ngModel)]="newMessage" placeholder="Write text..."></textarea>
-      <button (click)="sendMessageGroup()">Send</button>
     </div>
+    <textarea [(ngModel)]="newMessage" placeholder="Write text..."></textarea>
+    <button (click)="sendMessageGroup()">Send</button>
 
 
     <div *ngIf="selectedUser" class="selected-user">
