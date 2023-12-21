@@ -13,9 +13,9 @@
       <button class="btn btn-link" (click)="switchLanguage('en')">{{ 'buttons.english' | translate }}</button>
       <button class="btn btn-link" (click)="switchLanguage('ru')">{{ 'buttons.russian' | translate }}</button>
       <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserRepresentation()">Info</button>
-      <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToUserOrderRepresentation()">Orders</button>
-      <button class="btn btn-link" *ngIf="role !== ''" (click)="redirectToChatPage()">Support</button>
-      <div class="notification-circle" (click)="redirectToChatPage()" *ngIf="numberOdUnreadMessaged != undefined && numberOdUnreadMessaged > 0 ">{{ numberOdUnreadMessaged }}</div>
+      <button class="btn btn-link" *ngIf="role !== 'GUEST'" (click)="redirectToUserOrderRepresentation()">Orders</button>
+      <button class="btn btn-link" *ngIf="role !== 'GUEST'" (click)="redirectToChatPage()">Support</button>
+      <div class="notification-circle" (click)="redirectToChatPage()" *ngIf="role !== 'GUEST' && numberOdUnreadMessaged != undefined && numberOdUnreadMessaged > 0 ">{{ numberOdUnreadMessaged }}</div>
       <button class="btn btn-link" *ngIf="role == 'ADMIN'" (click)="adminPanel()">Admin Panel</button>
       <button class="btn btn-link" *ngIf="role == 'ADMIN'" (click)="userRequests()">Requests</button>
       <button class="btn btn-link" (click)="logOut()">Exit</button>

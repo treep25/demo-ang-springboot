@@ -76,3 +76,11 @@ export class GroupMessage {
   sentDateTime?: string;
 }
 
+export class UrlDto {
+  uri?: string
+}
+
+export class GoogleAccessToken {
+  accessToken?: string
+}
+
