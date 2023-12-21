@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {map} from 'rxjs/operators';
+import {AuthResponse, GroupMessage, Message, Order, Request, UrlDto, User} from "../models/tutorial.model";
 import {Observable} from "rxjs";
-import {AuthResponse, GroupMessage, Message, Order, Request, User} from "../models/tutorial.model";
 
 const baseUrlAuth = 'http://localhost:8080/api/v1/auth';
 const baseUrlUser = 'http://localhost:8080/api/v1/user';
@@ -12,11 +13,43 @@ const baseUrlTexting = 'http://localhost:8080/api/v1/texting';
   providedIn: 'root'
 })
 export class AuthService {
+
+  token: string = '';
+
   constructor(private http: HttpClient) {
+    this.csrf().subscribe(
+      value => this.token = value.token
+    )
   }
 
   login(loginRequest: any): Observable<AuthResponse> {
-    return this.http.post(`${baseUrlAuth}/login`, loginRequest);
+    return this.http.post(`${baseUrlAuth}/login`, loginRequest, {
+      withCredentials: true, headers:
+        new HttpHeaders({
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': this.token
+        })
+    });
+  }
+
+  getUrl(): Observable<UrlDto> {
+    return this.http.get<UrlDto>("http://localhost:8080/auth/url");
+  }
+
+  googleAuth(code: string): Observable<string> {
+    return this.http.get(`http://localhost:8080/auth/callback?code=${code}`, {responseType: 'text'})
+      .pipe(
+        map(response => response as string)
+      );
+  }
+
+  loginOAuth2(token: string | null | undefined) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<AuthResponse>(`http://localhost:8080/auth/login/oauth2`, {headers: headers});
   }
 
   register(registerRequest: any): void {
@@ -72,8 +105,18 @@ export class AuthService {
     return this.http.post(`${baseUrlRequest}/cancele/${id}`, null, {withCredentials: true})
   }
 
+  csrf(): Observable<any> {
+    return this.http.get("http://localhost:8080/api/v1/token")
+  }
+
   text(content: any, recipient: any): Observable<any> {
-    return this.http.post(`${baseUrlTexting}`, {content, recipient}, {withCredentials: true})
+    return this.http.post(`${baseUrlTexting}`, {content, recipient}, {
+      withCredentials: true, headers:
+        new HttpHeaders({
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': this.token
+        })
+    })
   }
 
   getConversationDialogContent(recipientEmail: any): Observable<Message[]> {
