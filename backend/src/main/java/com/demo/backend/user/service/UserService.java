@@ -19,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,12 +67,29 @@ public class UserService {
         }
     }
 
-    public AuthResponse login(AuthRequest authRequest) {
+    public AuthResponse login(AuthRequest authRequest, String ipAddr) {
         User user = userRepository.findByEmail(authRequest.getEmail()).orElseThrow(RuntimeException::new);
 
         managerAuthentication(authRequest);
 
-        return generateResponseTokens(jwtService.generateToken(user), jwtService.generateRefreshToken(user));
+        return generateResponseTokens(jwtService.generateToken(user, ipAddr), jwtService.generateRefreshToken(user, ipAddr));
+    }
+
+    public AuthResponse loginViaGoogleOAuth2(OAuth2IntrospectionAuthenticatedPrincipal user, String ipAddr) {
+        User find = userRepository.findByEmail(user.getClaim("email"))
+                .orElse(
+                        User
+                                .builder()
+                                .email(user.getClaim("email"))
+                                .firstName(user.getClaim("given_name"))
+                                .lastName(user.getClaim("family_name"))
+                                .isEnabled(true)
+                                .role(Role.USER)
+                                .build()
+                );
+        User save = userRepository.save(find);
+
+        return generateResponseTokens(jwtService.generateToken(save, ipAddr), jwtService.generateRefreshToken(save, ipAddr));
     }
 
     public void save(RegRequest request) {
@@ -94,13 +112,13 @@ public class UserService {
                 .build();
     }
 
-    public AuthResponse refreshToken(String refreshToken) {
-        String email = jwtService.extractUsername(refreshToken);
+    public AuthResponse refreshToken(String refreshToken, String ipAddr) {
+        String email = jwtService.extractUsername(refreshToken, ipAddr);
 
         User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
 
-        if (jwtService.isTokenValid(refreshToken, user)) {
-            return generateResponseTokens(jwtService.generateToken(user), jwtService.generateRefreshToken(user));
+        if (jwtService.isTokenValid(refreshToken, user, ipAddr)) {
+            return generateResponseTokens(jwtService.generateToken(user, ipAddr), jwtService.generateRefreshToken(user, ipAddr));
         }
         throw new RuntimeException("This token is not valid -> could`nt refresh");
     }
