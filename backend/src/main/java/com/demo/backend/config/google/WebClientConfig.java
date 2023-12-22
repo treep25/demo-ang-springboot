@@ -1,4 +1,4 @@
-package com.demo.backend.config;
+package com.demo.backend.config.google;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

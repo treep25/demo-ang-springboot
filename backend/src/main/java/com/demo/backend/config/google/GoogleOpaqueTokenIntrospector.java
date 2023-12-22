@@ -1,4 +1,4 @@
-package com.demo.backend.config;
+package com.demo.backend.config.google;
 
 import com.demo.backend.auth.oauth2.google.UserInfo;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.demo.backend.config;
+package com.demo.backend.config.multipart;
 
 import jakarta.servlet.MultipartConfigElement;
 import org.springframework.beans.factory.annotation.Value;

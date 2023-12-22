@@ -1,4 +1,4 @@
-package com.demo.backend.config;
+package com.demo.backend.config.handler;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,6 +1,5 @@
-package com.demo.backend.auth.oauth2;
+package com.demo.backend.auth.oauth2.google;
 
-import com.demo.backend.auth.oauth2.google.UrlDto;
 import com.demo.backend.user.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
