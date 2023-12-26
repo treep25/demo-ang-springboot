@@ -1,5 +1,6 @@
 package com.demo.backend.auth.oauth2.google;
 
+import com.demo.backend.auth.oauth2.UrlDto;
 import com.demo.backend.user.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
@@ -27,7 +28,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:8081")
-public class OAuth2Controller {
+public class GoogleOAuth2Controller {
 
     @Value("${stripe.security.oauth2.resourceserver.opaque-token.client-id}")
     private String clientId;

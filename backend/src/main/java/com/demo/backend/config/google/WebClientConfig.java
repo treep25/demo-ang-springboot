@@ -11,10 +11,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Value("${stripe.security.oauth2.resourceserver.opaque-token.introspection-uri}")
-    private String introspectUri = "https://www.googleapis.com/";
+    private String googleIntrospectUri;
+    @Value("${stripe.security.oauth2.resourceserver.facebook.opaque-token.introspection-uri}")
+    private String facebookIntrospectUri;
 
     @Bean
-    public WebClient userInfoClient() {
-        return WebClient.builder().baseUrl(introspectUri).build();
+    public WebClient googleWebClient() {
+        return WebClient.builder().baseUrl(googleIntrospectUri).build();
+    }
+
+    @Bean
+    public WebClient facebookWebClient() {
+        return WebClient.builder().baseUrl(facebookIntrospectUri).build();
     }
 }

@@ -1,13 +1,14 @@
 package com.demo.backend.security.config;
 
 
-import com.demo.backend.config.GoogleOpaqueTokenIntrospector;
+import com.demo.backend.config.google.CompositeOpaqueTokenIntrospector;
+import com.demo.backend.config.google.FacebookOpaqueTokenIntrospector;
+import com.demo.backend.config.google.GoogleOpaqueTokenIntrospector;
 import com.demo.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,6 +22,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Map;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,7 +33,8 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint userAuthEntryPoint;
-    private final WebClient userInfoClient;
+    private final WebClient googleWebClient;
+    private final WebClient facebookWebClient;
 
     @Bean
     public WebMvcConfigurer cors() {
@@ -46,8 +50,20 @@ public class SecurityConfiguration {
         };
     }
 
-    public OpaqueTokenIntrospector opaqueTokenIntrospector() {
-        return new GoogleOpaqueTokenIntrospector(userInfoClient);
+    public OpaqueTokenIntrospector googleOpaqueTokenIntrospector() {
+        return new GoogleOpaqueTokenIntrospector(googleWebClient);
+    }
+
+    public OpaqueTokenIntrospector facebookOpaqueTokenIntrospector() {
+        return new FacebookOpaqueTokenIntrospector(facebookWebClient);
+    }
+
+    public OpaqueTokenIntrospector compositeOpaqueTokenIntrospector() {
+        Map<String, OpaqueTokenIntrospector> introspectors = Map.of(
+                "GOOGLE", googleOpaqueTokenIntrospector(),
+                "FACEBOOK", facebookOpaqueTokenIntrospector());
+
+        return new CompositeOpaqueTokenIntrospector(introspectors);
     }
 
     @Bean
@@ -75,7 +91,12 @@ public class SecurityConfiguration {
                                         .permitAll()
                                         .anyRequest()
                                         .permitAll())
-                .oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults()))
+                .oauth2ResourceServer
+                        (c -> c
+                                .opaqueToken(
+                                        opaqueTokenConfigurer -> opaqueTokenConfigurer
+                                                .introspector(compositeOpaqueTokenIntrospector())))
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

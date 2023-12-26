@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Data
-public class UserInfo {
+public class UserInfoGoogle {
     private String sub;
     private String name;
     private String given_name;
@@ -13,5 +13,5 @@ public class UserInfo {
     private String picture;
     private String email;
     private boolean email_verified;
-    String locale;
+    private String locale;
 }

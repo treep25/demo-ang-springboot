@@ -23,16 +23,10 @@ export class AuthService {
   }
 
   login(loginRequest: any): Observable<AuthResponse> {
-    return this.http.post(`${baseUrlAuth}/login`, loginRequest, {
-      withCredentials: true, headers:
-        new HttpHeaders({
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': this.token
-        })
-    });
+    return this.http.post(`${baseUrlAuth}/login`, loginRequest);
   }
 
-  getUrl(): Observable<UrlDto> {
+  getUrlGoogle(): Observable<UrlDto> {
     return this.http.get<UrlDto>("http://localhost:8080/auth/url");
   }
 
@@ -43,13 +37,33 @@ export class AuthService {
       );
   }
 
-  loginOAuth2(token: string | null | undefined) {
+  loginOAuth2Google(token: string | null | undefined) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${"GOOGLE" + token}`,
     });
 
     return this.http.get<AuthResponse>(`http://localhost:8080/auth/login/oauth2`, {headers: headers});
+  }
+
+  getUrlFacebook(): Observable<UrlDto> {
+    return this.http.get<UrlDto>("http://localhost:8080/auth/facebook/url");
+  }
+
+  facebookAuth(code: string): Observable<string> {
+    return this.http.get(`http://localhost:8080/auth/facebook/callback?code=${code}`, {responseType: 'text'})
+      .pipe(
+        map(response => response as string)
+      );
+  }
+
+  loginOAuth2Facebook(token: string | null | undefined) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${"FACEBOOK" + token}`,
+    });
+
+    return this.http.get<AuthResponse>(`http://localhost:8080/auth/login/facebook/oauth2`, {headers: headers});
   }
 
   register(registerRequest: any): void {

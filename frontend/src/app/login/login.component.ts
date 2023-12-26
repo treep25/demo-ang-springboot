@@ -12,30 +12,80 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class LoginComponent {
   loginForm: FormGroup;
   submitted = false;
-  url: string | undefined = ""
+  googleUrl: string | undefined = ''
+  facebookUrl: string | undefined = ''
+
+
+  signInWithGoogle() {
+    document.cookie = 'provider=GOOGLE; expires=' + new Date(new Date().getTime() + 60000).toUTCString() + '; path=/; SameSite=None; Secure';
+    if (typeof this.googleUrl === "string") {
+      window.location.href = this.googleUrl
+    }
+  }
+
+  signInWithFacebook() {
+    document.cookie = 'provider=FACEBOOK; expires=' + new Date(new Date().getTime() + 60000).toUTCString() + '; path=/; SameSite=None; Secure';
+    if (typeof this.facebookUrl === "string") {
+      window.location.href = this.facebookUrl
+    }
+  }
+
+  extractCookieProvider(): string | null {
+    const cookie = document.cookie.split(';').map(cookie => cookie.trim());
+    const providerCookie = cookie.find(cookie => cookie.startsWith('provider='));
+
+    if (providerCookie) {
+      return providerCookie.split('=')[1];
+    } else {
+      return null;
+    }
+  }
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router, private route: ActivatedRoute) {
-    this.authService.getUrl().subscribe(
+    this.authService.getUrlGoogle().subscribe(
       value => {
-        this.url = value.uri
+        this.googleUrl = value.uri
       }
     )
+
+    this.authService.getUrlFacebook().subscribe(
+      value => {
+        this.facebookUrl = value.uri
+      }
+    )
+
     this.route.queryParams.subscribe(
       value => {
 
         if (value["code"] !== undefined) {
-          this.authService.googleAuth(value["code"].toString()).subscribe(
-            access_token => {
-              this.authService.loginOAuth2(access_token).subscribe(
-                authResponse => {
-                  document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
-                  document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
+          if (this.extractCookieProvider() == "GOOGLE") {
+            this.authService.googleAuth(value["code"].toString()).subscribe(
+              access_token => {
+                this.authService.loginOAuth2Google(access_token).subscribe(
+                  authResponse => {
+                    document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
+                    document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
 
-                  this.router.navigate(['tutorials']).then(r => window.location.reload());
-                }
-              )
-            }
-          );
+                    this.router.navigate(['tutorials']).then(r => window.location.reload());
+                  }
+                )
+              }
+            );
+          } else if (this.extractCookieProvider() == "FACEBOOK") {
+            this.authService.facebookAuth(value["code"].toString()).subscribe(
+              access_token => {
+                this.authService.loginOAuth2Facebook(access_token).subscribe(
+                  authResponse => {
+                    document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
+                    document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
+
+                    this.router.navigate(['tutorials']).then(r => window.location.reload());
+                  }
+                )
+              }
+            );
+          }
+
         }
       }
     )

@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -14,7 +16,7 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode
 @ToString
-public class Tutorial {
+public class Tutorial implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

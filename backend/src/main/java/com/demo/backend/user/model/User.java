@@ -2,6 +2,7 @@ package com.demo.backend.user.model;
 
 import com.demo.backend.order.model.Order;
 import com.demo.backend.support.messages.Message;
+import com.demo.backend.user.Provider;
 import com.demo.backend.user.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -35,6 +36,8 @@ public class User implements UserDetails {
     private Role role;
     @OneToOne
     private Order order;
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

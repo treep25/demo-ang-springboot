@@ -1,7 +1,6 @@
 package com.demo.backend.security.jwt;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,8 +44,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
-        System.err.println(request.getRemoteAddr());
+
+    ) throws IOException {
+
         String ipAddress = request.getRemoteAddr();
         final Cookie[] cookies = request.getCookies();
         String jwt = null;
@@ -74,8 +74,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception ex) {
-            //todo
-            filterChain.doFilter(request, response);
+            log.error("Auth error: {}", ex.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Auth error, FILTER ERROR");
         }
     }
 }

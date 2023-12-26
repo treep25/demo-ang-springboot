@@ -21,7 +21,15 @@
     </div>
   </div>
   <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary">Login</button>
-  <a href="{{url}}"> Sign in via Google</a>
-</form>
 
+  <a (click)="signInWithGoogle()" class="google-signin-button">
+    <img ngSrc="assets/png-transparent-google-company-text-logo.png" alt="Sign in via Google" height="920" width="920">
+  </a>
+
+  <a (click)="signInWithFacebook()" class="facebook-signin-button">
+    <img ngSrc="assets/Facebook_logo_(square).png" alt="Sign in via Facebook" height="960" width="960">
+  </a>
+</form>
+<script>
+</script>
 <button type="button" class="btn btn-success" (click)="makeRequest()">Make Request</button>

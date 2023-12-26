@@ -1,8 +1,8 @@
-package com.demo.backend.auth.oauth2.google;
+package com.demo.backend.auth.oauth2.facebook;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class GoogleAccessToken {
+public class FacebookAccessToken {
     private final String accessToken;
 }

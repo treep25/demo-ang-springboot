@@ -7,6 +7,9 @@ import com.demo.backend.tutorial.model.dto.TutorialDto;
 import com.demo.backend.tutorial.repository.TutorialRepository;
 import com.demo.backend.user.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -51,16 +54,20 @@ public class TutorialService {
         return currentTutorial.getStatus().equals(Status.PUBLISHED);
     }
 
+    @Cacheable(value = "allTutorials")
     public List<Tutorial> getAllTutorials(Role role) {
         return StreamSupport.stream(
                 tutorialRepository.findAll().spliterator(), false
         ).filter(tutorial -> ifUserCanSeePendingTutorials(role, tutorial)).toList();
     }
 
+    @Cacheable(value = "tutorialById", key = "#id")
     public Tutorial getTutorialById(long id) {
         return tutorialRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
+    @CachePut(value = "tutorialById", key = "#result.id")
+    @CacheEvict(value = "allTutorials", allEntries = true)
     public Tutorial saveTutorial(TutorialDto tutorialDto) {
         Tutorial preSavedTutorial = Tutorial
                 .builder()
@@ -79,18 +86,21 @@ public class TutorialService {
         return tutorialRepository.save(preSavedTutorial);
     }
 
+    @Cacheable(value = "tutorialImage", key = "#id")
     public byte[] getTutorialImage(long id) {
         Tutorial tutorialById = getTutorialById(id);
 
         return imageService.downloadImage(tutorialById.getImagePath());
     }
 
+    @CacheEvict(value = "allTutorials", allEntries = true)
     public void deleteTutorialById(long id) {
         getTutorialById(id);
 
         tutorialRepository.deleteById(id);
     }
 
+    @CacheEvict(value = "allTutorials", allEntries = true)
     public void deleteAllTutorials() {
         tutorialRepository.deleteAll();
     }
@@ -109,12 +119,14 @@ public class TutorialService {
                 .toList();
     }
 
+    @CachePut(value = "tutorialById", key = "#result.id")
+    @CacheEvict(value = "allTutorials", allEntries = true)
     public Tutorial updateTutorialById(long id, TutorialDto tutorialDto) {
         Tutorial tutorialById = getTutorialById(id);
         updatesMap.forEach(
-                (tutorialDtoPredicate, tutorialTutorialDtoBiConsumer) -> {
+                (tutorialDtoPredicate, repositoryAction) -> {
                     if (tutorialDtoPredicate.test(tutorialDto)) {
-                        tutorialTutorialDtoBiConsumer.accept(tutorialById, tutorialDto);
+                        repositoryAction.accept(tutorialById, tutorialDto);
                     }
                 }
         );
@@ -122,10 +134,13 @@ public class TutorialService {
         return tutorialRepository.save(tutorialById);
     }
 
+    @CachePut(value = "tutorialById", key = "#result.id")
+    @CacheEvict(value = "allTutorials", allEntries = true)
     public Tutorial updateTutorialById(long id, String status) {
         Tutorial tutorialById = getTutorialById(id);
         tutorialById.setStatus(Status.getStatusFromText(status));
 
         return tutorialRepository.save(tutorialById);
     }
+
 }

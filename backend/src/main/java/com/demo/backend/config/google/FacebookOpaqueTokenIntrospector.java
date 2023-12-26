@@ -1,6 +1,7 @@
 package com.demo.backend.config.google;
 
-import com.demo.backend.auth.oauth2.google.UserInfoGoogle;
+
+import com.demo.backend.auth.oauth2.facebook.UserInfoFacebook;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
@@ -10,31 +11,32 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
+public class FacebookOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
 
-    private final WebClient googleWebClient;
-    public static final String USER_INFO_PATH = "/oauth2/v3/userinfo";
+    private final WebClient facebookWebClient;
+    public static final String USER_INFO_PATH = "/me";
 
     @Override
     public OAuth2AuthenticatedPrincipal introspect(String token) {
-        UserInfoGoogle userInfoGoogle = googleWebClient.get()
+        UserInfoFacebook userInfoFacebook = facebookWebClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(USER_INFO_PATH)
+                        .queryParam("fields", "email,first_name,last_name")
                         .queryParam("access_token", token)
                         .build())
                 .retrieve()
-                .bodyToMono(UserInfoGoogle.class)
+                .bodyToMono(UserInfoFacebook.class)
                 .block();
+
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("sub", Objects.requireNonNull(userInfoGoogle).getSub());
-        attributes.put("email", userInfoGoogle.getEmail());
-        attributes.put("given_name", userInfoGoogle.getGiven_name());
-        attributes.put("family_name", userInfoGoogle.getFamily_name());
-        attributes.put("picture", userInfoGoogle.getPicture());
-        return new OAuth2IntrospectionAuthenticatedPrincipal(userInfoGoogle.getName(), attributes, null);
+        attributes.put("email", userInfoFacebook.getEmail());
+        attributes.put("given_name", userInfoFacebook.getFirst_name());
+        attributes.put("family_name", userInfoFacebook.getLast_name());
+
+        return new OAuth2IntrospectionAuthenticatedPrincipal(userInfoFacebook.getFirst_name(), attributes, null);
     }
+
 }

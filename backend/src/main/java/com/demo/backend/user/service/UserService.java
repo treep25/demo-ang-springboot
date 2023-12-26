@@ -9,6 +9,7 @@ import com.demo.backend.order.repository.OrderRepository;
 import com.demo.backend.security.jwt.JwtService;
 import com.demo.backend.support.messages.MessageService;
 import com.demo.backend.support.messages.MessageStatus;
+import com.demo.backend.user.Provider;
 import com.demo.backend.user.Role;
 import com.demo.backend.user.SearchingRequest;
 import com.demo.backend.user.model.User;
@@ -76,7 +77,7 @@ public class UserService {
     }
 
     public AuthResponse loginViaGoogleOAuth2(OAuth2IntrospectionAuthenticatedPrincipal user, String ipAddr) {
-        User find = userRepository.findByEmail(user.getClaim("email"))
+        User findByGoogle = userRepository.findByEmail(user.getClaim("email"))
                 .orElse(
                         User
                                 .builder()
@@ -85,9 +86,28 @@ public class UserService {
                                 .lastName(user.getClaim("family_name"))
                                 .isEnabled(true)
                                 .role(Role.USER)
+                                .provider(Provider.GOOGLE)
                                 .build()
                 );
-        User save = userRepository.save(find);
+        User save = userRepository.save(findByGoogle);
+
+        return generateResponseTokens(jwtService.generateToken(save, ipAddr), jwtService.generateRefreshToken(save, ipAddr));
+    }
+
+    public AuthResponse loginViaFacebookOAuth2(OAuth2IntrospectionAuthenticatedPrincipal user, String ipAddr) {
+        User findByFacebook = userRepository.findByEmail(user.getClaim("email"))
+                .orElse(
+                        User
+                                .builder()
+                                .email(user.getClaim("email"))
+                                .firstName(user.getClaim("given_name"))
+                                .lastName(user.getClaim("family_name"))
+                                .isEnabled(true)
+                                .role(Role.USER)
+                                .provider(Provider.FACEBOOK)
+                                .build()
+                );
+        User save = userRepository.save(findByFacebook);
 
         return generateResponseTokens(jwtService.generateToken(save, ipAddr), jwtService.generateRefreshToken(save, ipAddr));
     }

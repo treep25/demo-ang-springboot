@@ -1,4 +1,4 @@
-package com.demo.backend.auth.oauth2.google;
+package com.demo.backend.auth.oauth2;
 
 import lombok.Data;
 
