@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class FacebookOpaqueTokenIntrospector implements OpaqueTokenIntrospector 
                 .block();
 
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("email", userInfoFacebook.getEmail());
+        attributes.put("email", Objects.requireNonNull(userInfoFacebook).getEmail());
         attributes.put("given_name", userInfoFacebook.getFirst_name());
         attributes.put("family_name", userInfoFacebook.getLast_name());
 
