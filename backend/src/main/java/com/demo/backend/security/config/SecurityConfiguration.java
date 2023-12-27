@@ -1,8 +1,9 @@
 package com.demo.backend.security.config;
 
 
-import com.demo.backend.config.google.CompositeOpaqueTokenIntrospector;
-import com.demo.backend.config.google.FacebookOpaqueTokenIntrospector;
+import com.demo.backend.config.CompositeOpaqueTokenIntrospector;
+import com.demo.backend.config.facebook.FacebookOpaqueTokenIntrospector;
+import com.demo.backend.config.github.GitHubOpaqueTokenIntrospector;
 import com.demo.backend.config.google.GoogleOpaqueTokenIntrospector;
 import com.demo.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class SecurityConfiguration {
     private final AuthenticationEntryPoint userAuthEntryPoint;
     private final WebClient googleWebClient;
     private final WebClient facebookWebClient;
+    private final WebClient githubWebClient;
 
     @Bean
     public WebMvcConfigurer cors() {
@@ -58,10 +60,15 @@ public class SecurityConfiguration {
         return new FacebookOpaqueTokenIntrospector(facebookWebClient);
     }
 
+    public OpaqueTokenIntrospector githubOpaqueTokenIntrospector() {
+        return new GitHubOpaqueTokenIntrospector(githubWebClient);
+    }
+
     public OpaqueTokenIntrospector compositeOpaqueTokenIntrospector() {
         Map<String, OpaqueTokenIntrospector> introspectors = Map.of(
                 "GOOGLE", googleOpaqueTokenIntrospector(),
-                "FACEBOOK", facebookOpaqueTokenIntrospector());
+                "FACEBOOK", facebookOpaqueTokenIntrospector(),
+                "GITHUB", githubOpaqueTokenIntrospector());
 
         return new CompositeOpaqueTokenIntrospector(introspectors);
     }
