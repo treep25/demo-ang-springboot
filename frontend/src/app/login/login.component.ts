@@ -14,6 +14,7 @@ export class LoginComponent {
   submitted = false;
   googleUrl: string | undefined = ''
   facebookUrl: string | undefined = ''
+  githubUrl: string | undefined = ''
 
 
   signInWithGoogle() {
@@ -27,6 +28,13 @@ export class LoginComponent {
     document.cookie = 'provider=FACEBOOK; expires=' + new Date(new Date().getTime() + 60000).toUTCString() + '; path=/; SameSite=None; Secure';
     if (typeof this.facebookUrl === "string") {
       window.location.href = this.facebookUrl
+    }
+  }
+
+  signInWithGithub() {
+    document.cookie = 'provider=GITHUB; expires=' + new Date(new Date().getTime() + 60000).toUTCString() + '; path=/; SameSite=None; Secure';
+    if (typeof this.githubUrl === "string") {
+      window.location.href = this.githubUrl
     }
   }
 
@@ -54,6 +62,12 @@ export class LoginComponent {
       }
     )
 
+    this.authService.getUrlGithub().subscribe(
+      value => {
+        this.githubUrl = value.uri
+      }
+    )
+
     this.route.queryParams.subscribe(
       value => {
 
@@ -75,6 +89,19 @@ export class LoginComponent {
             this.authService.facebookAuth(value["code"].toString()).subscribe(
               access_token => {
                 this.authService.loginOAuth2Facebook(access_token).subscribe(
+                  authResponse => {
+                    document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
+                    document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
+
+                    this.router.navigate(['tutorials']).then(r => window.location.reload());
+                  }
+                )
+              }
+            );
+          } else if (this.extractCookieProvider() == "GITHUB") {
+            this.authService.githubAuth(value["code"].toString()).subscribe(
+              access_token => {
+                this.authService.loginOAuth2Github(access_token).subscribe(
                   authResponse => {
                     document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
                     document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
