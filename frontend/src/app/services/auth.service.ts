@@ -66,6 +66,26 @@ export class AuthService {
     return this.http.get<AuthResponse>(`http://localhost:8080/auth/login/facebook/oauth2`, {headers: headers});
   }
 
+  getUrlGithub(): Observable<UrlDto> {
+    return this.http.get<UrlDto>("http://localhost:8080/auth/github/url");
+  }
+
+  githubAuth(code: string): Observable<string> {
+    return this.http.get(`http://localhost:8080/auth/github/callback?code=${code}`, {responseType: 'text'})
+      .pipe(
+        map(response => response as string)
+      );
+  }
+
+  loginOAuth2Github(token: string | null | undefined) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${"GITHUB" + token}`,
+    });
+
+    return this.http.get<AuthResponse>(`http://localhost:8080/auth/login/github/oauth2`, {headers: headers});
+  }
+
   register(registerRequest: any): void {
     this.http.post(`${baseUrlAuth}/register`, registerRequest);
   }
