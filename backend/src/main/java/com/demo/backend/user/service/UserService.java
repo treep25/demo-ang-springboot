@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.server.resource.introspection.OAuth2I
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -108,6 +109,26 @@ public class UserService {
                                 .build()
                 );
         User save = userRepository.save(findByFacebook);
+
+        return generateResponseTokens(jwtService.generateToken(save, ipAddr), jwtService.generateRefreshToken(save, ipAddr));
+    }
+
+    public AuthResponse loginViaGithubOAuth2(OAuth2IntrospectionAuthenticatedPrincipal user, String ipAddr) {
+        List<String> list = Arrays.stream(user.getClaim("name").toString().split(" ")).toList();
+
+        User findByGithub = userRepository.findByEmail(user.getClaim("email"))
+                .orElse(
+                        User
+                                .builder()
+                                .email(user.getClaim("email"))
+                                .firstName(list.get(0))
+                                .lastName(list.get(1))
+                                .isEnabled(true)
+                                .role(Role.USER)
+                                .provider(Provider.GITHUB)
+                                .build()
+                );
+        User save = userRepository.save(findByGithub);
 
         return generateResponseTokens(jwtService.generateToken(save, ipAddr), jwtService.generateRefreshToken(save, ipAddr));
     }
