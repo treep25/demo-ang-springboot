@@ -1,4 +1,4 @@
-package com.demo.backend.config.google;
+package com.demo.backend.config.facebook;
 
 
 import com.demo.backend.auth.oauth2.facebook.UserInfoFacebook;
