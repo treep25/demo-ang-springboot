@@ -1,4 +1,4 @@
-package com.demo.backend.config.google;
+package com.demo.backend.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
@@ -21,7 +21,8 @@ public class CompositeOpaqueTokenIntrospector implements OpaqueTokenIntrospector
         this.introspectorsFunction = Map.of
                 (
                         token -> token.startsWith("GOOGLE"), token -> introspectors.get("GOOGLE").introspect(token.replaceAll("GOOGLE", "")),
-                        token -> token.startsWith("FACEBOOK"), token -> introspectors.get("FACEBOOK").introspect(token.replaceAll("FACEBOOK", ""))
+                        token -> token.startsWith("FACEBOOK"), token -> introspectors.get("FACEBOOK").introspect(token.replaceAll("FACEBOOK", "")),
+                        token -> token.startsWith("GITHUB"), token -> introspectors.get("GITHUB").introspect(token.replaceAll("GITHUB", ""))
 
                 );
     }
