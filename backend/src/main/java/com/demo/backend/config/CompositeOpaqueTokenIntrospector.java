@@ -20,11 +20,18 @@ public class CompositeOpaqueTokenIntrospector implements OpaqueTokenIntrospector
         this.introspectors = introspectors;
         this.introspectorsFunction = Map.of
                 (
-                        token -> token.startsWith("GOOGLE"), token -> introspectors.get("GOOGLE").introspect(token.replaceAll("GOOGLE", "")),
-                        token -> token.startsWith("FACEBOOK"), token -> introspectors.get("FACEBOOK").introspect(token.replaceAll("FACEBOOK", "")),
-                        token -> token.startsWith("GITHUB"), token -> introspectors.get("GITHUB").introspect(token.replaceAll("GITHUB", ""))
+                        token -> token.startsWith("GOOGLE"), token -> introspectors.get("GOOGLE")
+                                .introspect(getTokenFromBarearHeader(token, "GOOGLE")),
+                        token -> token.startsWith("FACEBOOK"), token -> introspectors.get("FACEBOOK")
+                                .introspect(getTokenFromBarearHeader(token, "FACEBOOK")),
+                        token -> token.startsWith("GITHUB"), token -> introspectors.get("GITHUB")
+                                .introspect(getTokenFromBarearHeader(token, "GITHUB"))
 
                 );
+    }
+
+    private String getTokenFromBarearHeader(String tokenWithPrefix, String prefix) {
+        return tokenWithPrefix.replaceAll(prefix, "");
     }
 
     @Override
