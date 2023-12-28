@@ -30,12 +30,14 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:8081")
 public class GoogleOAuth2Controller {
 
-    @Value("${stripe.security.oauth2.resourceserver.opaque-token.client-id}")
+    @Value("${stripe.security.oauth2.resourceserver.google.opaque-token.client-id}")
     private String clientId;
 
-    @Value("${stripe.security.oauth2.resourceserver.opaque-token.client-secret}")
+    @Value("${stripe.security.oauth2.resourceserver.google.opaque-token.client-secret}")
     private String clientSecret;
     private final UserService userService;
+    @Value("${stripe.security.oauth2.resourceserver.refirect-uri}")
+    private String redirectUri;
 
     @GetMapping("/auth/login/oauth2")
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal OAuth2IntrospectionAuthenticatedPrincipal user, @NotNull HttpServletRequest httpServletRequest) {
@@ -50,7 +52,7 @@ public class GoogleOAuth2Controller {
     public ResponseEntity<?> auth() throws MalformedURLException {
         String url = new GoogleAuthorizationCodeRequestUrl(
                 clientId,
-                "http://localhost:8081/login",
+                redirectUri,
                 List.of("email", "profile", "openid"))
                 .build();
 
@@ -65,7 +67,7 @@ public class GoogleOAuth2Controller {
                 clientId,
                 clientSecret,
                 code,
-                "http://localhost:8081/login"
+                redirectUri
 
         ).execute();
         String accessToken = execute.getAccessToken();

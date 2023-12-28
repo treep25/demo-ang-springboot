@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class WebClientConfig {
 
-    @Value("${stripe.security.oauth2.resourceserver.opaque-token.introspection-uri}")
+    @Value("${stripe.security.oauth2.resourceserver.google.opaque-token.introspection-uri}")
     private String googleIntrospectUri;
     @Value("${stripe.security.oauth2.resourceserver.facebook.opaque-token.introspection-uri}")
     private String facebookIntrospectUri;

@@ -35,7 +35,8 @@ public class GitHubOAuth2Controller {
     @Value("${stripe.security.oauth2.resourceserver.git-hub.opaque-token.client-secret}")
     private String clientSecret;
     private final UserService userService;
-    private String redirectUri = "http://localhost:8081/login";
+    @Value("${stripe.security.oauth2.resourceserver.refirect-uri}")
+    private String redirectUri;
     private String githubAccessTokenUrl = "https://github.com/login/oauth/access_token";
 
     @GetMapping("/auth/login/github/oauth2")

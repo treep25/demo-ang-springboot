@@ -25,7 +25,8 @@ public class FacebookOAuth2Controller {
 
     @Value("${stripe.security.oauth2.resourceserver.facebook.opaque-token.client-id}")
     private String clientId;
-    private String redirectUri = "http://localhost:8081/login";
+    @Value("${stripe.security.oauth2.resourceserver.refirect-uri}")
+    private String redirectUri;
     @Value("${stripe.security.oauth2.resourceserver.facebook.opaque-token.client-secret}")
     private String clientSecret = "d38ef46998f810e6a2e23319aef1a84a";
     private final UserService userService;
