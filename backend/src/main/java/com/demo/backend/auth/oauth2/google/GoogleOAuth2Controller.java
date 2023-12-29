@@ -53,7 +53,7 @@ public class GoogleOAuth2Controller {
         String url = new GoogleAuthorizationCodeRequestUrl(
                 clientId,
                 redirectUri,
-                List.of("email", "profile", "openid"))
+                List.of("email", "profile", "openid", "https://www.googleapis.com/auth/calendar.readonly"))
                 .build();
 
         return ResponseEntity.ok(new UrlDto(url));
