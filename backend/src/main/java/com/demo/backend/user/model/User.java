@@ -38,6 +38,8 @@ public class User implements UserDetails {
     private Order order;
     @Enumerated(EnumType.STRING)
     private Provider provider;
+    private String googleAccessTokenNotRequered;
+    private String azureAccessTokenNotRequered;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

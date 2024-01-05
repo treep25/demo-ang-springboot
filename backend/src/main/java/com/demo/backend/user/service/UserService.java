@@ -236,4 +236,12 @@ public class UserService {
 
         return order;
     }
+
+    public void updateGoogleAccessToken(User user) {
+        userRepository.save(user);
+    }
+
+    public void updateAzureAccessToken(User user) {
+        userRepository.save(user);
+    }
 }
