@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map} from 'rxjs/operators';
-import {AuthResponse, GroupMessage, Message, Order, Request, UrlDto, User} from "../models/tutorial.model";
+import {AuthResponse, Event, GroupMessage, Message, Order, Request, UrlDto, User} from "../models/tutorial.model";
 import {Observable} from "rxjs";
 
 const baseUrlAuth = 'http://localhost:8080/api/v1/auth';
@@ -14,12 +14,7 @@ const baseUrlTexting = 'http://localhost:8080/api/v1/texting';
 })
 export class AuthService {
 
-  token: string = '';
-
   constructor(private http: HttpClient) {
-    this.csrf().subscribe(
-      value => this.token = value.token
-    )
   }
 
   login(loginRequest: any): Observable<AuthResponse> {
@@ -86,6 +81,56 @@ export class AuthService {
     return this.http.get<AuthResponse>(`http://localhost:8080/auth/login/github/oauth2`, {headers: headers});
   }
 
+  getEventsGoogleCalendar() {
+    return this.http.get(`http://localhost:8080/google/calendar`, {withCredentials: true})
+  }
+
+  setAccessTokenCalendar(token: string) {
+    return this.http.get(`http://localhost:8080/google/calendar/save/access-token?token=${token}`, {withCredentials: true})
+  }
+
+  getUrlGoogleCalendar(): Observable<UrlDto> {
+    return this.http.get<UrlDto>("http://localhost:8080/google/calendar/auth/url");
+  }
+
+  googleOAuth2Calendar(code: string): Observable<string> {
+    return this.http.get(`http://localhost:8080/google/calendar/auth/callback?code=${code}`, {responseType: 'text'})
+      .pipe(
+        map(response => response as string)
+      );
+  }
+
+  createEventCalendar(newEvent: Event): Observable<any> {
+    return this.http.post("http://localhost:8080/google/calendar/c/event", newEvent, {withCredentials: true})
+  }
+
+  searchByDay(day: string) {
+    return this.http.get(`http://localhost:8080/google/calendar/byDay?day=${day}`, {withCredentials: true})
+  }
+
+  getEventsAzureCalendar() {
+    return this.http.get(`http://localhost:8080/azure/calendar`, {withCredentials: true})
+  }
+
+  setAzureAccessTokenCalendar(token: string) {
+    return this.http.get(`http://localhost:8080/azure/calendar/save/access-token?token=${token}`, {withCredentials: true})
+  }
+
+  getUrlAzureCalendar(): Observable<UrlDto> {
+    return this.http.get<UrlDto>("http://localhost:8080/azure/calendar/auth/url");
+  }
+
+  azureOAuth2Calendar(code: string): Observable<string> {
+    return this.http.get(`http://localhost:8080/azure/calendar/auth/callback?code=${code}`, {responseType: 'text'})
+      .pipe(
+        map(response => response as string)
+      );
+  }
+
+  createAzureEventCalendar(newEvent: Event): Observable<any> {
+    return this.http.post("http://localhost:8080/azure/calendar/c/event", newEvent, {withCredentials: true})
+  }
+
   register(registerRequest: any): void {
     this.http.post(`${baseUrlAuth}/register`, registerRequest);
   }
@@ -145,11 +190,7 @@ export class AuthService {
 
   text(content: any, recipient: any): Observable<any> {
     return this.http.post(`${baseUrlTexting}`, {content, recipient}, {
-      withCredentials: true, headers:
-        new HttpHeaders({
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': this.token
-        })
+      withCredentials: true
     })
   }
 
