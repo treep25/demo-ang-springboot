@@ -1,0 +1,43 @@
+<h1>My events Azure Calendar</h1>
+
+<div class="day-names">
+  <div class="day-btn" (click)="onDayClick('Mon')" data-day="Mon">M</div>
+  <div class="day-btn" (click)="onDayClick('Tue')" data-day="Tue">T</div>
+  <div class="day-btn" (click)="onDayClick('Wed')" data-day="Wed">W</div>
+  <div class="day-btn" (click)="onDayClick('Thu')" data-day="Thu">T</div>
+  <div class="day-btn" (click)="onDayClick('Fri')" data-day="Fri">F</div>
+  <div class="day-btn weekend" (click)="onDayClick('Sat')" data-day="Sat">S</div>
+  <div class="day-btn weekend" (click)="onDayClick('Sun')" data-day="Sun">SU</div>
+</div>
+
+<div *ngIf="creatingEvent">
+  <h2>Create Event</h2>
+  <form>
+    <label for="summary">Summary:</label>
+    <input type="text" id="summary" name="summary" [(ngModel)]="newEvent.summary" required>
+
+    <label for="startDate">Start Date:</label>
+    <input type="datetime-local" id="startDate" name="startDate" [(ngModel)]="newEvent.startDate" required>
+
+    <label for="endDate">End Date:</label>
+    <input type="datetime-local" id="endDate" name="endDate" [(ngModel)]="newEvent.endDate" required>
+
+    <button type="submit">Create</button>
+  </form>
+</div>
+<button type="reset" (click)="showCreateEventForm()">Event</button>
+
+<div class="events-container">
+  <div *ngFor="let event of events" class="event">
+    <div class="event-summary">{{ event.subject }}</div>
+    <div class="event-details">
+      <div *ngIf="event.start && event.start.dateTime"><strong>Start at:</strong> {{ formatDateTime(event.start.dateTime, event.start.timeZone) }}</div>
+      <div *ngIf="event.end && event.end.dateTime"><strong>End at:</strong> {{ formatDateTime(event.end.dateTime, event.end.timeZone) }}</div>
+      <div *ngIf="event.location && event.location.displayName"><strong>Where:</strong> {{ event.location.displayName }}</div>
+      <div *ngIf="event.body && event.body.contentType === 'html'"><strong>Description:</strong>
+        <div [innerHTML]="event.body.content"></div>
+      </div>
+    </div>
+    <div class="event-link"><a [href]="event.webLink" target="_blank">More</a></div>
+  </div>
+</div>

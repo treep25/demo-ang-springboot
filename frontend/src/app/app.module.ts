@@ -25,6 +25,8 @@ import {MakeRequestComponent} from './make-request/make-request.component';
 import {RequestRepresentationComponent} from './request-representation/request-representation.component';
 import {TextingComponent} from './texting/texting.component';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
+import {CalendarComponent} from './calendar/calendar.component';
+import {AzureCalendarComponent} from './azure-calendar/azure-calendar.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -46,7 +48,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     AdminPanelComponent,
     MakeRequestComponent,
     RequestRepresentationComponent,
-    TextingComponent
+    TextingComponent,
+    CalendarComponent,
+    AzureCalendarComponent
   ],
   imports: [
     PickerModule,
