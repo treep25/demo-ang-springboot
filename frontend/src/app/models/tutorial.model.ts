@@ -84,3 +84,9 @@ export class GoogleAccessToken {
   accessToken?: string
 }
 
+export class Event {
+  summary?: string;
+  startDate?: Date;
+  endDate?: Date;
+  token?: string;
+}
