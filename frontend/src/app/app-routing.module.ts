@@ -14,6 +14,8 @@ import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
 import {MakeRequestComponent} from "./make-request/make-request.component";
 import {RequestRepresentationComponent} from "./request-representation/request-representation.component";
 import {TextingComponent} from "./texting/texting.component";
+import {CalendarComponent} from "./calendar/calendar.component";
+import {AzureCalendarComponent} from "./azure-calendar/azure-calendar.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'tutorials', pathMatch: 'full'},
@@ -29,7 +31,9 @@ const routes: Routes = [
   {path: 'admin/panel', component: AdminPanelComponent, canActivate: [AuthGuard]},
   {path: 'admin/requests', component: RequestRepresentationComponent, canActivate: [AuthGuard]},
   {path: 'make-request', component: MakeRequestComponent},
-  {path: 'chat', component: TextingComponent, canActivate: [AuthGuard]}
+  {path: 'chat', component: TextingComponent, canActivate: [AuthGuard]},
+  {path: 'calendar', component: CalendarComponent},
+  {path: 'azure/calendar', component: AzureCalendarComponent}
 ];
 
 @NgModule({
