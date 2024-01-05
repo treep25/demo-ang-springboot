@@ -80,7 +80,7 @@ export class LoginComponent {
                     document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
                     document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
 
-                    this.router.navigate(['tutorials']).then(r => window.location.reload());
+                    this.router.navigate(['tutorials'])
                   }
                 )
               }
@@ -93,7 +93,7 @@ export class LoginComponent {
                     document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
                     document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
 
-                    this.router.navigate(['tutorials']).then(r => window.location.reload());
+                    this.router.navigate(['tutorials'])
                   }
                 )
               }
@@ -106,7 +106,7 @@ export class LoginComponent {
                     document.cookie = `accessToken=${authResponse.accessToken}; path=/; SameSite=None; Secure`;
                     document.cookie = `refreshToken=${authResponse.refreshToken}; path=/; SameSite=None; Secure`;
 
-                    this.router.navigate(['tutorials']).then(r => window.location.reload());
+                    this.router.navigate(['tutorials'])
                   }
                 )
               }
