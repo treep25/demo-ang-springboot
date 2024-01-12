@@ -11,8 +11,8 @@
 </div>
 
 <div *ngIf="creatingEvent">
-  <h2>Create Event</h2>
-  <form>
+  <h2>Create azure-meet Event</h2>
+  <form (submit)="createEvent()">
     <label for="summary">Summary:</label>
     <input type="text" id="summary" name="summary" [(ngModel)]="newEvent.summary" required>
 
@@ -21,7 +21,12 @@
 
     <label for="endDate">End Date:</label>
     <input type="datetime-local" id="endDate" name="endDate" [(ngModel)]="newEvent.endDate" required>
-
+    <label for="location">Location:</label>
+    <select id="location" name="location" [(ngModel)]="newEvent.location" required>
+      <option value="Germany">Germany</option>
+      <option value="Ukraine">Ukraine</option>
+      <option value="Poland">Poland</option>
+    </select>
     <button type="submit">Create</button>
   </form>
 </div>
