@@ -36,7 +36,7 @@ export class TutorialsListComponent implements OnInit {
         this.tutorials = data;
         console.log(data);
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error()
     });
   }
 
@@ -57,7 +57,7 @@ export class TutorialsListComponent implements OnInit {
         console.log(res);
         this.refreshList();
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error()
     });
   }
 
@@ -70,7 +70,7 @@ export class TutorialsListComponent implements OnInit {
         this.tutorials = data;
         console.log(data);
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error()
     });
   }
 
@@ -83,7 +83,7 @@ export class TutorialsListComponent implements OnInit {
         this.tutorials = data;
         console.log(data);
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error()
     });
   }
 
@@ -98,7 +98,7 @@ export class TutorialsListComponent implements OnInit {
         this.tutorials = data;
         console.log(data);
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error()
     });
   }
 
@@ -108,7 +108,7 @@ export class TutorialsListComponent implements OnInit {
         this.tutorials = data;
         console.log(data);
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error()
     });
   }
 

@@ -43,12 +43,12 @@ export class TutorialsInformationComponent {
             next: (data) => {
               this.imageData = data
             },
-            error: (e) => console.error(e)
+            error: (e) => console.error()
           }
         )
         console.log(data);
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error()
     });
   }
 

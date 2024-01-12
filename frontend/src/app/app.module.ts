@@ -50,7 +50,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     RequestRepresentationComponent,
     TextingComponent,
     CalendarComponent,
-    AzureCalendarComponent
+    AzureCalendarComponent,
   ],
   imports: [
     PickerModule,

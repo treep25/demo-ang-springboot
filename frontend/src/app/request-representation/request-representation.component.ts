@@ -29,18 +29,18 @@ export class RequestRepresentationComponent implements OnInit {
             window.location.reload()
           },
           error => {
-            console.error(error)
+            console.error()
           }
         )
       },
-      error => console.error(error)
+      error => console.error()
     )
   }
 
   canceleUserRequest(requestId: any) {
     this.authService.cancelRequest(requestId).subscribe(
       value => console.log(value),
-      error => console.error(error)
+      error => console.error()
     )
   }
 }

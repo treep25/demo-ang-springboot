@@ -26,6 +26,7 @@ export class RegisterRequest {
 export class LoginRequest {
   email?: string;
   password?: string;
+  code?: string
 }
 
 export class AuthResponse {
@@ -86,7 +87,13 @@ export class GoogleAccessToken {
 
 export class Event {
   summary?: string;
+  location?: string;
   startDate?: Date;
   endDate?: Date;
   token?: string;
+}
+
+export class AuthResponse2Fa {
+  secretKey?: string;
+  authenticatorUrl?: string;
 }

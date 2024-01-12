@@ -37,7 +37,7 @@ export class MakeRequestComponent implements OnInit {
           console.log(value);
           this.router.navigate(['/login']);
         },
-        error => console.error(error)
+        error => console.error()
       );
     }
   }

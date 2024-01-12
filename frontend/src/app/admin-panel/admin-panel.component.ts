@@ -28,7 +28,7 @@ export class AdminPanelComponent implements OnInit {
         this.users = value
         this.pagedUsers = this.users.slice(0, 1)
       },
-      error => console.error(error)
+      error => console.error()
     )
   }
 
@@ -40,28 +40,28 @@ export class AdminPanelComponent implements OnInit {
   blockUser(user: User): void {
     this.userService.changeUserStatus(user.id).subscribe(
       value => console.log(value),
-      error => console.error(error)
+      error => console.error()
     )
   }
 
   searchByFirstName(): void {
     this.userService.searchByFirstName(this.firstName).subscribe(
       value => this.pagedUsers = value,
-      error => console.error(error)
+      error => console.error()
     )
   }
 
   searchByLastName(): void {
     this.userService.searchByLastName(this.lastName).subscribe(
       value => this.users = value,
-      error => console.error(error)
+      error => console.error()
     )
   }
 
   getAllStatusEnabled(): void {
     this.userService.searchByIsEnabledTrue().subscribe(
       value => this.pagedUsers = value,
-      error => console.error(error)
+      error => console.error()
     )
   }
 

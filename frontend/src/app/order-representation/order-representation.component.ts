@@ -31,7 +31,7 @@ export class OrderRepresentationComponent implements OnInit {
         console.log("User orders")
         this.order = res;
       },
-      error: (e) => console.error("Error during getting user orders")
+      error: (e) => console.error()
     });
 
     const stripe = await this.loadStripe();
@@ -65,7 +65,7 @@ export class OrderRepresentationComponent implements OnInit {
     const {token, error} = await stripe.createToken();
 
     if (error) {
-      console.error(error);
+      console.error();
     } else {
       this.zone.run(() => {
         this.submitToken(token.id);
@@ -80,7 +80,7 @@ export class OrderRepresentationComponent implements OnInit {
         alert('Success');
       },
       error => {
-        console.error(error);
+        console.error();
         alert('Error');
       }
     );
@@ -90,7 +90,7 @@ export class OrderRepresentationComponent implements OnInit {
   clearBucketOrder() {
     this.userService.clearBucketOrder().subscribe(
       value => window.location.reload(),
-      error => console.error(error)
+      error => console.error()
     )
   }
 

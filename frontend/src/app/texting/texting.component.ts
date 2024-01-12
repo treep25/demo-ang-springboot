@@ -63,7 +63,7 @@ export class TextingComponent implements OnInit {
         this.groupMessages = value1;
         console.log(value1);
       },
-      error => console.error(error)
+      error => console.error()
     );
   }
 
