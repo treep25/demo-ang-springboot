@@ -13,6 +13,7 @@ export class AzureCalendarComponent implements OnInit {
   events: any;
   creatingEvent = false;
   newEvent: Event = {
+    location: '',
     token: '',
     summary: '',
     startDate: new Date(),
@@ -26,6 +27,7 @@ export class AzureCalendarComponent implements OnInit {
     this.creatingEvent = true;
 
     this.newEvent = {
+      location: '',
       token: '',
       summary: '',
       startDate: new Date(),
@@ -33,8 +35,13 @@ export class AzureCalendarComponent implements OnInit {
     }
   }
 
-  onDayClick(mon: string) {
-
+  onDayClick(selectedDay: string): void {
+    this.authService.searchByDayAzureCalendar(selectedDay).subscribe(
+      value => {
+        //@ts-ignore
+        this.events = value
+      }
+    )
   }
 
   ngOnInit(): void {
@@ -75,6 +82,13 @@ export class AzureCalendarComponent implements OnInit {
         }
       }
     )
+  }
+
+  createEvent() {
+    this.authService.createEventAzureCalendar(this.newEvent)
+      .subscribe(
+        value => window.location.reload()
+      )
   }
 
   formatDateTime(value: number, timeZone: string): string {

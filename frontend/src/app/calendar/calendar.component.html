@@ -11,7 +11,7 @@
 </div>
 
 <div *ngIf="creatingEvent">
-  <h2>Create Event</h2>
+  <h2>Create google-meet Event</h2>
   <form (submit)="createEvent()">
     <label for="summary">Summary:</label>
     <input type="text" id="summary" name="summary" [(ngModel)]="newEvent.summary" required>

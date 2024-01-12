@@ -88,9 +88,10 @@ export class CalendarComponent implements OnInit {
   }
 
   createEvent() {
-    // @ts-ignore
-    console.log(this.newEvent.summary)
-    this.authService.createEventCalendar(this.newEvent).subscribe(value => window.location.reload())
+    this.authService.createEventCalendar(this.newEvent)
+      .subscribe(
+        value => window.location.reload()
+      )
   }
 
   onDayClick(selectedDay: string): void {

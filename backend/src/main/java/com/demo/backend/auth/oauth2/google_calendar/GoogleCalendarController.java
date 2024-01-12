@@ -11,7 +11,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.model.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -32,20 +32,25 @@ public class GoogleCalendarController {
     private String redirectUri = "http://localhost:8081/calendar";
     private final GoogleCalendarService googleCalendarService;
     private final UserService userService;
+    private static final String READONLY_SCOPE = "https://www.googleapis.com/auth/calendar.readonly";
+    private static final String CALENDAR_EVENTS_SCOPE = "https://www.googleapis.com/auth/calendar.events";
 
     @GetMapping("/google/calendar/auth/url")
     public ResponseEntity<?> auth() throws MalformedURLException {
         String url = new GoogleAuthorizationCodeRequestUrl(
                 clientId,
                 redirectUri,
-                List.of("https://www.googleapis.com/auth/calendar.readonly", "https://www.googleapis.com/auth/calendar.events"))
+                List.of(READONLY_SCOPE, CALENDAR_EVENTS_SCOPE))
                 .build();
 
         return ResponseEntity.ok(new UrlDto(url));
     }
 
     @GetMapping("/google/calendar/auth/callback")
-    public ResponseEntity<?> authCallback(@RequestParam("code") String code) throws IOException {
+    public ResponseEntity<?> authCallback
+            (
+                    @RequestParam("code") String code) throws IOException {
+
         GoogleTokenResponse execute = new GoogleAuthorizationCodeTokenRequest(
                 new NetHttpTransport(),
                 new GsonFactory(),
@@ -61,7 +66,11 @@ public class GoogleCalendarController {
     }
 
     @GetMapping("/google/calendar/save/access-token")
-    public ResponseEntity<?> setTokenPrincipal(@RequestParam("token") String token, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> setTokenPrincipal
+            (
+                    @RequestParam("token") String token,
+                    @AuthenticationPrincipal User user) {
+
         user.setGoogleAccessTokenNotRequered(token);
 
         userService.updateGoogleAccessToken(user);
@@ -69,7 +78,9 @@ public class GoogleCalendarController {
     }
 
     @GetMapping("/google/calendar")
-    public ResponseEntity<?> getEventsForTheWeek(@AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
+    public ResponseEntity<?> getEventsForTheWeek
+            (
+                    @AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
         List<Event> eventsForTheWeek = googleCalendarService.getEventsForTheWeek(user.getGoogleAccessTokenNotRequered());
         if (eventsForTheWeek != null) {
             return ResponseEntity.ok(eventsForTheWeek);
@@ -78,15 +89,21 @@ public class GoogleCalendarController {
     }
 
     @PostMapping("google/calendar/c/event")
-    public ResponseEntity<?> createEvent(@RequestBody EventToCreateModel eventToCreateModel, @AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
+    public ResponseEntity<?> createEvent
+            (
+                    @RequestBody EventToCreateModel eventToCreateModel,
+                    @AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
 
         eventToCreateModel.setToken(user.getGoogleAccessTokenNotRequered());
 
-        return new ResponseEntity<>(googleCalendarService.createEvent(eventToCreateModel), HttpStatusCode.valueOf(201));
+        return new ResponseEntity<>(googleCalendarService.createEvent(eventToCreateModel), HttpStatus.CREATED);
     }
 
     @GetMapping("google/calendar/byDay")
-    public ResponseEntity<?> getCalendarByDay(@RequestParam("day") String day, @AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
+    public ResponseEntity<?> getCalendarByDay
+            (
+                    @RequestParam("day") String day,
+                    @AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
         return ResponseEntity.ok(googleCalendarService.getCalendarByDay(day, user.getGoogleAccessTokenNotRequered()));
     }
 }
