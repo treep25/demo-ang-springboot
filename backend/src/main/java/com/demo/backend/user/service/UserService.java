@@ -3,6 +3,9 @@ package com.demo.backend.user.service;
 import com.demo.backend.auth.AuthRequest;
 import com.demo.backend.auth.AuthResponse;
 import com.demo.backend.auth.RegRequest;
+import com.demo.backend.auth.conreoller.auth2fa.TwoFactorAuthResponse;
+import com.demo.backend.auth.conreoller.auth2fa.UserSecret;
+import com.demo.backend.auth.conreoller.auth2fa.UserSecretRepository;
 import com.demo.backend.order.model.Order;
 import com.demo.backend.order.model.OrderStatus;
 import com.demo.backend.order.repository.OrderRepository;
@@ -14,6 +17,7 @@ import com.demo.backend.user.Role;
 import com.demo.backend.user.SearchingRequest;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +27,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +45,9 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserSecretRepository userSecretRepository;
     private final MessageService messageService;
+    private static final String APP_NAME = "SPRING ANGULAR";
 
     private final Map<Predicate<SearchingRequest>, BiFunction<SearchingRequest, UserRepository, List<User>>> searchingMap = Map.of(
             searchingParam -> checkParamssBeforeSearch(searchingParam.getFirstName()) && checkParamssBeforeSearch(searchingParam.getLastName()),
@@ -243,5 +251,44 @@ public class UserService {
 
     public void updateAzureAccessToken(User user) {
         userRepository.save(user);
+    }
+
+
+    public TwoFactorAuthResponse saveSecretKeyForUser(String email, String password, GoogleAuthenticatorKey secretKey) {
+        User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        managerAuthentication(AuthRequest.builder().email(email).password(password).build());
+
+        UserSecret isUserSecretInStorage = userSecretRepository.findBySecretKey(secretKey.getKey()).orElse(null);
+
+        if (isUserSecretInStorage == null) {
+            return null;
+        }
+
+        UserSecret userSecret = new UserSecret();
+        userSecret.setUser(user);
+        userSecret.setSecretKey(secretKey.getKey());
+
+        userSecretRepository.save(userSecret);
+
+        return TwoFactorAuthResponse
+                .builder()
+                .secretKey(secretKey.getKey())
+                .authenticatorUrl(getAuthenticatorUrl(email, secretKey.getKey()))
+                .build();
+    }
+
+    private String getAuthenticatorUrl(String email, String secretKey) {
+        String encodedIssuer = URLEncoder.encode(APP_NAME, StandardCharsets.UTF_8);
+        String encodedUsername = URLEncoder.encode(email, StandardCharsets.UTF_8);
+
+        return String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s",
+                encodedIssuer, encodedUsername, secretKey, encodedIssuer);
+    }
+
+    public UserSecret getUserSecretByUsername(String email, String password) {
+        User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        managerAuthentication(AuthRequest.builder().email(email).password(password).build());
+
+        return userSecretRepository.findByUser(user).orElse(null);
     }
 }

@@ -24,7 +24,7 @@ export class UserRepresentationComponent {
         console.log("User representation")
         this.user = res;
       },
-      error: (e) => console.error("Error during getting user representation")
+      error: (e) => console.error()
     });
   }
 }
