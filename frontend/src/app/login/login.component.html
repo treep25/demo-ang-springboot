@@ -34,6 +34,27 @@
     <img ngSrc="assets/25231.png" alt="Sign in via Github" height="960" width="960">
   </a>
 </form>
+
+<div *ngIf="showQrCodeModal">
+  <div *ngIf="showSecret" class="secret-key-container">
+    {{ secretKey }}
+  </div>
+  <button (click)="getSecretKey()">Get code</button>
+  <img id="qrCodeImage" (click)="generateQRCode()" alt="QR Code"/>
+
+  <button (click)="getFormToEnterCode()">Continue</button>
+  <div *ngIf="!showSecret && showEnterField">
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="inputField">Enter something:</label>
+        <input type="text" id="inputField" name="inputField" [(ngModel)]="inputValue" class="form-control" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+  </div>
+</div>
 <script>
 </script>
 <button type="button" class="btn btn-success" (click)="makeRequest()">Make Request</button>
