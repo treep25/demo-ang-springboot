@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map} from 'rxjs/operators';
-import {AuthResponse, Event, GroupMessage, Message, Order, Request, UrlDto, User} from "../models/tutorial.model";
+import {AuthResponse, AuthResponse2Fa, Event, GroupMessage, Message, Order, Request, UrlDto, User} from "../models/tutorial.model";
 import {Observable} from "rxjs";
 
 const baseUrlAuth = 'http://localhost:8080/api/v1/auth';
@@ -19,6 +19,14 @@ export class AuthService {
 
   login(loginRequest: any): Observable<AuthResponse> {
     return this.http.post(`${baseUrlAuth}/login`, loginRequest);
+  }
+
+  loginApiV2(loginRequest: any): Observable<AuthResponse2Fa> {
+    return this.http.post(`http://localhost:8080/api/v2/auth/login`, loginRequest);
+  }
+
+  loginVerifyToken(loginRequest: any): Observable<AuthResponse> {
+    return this.http.post(`http://localhost:8080/api/v2/auth/verify-code`, loginRequest);
   }
 
   getUrlGoogle(): Observable<UrlDto> {
@@ -104,8 +112,16 @@ export class AuthService {
     return this.http.post("http://localhost:8080/google/calendar/c/event", newEvent, {withCredentials: true})
   }
 
+  createEventAzureCalendar(newEvent: Event) {
+    return this.http.post("http://localhost:8080/azure/c/event", newEvent, {withCredentials: true})
+  }
+
   searchByDay(day: string) {
     return this.http.get(`http://localhost:8080/google/calendar/byDay?day=${day}`, {withCredentials: true})
+  }
+
+  searchByDayAzureCalendar(day: string) {
+    return this.http.get(`http://localhost:8080/azure/calendar/byDay?day=${day}`, {withCredentials: true})
   }
 
   getEventsAzureCalendar() {
