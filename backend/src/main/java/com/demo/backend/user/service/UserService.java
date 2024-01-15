@@ -17,6 +17,8 @@ import com.demo.backend.user.Role;
 import com.demo.backend.user.SearchingRequest;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,6 +29,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -141,16 +145,18 @@ public class UserService {
         return generateResponseTokens(jwtService.generateToken(save, ipAddr), jwtService.generateRefreshToken(save, ipAddr));
     }
 
-    public void save(RegRequest request) {
+    public User save(RegRequest request) {
         User buildUserForSave = User.builder()
                 .firstName(request.getFirstName())
+                .isEnabled(true)
+                .provider(Provider.LOCAL)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .role(Role.USER)
                 .build();
 
-        userRepository.save(buildUserForSave);
+        return userRepository.save(buildUserForSave);
     }
 
     private AuthResponse generateResponseTokens(String accessToken, String refreshToken) {
@@ -258,12 +264,6 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(RuntimeException::new);
         managerAuthentication(AuthRequest.builder().email(email).password(password).build());
 
-        UserSecret isUserSecretInStorage = userSecretRepository.findBySecretKey(secretKey.getKey()).orElse(null);
-
-        if (isUserSecretInStorage == null) {
-            return null;
-        }
-
         UserSecret userSecret = new UserSecret();
         userSecret.setUser(user);
         userSecret.setSecretKey(secretKey.getKey());
@@ -290,5 +290,54 @@ public class UserService {
         managerAuthentication(AuthRequest.builder().email(email).password(password).build());
 
         return userSecretRepository.findByUser(user).orElse(null);
+    }
+
+    public byte[] generatePdfReport(User user) throws DocumentException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, baos);
+
+            PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+            String userPassword = "1";
+            String ownerPassword = "1";
+            writer.setEncryption(userPassword.getBytes(), ownerPassword.getBytes(),
+                    PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128);
+
+            document.open();
+
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLUE);
+            Paragraph title = new Paragraph("User Report", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            Font contentFont = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+
+            Paragraph userInfo = new Paragraph();
+            userInfo.setSpacingBefore(20);
+
+            userInfo.add(new Chunk("First Name: ", contentFont));
+            userInfo.add(new Chunk(user.getFirstName(), contentFont));
+            userInfo.add(Chunk.NEWLINE);
+
+            userInfo.add(new Chunk("Last Name: ", contentFont));
+            userInfo.add(new Chunk(user.getLastName(), contentFont));
+            userInfo.add(Chunk.NEWLINE);
+
+            userInfo.add(new Chunk("Email: ", contentFont));
+            userInfo.add(new Chunk(user.getEmail(), contentFont));
+            userInfo.add(Chunk.NEWLINE);
+
+            userInfo.add(new Chunk("Provider: ", contentFont));
+            userInfo.add(new Chunk(user.getProvider().name(), contentFont));
+
+            document.add(userInfo);
+
+            document.close();
+
+            return baos.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("Error generating PDF report with user " + user.getEmail(), e);
+        }
     }
 }

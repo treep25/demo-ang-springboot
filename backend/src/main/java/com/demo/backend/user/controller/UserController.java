@@ -6,7 +6,11 @@ import com.demo.backend.user.SearchingRequest;
 import com.demo.backend.user.mapper.UserMapper;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.service.UserService;
+import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,6 +30,15 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal User user) {
 
         return ResponseEntity.ok(userMapper.convertToUserDto(user));
+    }
+
+    @GetMapping("me/info/report")
+    public ResponseEntity<?> getUserInfoPdfReport(@AuthenticationPrincipal User user) throws DocumentException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("inline", "user_report.pdf");
+
+        return new ResponseEntity<>(userService.generatePdfReport(user), headers, HttpStatus.OK);
     }
 
     @PostMapping("/order")

@@ -21,12 +21,12 @@ export class AuthService {
     return this.http.post(`${baseUrlAuth}/login`, loginRequest);
   }
 
-  loginApiV2(loginRequest: any): Observable<AuthResponse2Fa> {
-    return this.http.post(`http://localhost:8080/api/v2/auth/login`, loginRequest);
+  create2faAfterRegister(loginRequest: any): Observable<AuthResponse2Fa> {
+    return this.http.post(`http://localhost:8080/api/v2/auth/create/2fa`, loginRequest);
   }
 
   loginVerifyToken(loginRequest: any): Observable<AuthResponse> {
-    return this.http.post(`http://localhost:8080/api/v2/auth/verify-code`, loginRequest);
+    return this.http.post(`http://localhost:8080/api/v2/auth/login/verify-code`, loginRequest);
   }
 
   getUrlGoogle(): Observable<UrlDto> {
@@ -143,12 +143,9 @@ export class AuthService {
       );
   }
 
-  createAzureEventCalendar(newEvent: Event): Observable<any> {
-    return this.http.post("http://localhost:8080/azure/calendar/c/event", newEvent, {withCredentials: true})
-  }
 
-  register(registerRequest: any): void {
-    this.http.post(`${baseUrlAuth}/register`, registerRequest);
+  register(registerRequest: any) {
+    return this.http.post(`${baseUrlAuth}/register`, registerRequest);
   }
 
   refreshToken(refreshToken: any): Observable<AuthResponse> {
@@ -251,5 +248,9 @@ export class AuthService {
 
   cancelOrder(): Observable<any> {
     return this.http.delete(`${baseUrlUser}/delete/orders`, {withCredentials: true})
+  }
+
+  generateReport() {
+    return this.http.get("http://localhost:8080/api/v1/user/me/info/report", {withCredentials: true, responseType: "blob"},)
   }
 }

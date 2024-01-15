@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {User} from "../models/tutorial.model";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-user-representation',
@@ -15,7 +16,7 @@ export class UserRepresentationComponent {
     role: ''
   }
 
-  constructor(private userService: AuthService) {
+  constructor(private userService: AuthService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -26,5 +27,23 @@ export class UserRepresentationComponent {
       },
       error: (e) => console.error()
     });
+  }
+
+  generateReport() {
+    this.userService.generateReport().subscribe(
+      (response: any) => {
+        const blob = new Blob([response], {type: 'application/pdf'});
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+      },
+      (error) => {
+        if (error instanceof HttpErrorResponse) {
+          console.error('HTTP error occurred:', error.status);
+          console.error('Response body:', error.error);
+        } else {
+          console.error('An error occurred:', error);
+        }
+      }
+    );
   }
 }

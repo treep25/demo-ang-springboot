@@ -1,6 +1,7 @@
 package com.demo.backend.user.model;
 
 import com.demo.backend.order.model.Order;
+import com.demo.backend.user.Provider;
 import com.demo.backend.user.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EnumType;
@@ -23,4 +24,6 @@ public class UserDto {
     private Order order;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private boolean isEnabled;
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 }
