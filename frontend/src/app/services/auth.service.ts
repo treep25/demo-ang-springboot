@@ -251,6 +251,10 @@ export class AuthService {
   }
 
   generateReport() {
-    return this.http.get("http://localhost:8080/api/v1/user/me/info/report", {withCredentials: true, responseType: "blob"},)
+    return this.http.get("http://localhost:8080/api/v1/user/me/info/report", {withCredentials: true, responseType: "blob"})
+  }
+
+  generateReportAndSendViaGmail() {
+    return this.http.post("http://localhost:8080/api/v1/user/me/info/report/gmail", null, {withCredentials: true})
   }
 }
