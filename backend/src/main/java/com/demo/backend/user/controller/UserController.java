@@ -7,6 +7,7 @@ import com.demo.backend.user.mapper.UserMapper;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.service.UserService;
 import com.itextpdf.text.DocumentException;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -39,6 +41,13 @@ public class UserController {
         headers.setContentDispositionFormData("inline", "user_report.pdf");
 
         return new ResponseEntity<>(userService.generatePdfReport(user), headers, HttpStatus.OK);
+    }
+
+    @PostMapping("me/info/report/gmail")
+    public ResponseEntity<?> sendUserInfoPdfReport(@AuthenticationPrincipal User user) throws DocumentException, MessagingException {
+        userService.sendReportViaGmail(user);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/order")

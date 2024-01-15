@@ -20,7 +20,12 @@ import com.demo.backend.user.repository.UserRepository;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -52,6 +57,7 @@ public class UserService {
     private final UserSecretRepository userSecretRepository;
     private final MessageService messageService;
     private static final String APP_NAME = "SPRING ANGULAR";
+    private final JavaMailSender javaMailSender;
 
     private final Map<Predicate<SearchingRequest>, BiFunction<SearchingRequest, UserRepository, List<User>>> searchingMap = Map.of(
             searchingParam -> checkParamssBeforeSearch(searchingParam.getFirstName()) && checkParamssBeforeSearch(searchingParam.getLastName()),
@@ -339,5 +345,21 @@ public class UserService {
         } catch (IOException e) {
             throw new RuntimeException("Error generating PDF report with user " + user.getEmail(), e);
         }
+    }
+
+    public void sendReportViaGmail(User user) throws DocumentException, MessagingException {
+        byte[] bytes = generatePdfReport(user);
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(user.getEmail());
+        helper.setSubject("User Report");
+        helper.setText("Please find the attached user report.");
+
+        ByteArrayResource pdfAttachment = new ByteArrayResource(bytes);
+        helper.addAttachment("user_report.pdf", pdfAttachment);
+
+        javaMailSender.send(message);
     }
 }

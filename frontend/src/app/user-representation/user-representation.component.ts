@@ -46,4 +46,10 @@ export class UserRepresentationComponent {
       }
     );
   }
+
+  generateReportAndSendGmail() {
+    this.userService.generateReportAndSendViaGmail().subscribe(
+
+    );
+  }
 }
