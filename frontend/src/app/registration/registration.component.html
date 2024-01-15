@@ -1,5 +1,5 @@
 <!-- register.component.html -->
-<form (ngSubmit)="register()" [formGroup]="registerForm">
+<form (ngSubmit)="register()" [formGroup]="registerForm" class="registration-form">
   <div class="form-group">
     <label for="firstName">First Name:</label>
     <input type="text" id="firstName" name="firstName" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && registerForm.get('firstName')?.errors }">
@@ -44,3 +44,11 @@
   </div>
   <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary">Register</button>
 </form>
+<div *ngIf="showQrCodeModal" class="modal-container">
+  <div *ngIf="showSecret" class="secret-key-container">
+    {{ secretKey }}
+  </div>
+  <button (click)="getSecretKey()" class="code-button">Get Code</button>
+  <img id="qrCodeImage" (click)="generateQRCode()" alt="QR Code" class="qr-code-image"/>
+  <button (click)="continueRedirectToLogin()" class="continue-button">Continue</button>
+</div>

@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from "../services/auth.service";
 import {LoginRequest} from "../models/tutorial.model";
 import {ActivatedRoute, Router} from "@angular/router";
-import * as QRCode from 'qrcode';
 
 @Component({
   selector: 'app-login',
@@ -121,36 +120,11 @@ export class LoginComponent {
     this.loginForm = this.formBuilder.group({
       login: ['', Validators.required],
       password: ['', Validators.required],
+      codeValueToLogin: ['', ""],
       agree: [false, Validators.requiredTrue]
     });
   }
 
-  // login() {
-  //   this.submitted = true;
-  //
-  //   if (this.loginForm.invalid) {
-  //     return;
-  //   }
-  //
-  //   const loginRequest: LoginRequest = {
-  //     email: this.loginForm.get('login')?.value,
-  //     password: this.loginForm.get('password')?.value,
-  //   };
-  //
-  //   this.authService.login(loginRequest).subscribe({
-  //     next: (res) => {
-  //       document.cookie = `accessToken=${res.accessToken}; path=/; SameSite=None; Secure`;
-  //       document.cookie = `refreshToken=${res.refreshToken}; path=/; SameSite=None; Secure`;
-  //
-  //       this.router.navigate(['tutorials']).then(r => window.location.reload());
-  //
-  //     }
-  //   })
-  // }
-
-  secretKey: string | undefined = ''
-  qrCodeData: string | undefined = ''
-  showQrCodeModal: boolean = false
   showSecret: boolean = false
   showEnterField: boolean = false
   loginRequest: LoginRequest = {}
@@ -167,43 +141,22 @@ export class LoginComponent {
       password: this.loginForm.get('password')?.value,
     };
 
-    this.authService.loginApiV2(this.loginRequest).subscribe({
-      next: (res) => {
-        this.secretKey = res.secretKey;
-        this.qrCodeData = res.authenticatorUrl;
-        this.showQrCodeModal = true;
-      },
-      error: (err) => {
-        console.log("Error during get 2fa response")
-      }
-    })
+    if (this.showEnterField) {
+      this.onSubmit();
+    }
+
+    this.getFormToEnterCode()
   }
 
-  generateQRCode() {
-    // @ts-ignore
-    QRCode.toDataURL(this.qrCodeData, (err, url) => {
-      if (err) {
-        console.error();
-      } else {
-        const qrCodeImage = document.getElementById('qrCodeImage') as HTMLImageElement;
-        qrCodeImage.src = url;
-      }
-    });
-  }
-
-  getSecretKey() {
-    this.showSecret = !this.showSecret;
-  }
 
   getFormToEnterCode() {
     this.showSecret = false;
     this.showEnterField = true
   }
 
-  inputValue: string = '';
 
   onSubmit() {
-    this.loginRequest.code = this.inputValue
+    this.loginRequest.code = this.loginForm.get('codeValueToLogin')?.value
     this.authService.loginVerifyToken(this.loginRequest).subscribe({
       next: (res) => {
         document.cookie = `accessToken=${res.accessToken}; path=/; SameSite=None; Secure`;

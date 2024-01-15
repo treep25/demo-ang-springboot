@@ -13,6 +13,10 @@
       Password is required
     </div>
   </div>
+  <div class="form-group" *ngIf="showEnterField">
+    <label for="inputField">2FA code:</label>
+    <input type="text" id="inputField" name="inputField" formControlName="codeValueToLogin" class="form-control" required>
+  </div>
   <div class="form-group form-check">
     <input type="checkbox" id="agree" name="agree" formControlName="agree" class="form-check-input" [ngClass]="{ 'is-invalid': submitted && loginForm.get('agree')?.errors }">
     <label for="agree" class="form-check-label">I agree to the privacy policy</label>
@@ -35,26 +39,4 @@
   </a>
 </form>
 
-<div *ngIf="showQrCodeModal">
-  <div *ngIf="showSecret" class="secret-key-container">
-    {{ secretKey }}
-  </div>
-  <button (click)="getSecretKey()">Get code</button>
-  <img id="qrCodeImage" (click)="generateQRCode()" alt="QR Code"/>
-
-  <button (click)="getFormToEnterCode()">Continue</button>
-  <div *ngIf="!showSecret && showEnterField">
-    <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="inputField">Enter something:</label>
-        <input type="text" id="inputField" name="inputField" [(ngModel)]="inputValue" class="form-control" required>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-  </div>
-</div>
-<script>
-</script>
 <button type="button" class="btn btn-success" (click)="makeRequest()">Make Request</button>

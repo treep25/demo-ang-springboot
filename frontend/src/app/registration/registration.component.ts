@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RegisterRequest} from "../models/tutorial.model";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import * as QRCode from "qrcode";
 
 @Component({
   selector: 'app-register',
@@ -47,8 +48,53 @@ export class RegisterComponent {
       repeatPassword: this.registerForm.get('repeatPassword')?.value,
     };
 
-    this.authService.register(registerRequest)
+    this.authService.register(registerRequest).subscribe(
+      value => {
+        this.createCode2fa()
+      }
+    );
 
+  }
+
+  secretKey: string | undefined = ''
+  showQrCodeModal: boolean = false
+  qrCodeData: string | undefined = ''
+  showSecret: boolean | undefined = false;
+
+  generateQRCode() {
+    // @ts-ignore
+    QRCode.toDataURL(this.qrCodeData, (err, url) => {
+      if (err) {
+        console.error();
+      } else {
+        const qrCodeImage = document.getElementById('qrCodeImage') as HTMLImageElement;
+        qrCodeImage.src = url;
+      }
+    });
+  }
+
+  createCode2fa() {
+    this.authService.create2faAfterRegister({
+      email: this.registerForm.get('email')?.value,
+      password: this.registerForm.get('password')?.value
+
+    }).subscribe({
+      next: (res) => {
+        this.secretKey = res.secretKey;
+        this.qrCodeData = res.authenticatorUrl;
+        this.showQrCodeModal = true;
+      },
+      error: (err) => {
+        console.log("Error during get 2fa response")
+      }
+    })
+  }
+
+  getSecretKey() {
+    this.showSecret = !this.showSecret;
+  }
+
+  continueRedirectToLogin() {
     this.router.navigate(['login']);
   }
 
