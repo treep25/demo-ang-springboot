@@ -33,14 +33,13 @@ public class GoogleCalendarController {
     private final GoogleCalendarService googleCalendarService;
     private final UserService userService;
     private static final String READONLY_SCOPE = "https://www.googleapis.com/auth/calendar.readonly";
-    private static final String CALENDAR_EVENTS_SCOPE = "https://www.googleapis.com/auth/calendar.events";
 
     @GetMapping("/google/calendar/auth/url")
     public ResponseEntity<?> auth() throws MalformedURLException {
         String url = new GoogleAuthorizationCodeRequestUrl(
                 clientId,
                 redirectUri,
-                List.of(READONLY_SCOPE, CALENDAR_EVENTS_SCOPE))
+                List.of(READONLY_SCOPE))
                 .build();
 
         return ResponseEntity.ok(new UrlDto(url));
