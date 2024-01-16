@@ -27,6 +27,7 @@ import {TextingComponent} from './texting/texting.component';
 import {PickerModule} from '@ctrl/ngx-emoji-mart';
 import {CalendarComponent} from './calendar/calendar.component';
 import {AzureCalendarComponent} from './azure-calendar/azure-calendar.component';
+import {GmailComponentComponent} from './gmail-component/gmail-component.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -51,6 +52,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TextingComponent,
     CalendarComponent,
     AzureCalendarComponent,
+    GmailComponentComponent,
   ],
   imports: [
     PickerModule,

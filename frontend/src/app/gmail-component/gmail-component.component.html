@@ -1,0 +1,36 @@
+<div class="email-list">
+  <div *ngFor="let email of emails" class="email-item">
+    <div class="email-header">
+      <strong>Topic:</strong> {{ getEmailHeaderValue(email, 'Subject') }}
+    </div>
+    <div class="email-details">
+      <strong>Sender:</strong> {{ getEmailHeaderValue(email, 'From') }}
+    </div>
+    <div class="email-details">
+      <strong>Date:</strong> {{ getEmailHeaderValue(email, 'Date') | date }}
+    </div>
+    <div class="email-content">
+      <strong>Content:</strong> {{ email.snippet }}
+    </div>
+    <hr/>
+  </div>
+  <button class="create-button" (click)="getOutgoingMessages()">Outgoing messages</button>
+  <button class="create-button" (click)="openComposeForm()">New mail</button>
+  <div *ngIf="showComposeForm" class="compose-form">
+    <h2>Create</h2>
+    <div>
+      <label for="to">To:</label>
+      <input type="text" id="to" [(ngModel)]="newEmail.to"/>
+    </div>
+    <div>
+      <label for="subject">Topic:</label>
+      <input type="text" id="subject" [(ngModel)]="newEmail.subject"/>
+    </div>
+    <div>
+      <label for="body">Body:</label>
+      <textarea id="body" [(ngModel)]="newEmail.body"></textarea>
+    </div>
+    <button (click)="closeComposeForm()">Сancel</button>
+    <button (click)="sendEmail()">Send</button>
+  </div>
+</div>

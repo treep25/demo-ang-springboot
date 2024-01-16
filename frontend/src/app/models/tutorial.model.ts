@@ -97,3 +97,38 @@ export class AuthResponse2Fa {
   secretKey?: string;
   authenticatorUrl?: string;
 }
+
+export interface Email {
+  historyId: number;
+  id: string;
+  internalDate: number;
+  labelIds: string[];
+  payload: {
+    body: {
+      size: number;
+    };
+    filename: string;
+    headers: {
+      name: string;
+      value: string;
+    }[];
+    mimeType: string;
+    partId: string;
+    parts: {
+      body: {
+        data: string;
+        size: number;
+      };
+      filename: string;
+      headers: {
+        name: string;
+        value: string;
+      }[];
+      mimeType: string;
+      partId: string;
+    }[];
+  };
+  sizeEstimate: number;
+  snippet: string;
+  threadId: string;
+}

@@ -16,6 +16,7 @@ import {RequestRepresentationComponent} from "./request-representation/request-r
 import {TextingComponent} from "./texting/texting.component";
 import {CalendarComponent} from "./calendar/calendar.component";
 import {AzureCalendarComponent} from "./azure-calendar/azure-calendar.component";
+import {GmailComponentComponent} from "./gmail-component/gmail-component.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'tutorials', pathMatch: 'full'},
@@ -33,7 +34,8 @@ const routes: Routes = [
   {path: 'make-request', component: MakeRequestComponent},
   {path: 'chat', component: TextingComponent, canActivate: [AuthGuard]},
   {path: 'calendar', component: CalendarComponent},
-  {path: 'azure/calendar', component: AzureCalendarComponent}
+  {path: 'azure/calendar', component: AzureCalendarComponent},
+  {path: 'google/gmail', component: GmailComponentComponent}
 ];
 
 @NgModule({

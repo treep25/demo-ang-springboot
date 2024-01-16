@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {map} from 'rxjs/operators';
-import {AuthResponse, AuthResponse2Fa, Event, GroupMessage, Message, Order, Request, UrlDto, User} from "../models/tutorial.model";
+import {AuthResponse, AuthResponse2Fa, Email, Event, GroupMessage, Message, Order, Request, UrlDto, User} from "../models/tutorial.model";
 import {Observable} from "rxjs";
 
 const baseUrlAuth = 'http://localhost:8080/api/v1/auth';
@@ -256,5 +256,28 @@ export class AuthService {
 
   generateReportAndSendViaGmail() {
     return this.http.post("http://localhost:8080/api/v1/user/me/info/report/gmail", null, {withCredentials: true})
+  }
+
+  googleGmailBox(): Observable<Email[]> {
+    return this.http.get<Email[]>("http://localhost:8080/api/v1/gmail/messages", {withCredentials: true})
+  }
+
+  getUrlGoogleGmail(): Observable<UrlDto> {
+    return this.http.get("http://localhost:8080/api/v1/gmail/auth/url")
+  }
+
+  googleGmailApis(code: any) {
+    return this.http.get(`http://localhost:8080/api/v1/gmail/auth/callback?code=${code}`, {responseType: 'text'})
+      .pipe(
+        map(response => response as string)
+      );
+  }
+
+  sendEmail(newEmail: any) {
+    return this.http.post("http://localhost:8080/api/v1/gmail/send-email", newEmail, {withCredentials: true})
+  }
+
+  getOutgoingMessages() {
+    return this.http.get<Email[]>("http://localhost:8080/api/v1/gmail/messages/outgoing", {withCredentials: true})
   }
 }
