@@ -18,6 +18,10 @@ export class GmailComponentComponent implements OnInit {
     subject: '',
     body: ''
   };
+  attachmentFile: File | null = null;
+
+  searchText: string = '';
+  searchType: string = '';
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
     this.route.queryParams.subscribe(
@@ -59,6 +63,10 @@ export class GmailComponentComponent implements OnInit {
     )
   }
 
+  ngOnInit(): void {
+
+  }
+
   showComposeForm = false;
 
   openComposeForm() {
@@ -70,13 +78,17 @@ export class GmailComponentComponent implements OnInit {
   }
 
   sendEmail() {
-    this.authService.sendEmail(this.newEmail).subscribe(
+    // @ts-ignore
+    this.authService.sendEmail(this.newEmail, this.attachmentFile).subscribe(
       value => window.location.reload()
     )
   }
 
-  ngOnInit(): void {
-
+  handleAttachmentChange(event: any): void {
+    const fileList: FileList | null = event.target.files;
+    if (fileList && fileList.length > 0) {
+      this.attachmentFile = fileList[0];
+    }
   }
 
   getEmailHeaderValue(email: Email, headerName: string): string {
@@ -88,7 +100,15 @@ export class GmailComponentComponent implements OnInit {
     this.authService.getOutgoingMessages().subscribe(
       value => {
         this.emails = value
-        // window.location.reload()
+      }
+    )
+  }
+
+
+  search() {
+    this.authService.searchByParamsGmail(this.searchType, this.searchText).subscribe(
+      value => {
+        this.emails = value
       }
     )
   }

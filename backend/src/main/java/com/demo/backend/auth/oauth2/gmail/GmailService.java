@@ -16,12 +16,17 @@ import jakarta.mail.internet.MimeMultipart;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +35,12 @@ public class GmailService {
     private Gmail gmail;
     private static final String CURRENT_PRINCIPAL_ID = "me";
     private static final String LABEL_SENT = "SENT";
+
+    private Map<Predicate<ByParamSearchingDto>, Function<ByParamSearchingDto, String>> predicateMap = Map.of(
+            param -> isByParamExist(param.getBySender()), param -> "from:" + param.getBySender(),
+            param -> isByParamExist(param.getBySubject()), param -> "subject:" + param.getBySubject(),
+            param -> isByParamExist(param.getByContentSearchTerm()), ByParamSearchingDto::getByContentSearchTerm
+    );
 
     private Gmail setUpGmail(String jwtToken) {
         GoogleCredential credential = new GoogleCredential().setAccessToken(jwtToken);
@@ -59,7 +70,10 @@ public class GmailService {
     public List<Message> listMessagesMetaInfo(String token) throws IOException {
         gmail = setUpGmail(token);
 
-        ListMessagesResponse response = gmail.users().messages().list(CURRENT_PRINCIPAL_ID)
+        ListMessagesResponse response = gmail
+                .users()
+                .messages()
+                .list(CURRENT_PRINCIPAL_ID)
                 .setMaxResults(15L)
                 .execute();
 
@@ -75,7 +89,9 @@ public class GmailService {
     public List<Message> listOutgoingMessages(String token) throws IOException {
         gmail = setUpGmail(token);
 
-        return gmail.users().messages()
+        return gmail
+                .users()
+                .messages()
                 .list(CURRENT_PRINCIPAL_ID)
                 .setLabelIds(Collections.singletonList(LABEL_SENT))
                 .execute().getMessages()
@@ -89,11 +105,11 @@ public class GmailService {
                 }).toList();
     }
 
-    public void sendEmail(String to, String subject, String body, String token) throws IOException, MessagingException {
+    public void sendEmail(String to, String subject, String body, String token, MultipartFile attachment) throws IOException, MessagingException {
 
         gmail = setUpGmail(token);
 
-        MimeMessage mimeMessage = createMimeMessage(to, subject, body);
+        MimeMessage mimeMessage = createMimeMessage(to, subject, body, attachment);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         mimeMessage.writeTo(buffer);
         byte[] bytes = buffer.toByteArray();
@@ -104,7 +120,7 @@ public class GmailService {
         gmail.users().messages().send(CURRENT_PRINCIPAL_ID, message).execute();
     }
 
-    private MimeMessage createMimeMessage(String to, String subject, String body) throws MessagingException {
+    private MimeMessage createMimeMessage(String to, String subject, String body, MultipartFile attachment) throws MessagingException, IOException {
         Session session = Session.getDefaultInstance(new Properties(), null);
 
         MimeMessage email = new MimeMessage(session);
@@ -117,8 +133,52 @@ public class GmailService {
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);
 
+
+        if (attachment != null) {
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+
+            attachmentPart.setContent(attachment.getBytes(), attachment.getContentType());
+            attachmentPart.setFileName(attachment.getOriginalFilename());
+
+            multipart.addBodyPart(attachmentPart);
+        }
+
         email.setContent(multipart);
+
         return email;
     }
 
+
+    private boolean isByParamExist(String byParam) {
+        return byParam != null && !byParam.isBlank() && !byParam.isEmpty();
+    }
+
+    public List<Message> listMessagesByParam(ByParamSearchingDto byParamSearchingDto, String token) throws IOException {
+        gmail = setUpGmail(token);
+
+        AtomicReference<String> query = new AtomicReference<>("");
+
+        predicateMap.forEach(
+                (param, dto) -> {
+                    if (param.test(byParamSearchingDto)) {
+                        query.set(dto.apply(byParamSearchingDto));
+                    }
+                }
+        );
+
+        return gmail.users().messages()
+                .list(CURRENT_PRINCIPAL_ID)
+                .setQ(query.get())
+                .setMaxResults(10L)
+                .execute()
+                .getMessages()
+                .stream()
+                .map(message -> {
+                    try {
+                        return getMessage(token, message.getId());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
+    }
 }

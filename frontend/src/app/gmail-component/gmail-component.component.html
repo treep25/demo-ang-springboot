@@ -1,4 +1,20 @@
 <div class="email-list">
+  <div>
+    <label for="searchText">Search Text:</label>
+    <input type="text" id="searchText" [(ngModel)]="searchText"/>
+  </div>
+  <div>
+    <label>
+      <input type="radio" [(ngModel)]="searchType" value="sender"/> Search by Sender
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="searchType" value="subject"/> Search by Subject
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="searchType" value="content"/> Search by Content
+    </label>
+  </div>
+  <button (click)="search()">Search</button>
   <div *ngFor="let email of emails" class="email-item">
     <div class="email-header">
       <strong>Topic:</strong> {{ getEmailHeaderValue(email, 'Subject') }}
@@ -12,6 +28,24 @@
     <div class="email-content">
       <strong>Content:</strong> {{ email.snippet }}
     </div>
+    <!--    <div *ngIf="email.payload.parts.length > 0">-->
+    <!--      <strong>Attachments:</strong>-->
+    <!--      <ul>-->
+    <!--        <li *ngFor="let attachment of email.payload.parts">-->
+    <!--          <div>-->
+    <!--            <strong>File Name:</strong> {{ attachment.filename}}-->
+    <!--          </div>-->
+    <!--          <div>-->
+    <!--            <strong>Size:</strong> {{ attachment.body.size }}-->
+    <!--          </div>-->
+    <!--          <div>-->
+    <!--            <a [href]="getAttachmentUrl(attachment)" download="{{ attachment.filename }}">-->
+    <!--              Download-->
+    <!--            </a>-->
+    <!--          </div>-->
+    <!--        </li>-->
+    <!--      </ul>-->
+    <!--    </div>-->
     <hr/>
   </div>
   <button class="create-button" (click)="getOutgoingMessages()">Outgoing messages</button>
@@ -23,14 +57,19 @@
       <input type="text" id="to" [(ngModel)]="newEmail.to"/>
     </div>
     <div>
-      <label for="subject">Topic:</label>
+      <label for="subject">Subject:</label>
       <input type="text" id="subject" [(ngModel)]="newEmail.subject"/>
     </div>
     <div>
       <label for="body">Body:</label>
       <textarea id="body" [(ngModel)]="newEmail.body"></textarea>
     </div>
-    <button (click)="closeComposeForm()">Сancel</button>
+    <div>
+      <label for="attachment">Attachment:</label>
+      <input type="file" id="attachment" (change)="handleAttachmentChange($event)"/>
+    </div>
+    <button (click)="closeComposeForm()">Cancel</button>
     <button (click)="sendEmail()">Send</button>
   </div>
+
 </div>

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -55,10 +56,11 @@ public class GmailController {
     @PostMapping("/send-email")
     public ResponseEntity<?> sendEmail(
             @AuthenticationPrincipal User user,
-            @RequestBody SendEmailDto sendEmailDto) throws IOException, MessagingException {
+            @ModelAttribute SendEmailDto sendEmailDto,
+            @RequestPart("file") MultipartFile file) throws IOException, MessagingException {
 
-        gmailService.sendEmail(sendEmailDto.getTo(), sendEmailDto.getSubject(), sendEmailDto.getBody(), user.getGoogleAccessTokenNotRequered());
-        return ResponseEntity.ok("Email sent successfully");
+        gmailService.sendEmail(sendEmailDto.getTo(), sendEmailDto.getSubject(), sendEmailDto.getBody(), user.getGoogleAccessTokenNotRequered(), file);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/messages/outgoing")
@@ -66,6 +68,22 @@ public class GmailController {
             @AuthenticationPrincipal User user) throws IOException {
 
         return ResponseEntity.ok(gmailService.listOutgoingMessages(user.getGoogleAccessTokenNotRequered()));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(
+            @AuthenticationPrincipal User user,
+            @RequestParam(required = false, value = "sender") String bySender,
+            @RequestParam(required = false, value = "subject") String bySubject,
+            @RequestParam(required = false, value = "content") String byContentSearchTerm
+    ) throws IOException {
+
+        return ResponseEntity.ok(gmailService.listMessagesByParam
+                (
+                        new ByParamSearchingDto(
+                                bySender,
+                                bySubject,
+                                byContentSearchTerm), user.getGoogleAccessTokenNotRequered()));
     }
 
     @GetMapping("/auth/url")

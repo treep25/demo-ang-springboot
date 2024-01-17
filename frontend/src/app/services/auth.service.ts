@@ -273,11 +273,25 @@ export class AuthService {
       );
   }
 
-  sendEmail(newEmail: any) {
-    return this.http.post("http://localhost:8080/api/v1/gmail/send-email", newEmail, {withCredentials: true})
+  sendEmail(newEmail: any, attachmentFile: File) {
+    const formData = new FormData();
+
+    formData.append('to', newEmail.to);
+    formData.append('subject', newEmail.subject);
+    formData.append('body', newEmail.body);
+
+    if (attachmentFile) {
+      formData.append('file', attachmentFile, attachmentFile.name);
+    }
+
+    return this.http.post("http://localhost:8080/api/v1/gmail/send-email", formData, {withCredentials: true});
   }
 
   getOutgoingMessages() {
     return this.http.get<Email[]>("http://localhost:8080/api/v1/gmail/messages/outgoing", {withCredentials: true})
+  }
+
+  searchByParamsGmail(searchType: string, searchText: string) {
+    return this.http.get<Email[]>(`http://localhost:8080/api/v1/gmail/search?${searchType}=${searchText}`, {withCredentials: true})
   }
 }
