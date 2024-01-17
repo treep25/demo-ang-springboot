@@ -78,7 +78,15 @@ public class GmailService {
         return gmail.users().messages()
                 .list(CURRENT_PRINCIPAL_ID)
                 .setLabelIds(Collections.singletonList(LABEL_SENT))
-                .execute().getMessages();
+                .execute().getMessages()
+                .stream()
+                .map(message -> {
+                    try {
+                        return getMessage(token, message.getId());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
     }
 
     public void sendEmail(String to, String subject, String body, String token) throws IOException, MessagingException {

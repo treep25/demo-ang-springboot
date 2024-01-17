@@ -88,7 +88,7 @@ export class GmailComponentComponent implements OnInit {
     this.authService.getOutgoingMessages().subscribe(
       value => {
         this.emails = value
-        window.location.reload()
+        // window.location.reload()
       }
     )
   }
