@@ -1,4 +1,4 @@
-package com.demo.backend.auth.conreoller.auth2fa;
+package com.demo.backend.auth.controller.auth2fa;
 
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;

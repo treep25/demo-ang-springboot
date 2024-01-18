@@ -1,4 +1,4 @@
-package com.demo.backend.auth.conreoller.auth2fa;
+package com.demo.backend.auth.controller.auth2fa;
 
 import com.demo.backend.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
