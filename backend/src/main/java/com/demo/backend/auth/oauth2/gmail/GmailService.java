@@ -20,10 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,6 +33,7 @@ public class GmailService {
     private Gmail gmail;
     private static final String CURRENT_PRINCIPAL_ID = "me";
     private static final String LABEL_SENT = "SENT";
+    private static final String MIME_MESSAGE_CONTENT_TYPE = "text/plain";
 
     private Map<Predicate<ByParamSearchingDto>, Function<ByParamSearchingDto, String>> predicateMap = Map.of(
             param -> isByParamExist(param.getBySender()), param -> "from:" + param.getBySender(),
@@ -128,7 +127,7 @@ public class GmailService {
         email.setSubject(subject);
 
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        mimeBodyPart.setContent(body, "text/plain");
+        mimeBodyPart.setContent(body, MIME_MESSAGE_CONTENT_TYPE);
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);
@@ -179,6 +178,63 @@ public class GmailService {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                }).toList();
+                })
+                .toList();
+    }
+
+    public List<Message> getUnreadMessages(String token) throws IOException {
+        gmail = setUpGmail(token);
+
+        String query = "is:unread";
+        return gmail
+                .users()
+                .messages()
+                .list(CURRENT_PRINCIPAL_ID)
+                .setQ(query)
+                .execute()
+                .getMessages()
+                .stream()
+                .map(message -> {
+                    try {
+                        return getMessage(token, message.getId());
+                    } catch (IOException e) {
+                        throw new RuntimeException();
+                    }
+                })
+                .toList();
+    }
+
+    public List<Message> searchEmailsByDate(Date startDate, String token) throws IOException {
+        gmail = setUpGmail(token);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        String formattedStartDate = dateFormat.format(startDate);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        Date nextDay = calendar.getTime();
+        String formattedEndDate = dateFormat.format(nextDay);
+
+        String query = String.format("after:%s before:%s", formattedStartDate, formattedEndDate);
+
+        return gmail
+                .users()
+                .messages()
+                .list(CURRENT_PRINCIPAL_ID)
+                .setQ(query)
+                .execute()
+                .getMessages()
+                .stream()
+                .map(message -> {
+                    try {
+                        return getMessage(token, message.getId());
+                    } catch (IOException e) {
+                        throw new RuntimeException();
+                    }
+                })
+                .toList();
     }
 }

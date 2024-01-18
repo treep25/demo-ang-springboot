@@ -3,9 +3,10 @@ package com.demo.backend.user.service;
 import com.demo.backend.auth.AuthRequest;
 import com.demo.backend.auth.AuthResponse;
 import com.demo.backend.auth.RegRequest;
-import com.demo.backend.auth.conreoller.auth2fa.TwoFactorAuthResponse;
-import com.demo.backend.auth.conreoller.auth2fa.UserSecret;
-import com.demo.backend.auth.conreoller.auth2fa.UserSecretRepository;
+import com.demo.backend.auth.controller.auth2fa.TwoFactorAuthResponse;
+import com.demo.backend.auth.controller.auth2fa.UserSecret;
+import com.demo.backend.auth.controller.auth2fa.UserSecretRepository;
+import com.demo.backend.config.email.HtmlPageContentBuilder;
 import com.demo.backend.order.model.Order;
 import com.demo.backend.order.model.OrderStatus;
 import com.demo.backend.order.repository.OrderRepository;
@@ -19,10 +20,11 @@ import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -34,8 +36,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionAuthenticatedPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -47,7 +51,6 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
@@ -69,6 +72,17 @@ public class UserService {
             searchingParam -> checkParamssBeforeSearch(searchingParam.getFirstName()),
             (currentSearchingParam, repository) -> repository.findByFirstName(currentSearchingParam.getFirstName())
     );
+
+    public UserService(UserRepository userRepository, OrderRepository orderRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtService jwtService, UserSecretRepository userSecretRepository, MessageService messageService, @Qualifier("javaMailSenderSmtp") JavaMailSender javaMailSender) {
+        this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.userSecretRepository = userSecretRepository;
+        this.messageService = messageService;
+        this.javaMailSender = javaMailSender;
+    }
 
     private boolean checkParamssBeforeSearch(String param) {
         return param != null && !param.isEmpty() && !param.isBlank();
@@ -301,8 +315,6 @@ public class UserService {
     public byte[] generatePdfReport(User user) throws DocumentException {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             Document document = new Document();
-            PdfWriter.getInstance(document, baos);
-
             PdfWriter writer = PdfWriter.getInstance(document, baos);
 
             String userPassword = "1";
@@ -317,33 +329,22 @@ public class UserService {
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
 
-            Font contentFont = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-
-            Paragraph userInfo = new Paragraph();
-            userInfo.setSpacingBefore(20);
-
-            userInfo.add(new Chunk("First Name: ", contentFont));
-            userInfo.add(new Chunk(user.getFirstName(), contentFont));
-            userInfo.add(Chunk.NEWLINE);
-
-            userInfo.add(new Chunk("Last Name: ", contentFont));
-            userInfo.add(new Chunk(user.getLastName(), contentFont));
-            userInfo.add(Chunk.NEWLINE);
-
-            userInfo.add(new Chunk("Email: ", contentFont));
-            userInfo.add(new Chunk(user.getEmail(), contentFont));
-            userInfo.add(Chunk.NEWLINE);
-
-            userInfo.add(new Chunk("Provider: ", contentFont));
-            userInfo.add(new Chunk(user.getProvider().name(), contentFont));
-
-            document.add(userInfo);
+            addHtmlContent(document, HtmlPageContentBuilder.generateHtmlContent(user), writer);
 
             document.close();
 
             return baos.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException("Error generating PDF report with user " + user.getEmail(), e);
+        }
+    }
+
+    private static void addHtmlContent(Document document, String htmlContent, PdfWriter writer) throws DocumentException {
+        try {
+            InputStream is = new ByteArrayInputStream(htmlContent.getBytes());
+            XMLWorkerHelper.getInstance().parseXHtml(writer, document, is);
+        } catch (IOException e) {
+            throw new DocumentException("Error adding HTML content to PDF", e);
         }
     }
 

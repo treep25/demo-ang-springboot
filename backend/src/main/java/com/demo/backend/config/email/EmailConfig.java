@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
-@Component
+@Configuration
 @RequiredArgsConstructor
 @Data
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class EmailConfig {
     private String mailPassword;
 
     @Bean
-    public JavaMailSender javaMailSender() {
+    public JavaMailSender javaMailSenderSmtp() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(mailHost);
         mailSender.setPort(Integer.parseInt(mailPort));

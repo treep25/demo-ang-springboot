@@ -12,6 +12,7 @@ import com.google.api.services.gmail.model.Message;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8081")
@@ -57,9 +59,14 @@ public class GmailController {
     public ResponseEntity<?> sendEmail(
             @AuthenticationPrincipal User user,
             @ModelAttribute SendEmailDto sendEmailDto,
-            @RequestPart("file") MultipartFile file) throws IOException, MessagingException {
+            @RequestPart(required = false, value = "file") MultipartFile file) throws IOException, MessagingException {
 
-        gmailService.sendEmail(sendEmailDto.getTo(), sendEmailDto.getSubject(), sendEmailDto.getBody(), user.getGoogleAccessTokenNotRequered(), file);
+        gmailService.sendEmail(sendEmailDto.getTo(),
+                sendEmailDto.getSubject(),
+                sendEmailDto.getBody(),
+                user.getGoogleAccessTokenNotRequered(),
+                file);
+
         return ResponseEntity.ok().build();
     }
 
@@ -68,6 +75,12 @@ public class GmailController {
             @AuthenticationPrincipal User user) throws IOException {
 
         return ResponseEntity.ok(gmailService.listOutgoingMessages(user.getGoogleAccessTokenNotRequered()));
+    }
+
+    @GetMapping("/messages/unread")
+    public ResponseEntity<?> getUnreadMessages(@AuthenticationPrincipal User user) throws IOException {
+
+        return ResponseEntity.ok(gmailService.getUnreadMessages(user.getGoogleAccessTokenNotRequered()));
     }
 
     @GetMapping("/search")
@@ -84,6 +97,16 @@ public class GmailController {
                                 bySender,
                                 bySubject,
                                 byContentSearchTerm), user.getGoogleAccessTokenNotRequered()));
+    }
+
+    @GetMapping("/search/byDate")
+    public ResponseEntity<?> searchByDate(
+            @AuthenticationPrincipal User user,
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate) throws IOException {
+
+        return ResponseEntity.ok(
+                gmailService.searchEmailsByDate(startDate, user.getGoogleAccessTokenNotRequered())
+        );
     }
 
     @GetMapping("/auth/url")
