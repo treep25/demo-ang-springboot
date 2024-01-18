@@ -294,4 +294,12 @@ export class AuthService {
   searchByParamsGmail(searchType: string, searchText: string) {
     return this.http.get<Email[]>(`http://localhost:8080/api/v1/gmail/search?${searchType}=${searchText}`, {withCredentials: true})
   }
+
+  getUnreadMessages() {
+    return this.http.get<Email[]>(`http://localhost:8080/api/v1/gmail/messages/unread`, {withCredentials: true})
+  }
+
+  searchMessagesByDate(date: string) {
+    return this.http.get<Email[]>(`http://localhost:8080/api/v1/gmail/search/byDate?start=${date}`, {withCredentials: true})
+  }
 }
