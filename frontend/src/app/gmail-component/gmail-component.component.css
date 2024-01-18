@@ -117,6 +117,8 @@ hr {
   display: block;
 }
 
-
-
+.unread-indicator {
+  color: crimson;
+  font-size: 20px; /* Регулируйте размер звездочки по вашему усмотрению */
+}
 

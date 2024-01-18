@@ -15,6 +15,9 @@
     </label>
   </div>
   <button (click)="search()">Search</button>
+  <button class="create-button" (click)="getUnreadMessages()">Unread messages</button>
+  <button class="create-button" (click)="openDatepicker()">Pin date</button>
+  <input *ngIf="showDatepicker" type="date" (change)="handleDateChange($event)"/>
   <div *ngFor="let email of emails" class="email-item">
     <div class="email-header">
       <strong>Topic:</strong> {{ getEmailHeaderValue(email, 'Subject') }}
@@ -28,24 +31,9 @@
     <div class="email-content">
       <strong>Content:</strong> {{ email.snippet }}
     </div>
-    <!--    <div *ngIf="email.payload.parts.length > 0">-->
-    <!--      <strong>Attachments:</strong>-->
-    <!--      <ul>-->
-    <!--        <li *ngFor="let attachment of email.payload.parts">-->
-    <!--          <div>-->
-    <!--            <strong>File Name:</strong> {{ attachment.filename}}-->
-    <!--          </div>-->
-    <!--          <div>-->
-    <!--            <strong>Size:</strong> {{ attachment.body.size }}-->
-    <!--          </div>-->
-    <!--          <div>-->
-    <!--            <a [href]="getAttachmentUrl(attachment)" download="{{ attachment.filename }}">-->
-    <!--              Download-->
-    <!--            </a>-->
-    <!--          </div>-->
-    <!--        </li>-->
-    <!--      </ul>-->
-    <!--    </div>-->
+    <div *ngIf="showUnreadMessages" class="unread-indicator">
+      &#9733;
+    </div>
     <hr/>
   </div>
   <button class="create-button" (click)="getOutgoingMessages()">Outgoing messages</button>

@@ -78,6 +78,7 @@ export class GmailComponentComponent implements OnInit {
   }
 
   sendEmail() {
+    this.showUnreadMessages = false;
     // @ts-ignore
     this.authService.sendEmail(this.newEmail, this.attachmentFile).subscribe(
       value => window.location.reload()
@@ -97,6 +98,7 @@ export class GmailComponentComponent implements OnInit {
   }
 
   getOutgoingMessages() {
+    this.showUnreadMessages = false;
     this.authService.getOutgoingMessages().subscribe(
       value => {
         this.emails = value
@@ -106,7 +108,42 @@ export class GmailComponentComponent implements OnInit {
 
 
   search() {
+    this.showUnreadMessages = false;
     this.authService.searchByParamsGmail(this.searchType, this.searchText).subscribe(
+      value => {
+        this.emails = value
+      }
+    )
+  }
+
+  showUnreadMessages = false;
+
+  getUnreadMessages() {
+    this.authService.getUnreadMessages().subscribe(
+      value => {
+        this.showUnreadMessages = true
+        this.emails = value
+      }
+    )
+  }
+
+  showDatepicker = false;
+  selectedDate: any
+
+  openDatepicker(): void {
+    this.showDatepicker = true;
+  }
+
+  handleDateChange(event: any): void {
+    this.selectedDate = event.target.value;
+    this.showDatepicker = false;
+    this.searchByDateMessages(this.selectedDate);
+  }
+
+  searchByDateMessages(selectedDate: string): void {
+    this.showUnreadMessages = false;
+
+    this.authService.searchMessagesByDate(selectedDate).subscribe(
       value => {
         this.emails = value
       }
