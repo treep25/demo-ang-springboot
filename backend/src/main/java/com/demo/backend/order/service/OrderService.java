@@ -28,7 +28,14 @@ public class OrderService {
 
         List<Tutorial> tutorialList = new ArrayList<>();
 
-        Optional.ofNullable(Optional.ofNullable(user.getOrder()).orElse(newOrder).getTutorialsOrder()).orElse(tutorialList).add(tutorial);
+        Optional
+                .ofNullable(Optional
+                        .ofNullable(user
+                                .getOrder())
+                        .orElse(newOrder)
+                        .getTutorialsOrder())
+                .orElse(tutorialList)
+                .add(tutorial);
 
         if (user.getOrder() == null) {
             newOrder.setTutorialsOrder(tutorialList);

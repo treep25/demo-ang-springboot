@@ -1,5 +1,9 @@
-package com.demo.backend.support.messages;
+package com.demo.backend.support.messages.service;
 
+import com.demo.backend.support.messages.dto.MessageDto;
+import com.demo.backend.support.messages.model.Message;
+import com.demo.backend.support.messages.model.MessageStatus;
+import com.demo.backend.support.messages.repository.MessageRepository;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

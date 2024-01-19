@@ -1,4 +1,4 @@
-package com.demo.backend.support.messages;
+package com.demo.backend.support.messages.model;
 
 public enum MessageStatus {
 

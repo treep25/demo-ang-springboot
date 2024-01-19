@@ -34,10 +34,15 @@ public class GmailService {
     private static final String CURRENT_PRINCIPAL_ID = "me";
     private static final String LABEL_SENT = "SENT";
     private static final String MIME_MESSAGE_CONTENT_TYPE = "text/plain";
+    private static final String GET_UNREAD_MESSAGES_QUERY = "is:unread";
+    private static final String GET_BY_SENDER_QUERY = "from:";
+    private static final String GET_BY_SUBJECT_QUERY = "subject:";
+    private static final String APPLICATION_NAME = "Spring boot Angular OAuth2";
+
 
     private Map<Predicate<ByParamSearchingDto>, Function<ByParamSearchingDto, String>> predicateMap = Map.of(
-            param -> isByParamExist(param.getBySender()), param -> "from:" + param.getBySender(),
-            param -> isByParamExist(param.getBySubject()), param -> "subject:" + param.getBySubject(),
+            param -> isByParamExist(param.getBySender()), param -> GET_BY_SENDER_QUERY + param.getBySender(),
+            param -> isByParamExist(param.getBySubject()), param -> GET_BY_SUBJECT_QUERY + param.getBySubject(),
             param -> isByParamExist(param.getByContentSearchTerm()), ByParamSearchingDto::getByContentSearchTerm
     );
 
@@ -48,7 +53,7 @@ public class GmailService {
                 new NetHttpTransport(),
                 JacksonFactory.getDefaultInstance(),
                 credential)
-                .setApplicationName("Spring boot Angular OAuth2")
+                .setApplicationName(APPLICATION_NAME)
                 .build();
     }
 
@@ -185,12 +190,11 @@ public class GmailService {
     public List<Message> getUnreadMessages(String token) throws IOException {
         gmail = setUpGmail(token);
 
-        String query = "is:unread";
         return gmail
                 .users()
                 .messages()
                 .list(CURRENT_PRINCIPAL_ID)
-                .setQ(query)
+                .setQ(GET_UNREAD_MESSAGES_QUERY)
                 .execute()
                 .getMessages()
                 .stream()

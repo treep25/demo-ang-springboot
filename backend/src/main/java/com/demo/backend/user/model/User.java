@@ -1,7 +1,7 @@
 package com.demo.backend.user.model;
 
 import com.demo.backend.order.model.Order;
-import com.demo.backend.support.messages.Message;
+import com.demo.backend.support.messages.model.Message;
 import com.demo.backend.user.Provider;
 import com.demo.backend.user.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;

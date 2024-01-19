@@ -1,5 +1,9 @@
-package com.demo.backend.support.messages;
+package com.demo.backend.support.messages.service;
 
+import com.demo.backend.support.messages.dto.MessageDto;
+import com.demo.backend.support.messages.model.GroupMessage;
+import com.demo.backend.support.messages.model.MessageStatus;
+import com.demo.backend.support.messages.repository.GroupMessageRepository;
 import com.demo.backend.user.model.User;
 import com.demo.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +20,7 @@ public class GroupMessageService {
     private final GroupMessageRepository messageRepository;
     private final UserRepository userRepository;
 
-    List<GroupMessage> getAllGroups(User user) {
+    public List<GroupMessage> getAllGroups(User user) {
         Set<GroupMessage> allBySender = new HashSet<>(messageRepository.findAllBySender(user));
         allBySender.addAll(new HashSet<>(messageRepository.findAllByRecipients(user)));
         return allBySender.stream()

@@ -32,7 +32,9 @@ public class FacebookOAuth2Controller {
     private final UserService userService;
 
     @GetMapping("/auth/login/facebook/oauth2")
-    public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal OAuth2IntrospectionAuthenticatedPrincipal user, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> getUserInfo(
+            @AuthenticationPrincipal OAuth2IntrospectionAuthenticatedPrincipal user, HttpServletRequest httpServletRequest) {
+
         if (user != null) {
 
             return ResponseEntity.ok(userService.loginViaFacebookOAuth2(user, httpServletRequest.getRemoteAddr()));

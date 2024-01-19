@@ -1,5 +1,8 @@
-package com.demo.backend.support.messages;
+package com.demo.backend.support.messages.controller;
 
+import com.demo.backend.support.messages.dto.MessageDto;
+import com.demo.backend.support.messages.service.GroupMessageService;
+import com.demo.backend.support.messages.service.MessageService;
 import com.demo.backend.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

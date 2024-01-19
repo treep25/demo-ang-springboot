@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 public class UserEmailsInfo {
     private String email;
     private boolean primary;
-
     public boolean getPrimary() {
         return this.primary;
     }

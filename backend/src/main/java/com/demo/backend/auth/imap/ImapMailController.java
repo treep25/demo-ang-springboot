@@ -15,7 +15,6 @@ public class ImapMailController {
 
     private final ImapMailService imapMailService;
 
-
     @GetMapping("/receive")
     public ResponseEntity<?> receiveMail() {
 

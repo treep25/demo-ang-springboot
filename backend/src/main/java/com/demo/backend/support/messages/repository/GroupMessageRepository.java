@@ -1,5 +1,6 @@
-package com.demo.backend.support.messages;
+package com.demo.backend.support.messages.repository;
 
+import com.demo.backend.support.messages.model.GroupMessage;
 import com.demo.backend.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class TwoFactorAuthService {
 
-    private GoogleAuthenticator gAuth = new GoogleAuthenticator();
+    private GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
 
     public GoogleAuthenticatorKey createSecretKey() {
-        return gAuth.createCredentials();
+        return googleAuthenticator.createCredentials();
     }
 
     public boolean verifyCode(UserSecret userSecret, int code) {
-        return gAuth.authorize(userSecret.getSecretKey(), code);
+        return googleAuthenticator.authorize(userSecret.getSecretKey(), code);
     }
 }

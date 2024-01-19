@@ -80,6 +80,7 @@ public class GoogleCalendarController {
     public ResponseEntity<?> getEventsForTheWeek
             (
                     @AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
+
         List<Event> eventsForTheWeek = googleCalendarService.getEventsForTheWeek(user.getGoogleAccessTokenNotRequered());
         if (eventsForTheWeek != null) {
             return ResponseEntity.ok(eventsForTheWeek);
@@ -103,6 +104,7 @@ public class GoogleCalendarController {
             (
                     @RequestParam("day") String day,
                     @AuthenticationPrincipal User user) throws GeneralSecurityException, IOException {
+
         return ResponseEntity.ok(googleCalendarService.getCalendarByDay(day, user.getGoogleAccessTokenNotRequered()));
     }
 }

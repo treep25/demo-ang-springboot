@@ -21,6 +21,9 @@ import java.util.List;
 public class GoogleCalendarService {
 
     private Calendar calndarApi;
+    private static final String APPLICATION_NAME = "Spring boot Angular OAuth2";
+    private static final String BEARER_HEADER = "Bearer ";
+    private static final String TIME_ZONE = "Europe/Kiev";
 
     private Calendar newCalendarServiceApi(String accessToken) throws GeneralSecurityException, IOException {
         JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -30,8 +33,8 @@ public class GoogleCalendarService {
                 jsonFactory,
                 null
         )
-                .setHttpRequestInitializer(request -> request.getHeaders().setAuthorization("Bearer " + accessToken))
-                .setApplicationName("Spring boot Angular OAuth2")
+                .setHttpRequestInitializer(request -> request.getHeaders().setAuthorization(BEARER_HEADER + accessToken))
+                .setApplicationName(APPLICATION_NAME)
                 .build();
     }
 
@@ -53,7 +56,8 @@ public class GoogleCalendarService {
 
     private List<Event> getEventsForTheWeekMethod(String calendarId) throws IOException {
         Date now = new Date();
-        ZonedDateTime zonedDateTime = LocalDateTime.of(2024, Month.JANUARY, 1, 0, 0, 0).atZone(ZoneId.systemDefault());
+        ZonedDateTime zonedDateTime = LocalDateTime
+                .of(2024, Month.JANUARY, 1, 0, 0, 0).atZone(ZoneId.systemDefault());
 
 
         Events events = calndarApi.events().list(calendarId)
@@ -86,13 +90,13 @@ public class GoogleCalendarService {
         DateTime startDateTime = new DateTime(eventToCreateModel.getStartDate());
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
-                .setTimeZone("Europe/Kiev");
+                .setTimeZone(TIME_ZONE);
         event.setStart(start);
 
         DateTime endDateTime = new DateTime(eventToCreateModel.getEndDate());
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
-                .setTimeZone("Europe/Kiev");
+                .setTimeZone(TIME_ZONE);
         event.setEnd(end);
 
         String calendarId = "primary";

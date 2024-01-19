@@ -1,4 +1,4 @@
-package com.demo.backend.support.messages;
+package com.demo.backend.support.messages.model;
 
 
 import com.demo.backend.user.model.User;

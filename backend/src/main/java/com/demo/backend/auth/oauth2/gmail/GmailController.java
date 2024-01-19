@@ -111,6 +111,7 @@ public class GmailController {
 
     @GetMapping("/auth/url")
     public ResponseEntity<?> auth() throws MalformedURLException {
+
         String url = new GoogleAuthorizationCodeRequestUrl(
                 clientId,
                 redirectUri,
