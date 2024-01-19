@@ -2,7 +2,6 @@ import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import {Order} from "../models/tutorial.model";
 import {AuthService} from "../services/auth.service";
 import {PaymentStripeService} from "../services/payment-stripe.service";
-import {StripeService} from "ngx-stripe";
 
 @Component({
   selector: 'app-order-representation',
@@ -18,8 +17,7 @@ export class OrderRepresentationComponent implements OnInit {
   constructor(
     private userService: AuthService,
     private paymentService: PaymentStripeService,
-    private zone: NgZone,
-    private stripeService: StripeService
+    private zone: NgZone
   ) {
 
   }
@@ -31,7 +29,7 @@ export class OrderRepresentationComponent implements OnInit {
         console.log("User orders")
         this.order = res;
       },
-      error: (e) => console.error()
+      error: () => console.error()
     });
 
     const stripe = await this.loadStripe();
@@ -50,7 +48,7 @@ export class OrderRepresentationComponent implements OnInit {
       await new Promise((resolve) => {
         script.onload = resolve;
       });
-      return await (window as any).Stripe('pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z');
+      return (window as any).Stripe('pk_test_51OHikCAiCn0BUr4JPSqR5FDOhT5nGSiIvCkqFv5urEAAg12ymu317v7gAkfbFAPfK0D10L8AhnJzzdScYZOFP5WX00aITNen2Z');
     }
   }
 
@@ -79,7 +77,7 @@ export class OrderRepresentationComponent implements OnInit {
         console.log(response);
         alert('Success');
       },
-      error => {
+      () => {
         console.error();
         alert('Error');
       }
@@ -89,16 +87,16 @@ export class OrderRepresentationComponent implements OnInit {
 
   clearBucketOrder() {
     this.userService.clearBucketOrder().subscribe(
-      value => window.location.reload(),
-      error => console.error()
+      () => window.location.reload(),
+      () => console.error()
     )
   }
 
-  paidOrder(order: Order) {
+  paidOrder() {
     this.userService.payOrder().subscribe();
   }
 
-  cancelOrder(order: Order) {
+  cancelOrder() {
     this.userService.cancelOrder().subscribe();
   }
 }

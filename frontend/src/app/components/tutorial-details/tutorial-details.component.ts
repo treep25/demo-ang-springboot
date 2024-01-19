@@ -46,7 +46,7 @@ export class TutorialDetailsComponent {
         this.currentTutorial = data;
         console.log(data);
       },
-      error: (e) => console.error()
+      error: () => console.error()
     });
   }
 
@@ -61,7 +61,7 @@ export class TutorialDetailsComponent {
           ? res.message
           : 'The status was updated successfully!';
       },
-      error: (e) => console.error()
+      error: () => console.error()
     });
   }
 
@@ -77,7 +77,7 @@ export class TutorialDetailsComponent {
             ? res.message
             : 'This tutorial was updated successfully!';
         },
-        error: (e) => console.error()
+        error: () => console.error()
       });
   }
 
@@ -87,7 +87,7 @@ export class TutorialDetailsComponent {
         console.log(res);
         this.router.navigate(['/tutorials']);
       },
-      error: (e) => console.error()
+      error: () => console.error()
     });
   }
 

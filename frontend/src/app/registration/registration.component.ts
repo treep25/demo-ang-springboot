@@ -49,7 +49,7 @@ export class RegisterComponent {
     };
 
     this.authService.register(registerRequest).subscribe(
-      value => {
+      () => {
         this.createCode2fa()
       }
     );
@@ -84,7 +84,7 @@ export class RegisterComponent {
         this.qrCodeData = res.authenticatorUrl;
         this.showQrCodeModal = true;
       },
-      error: (err) => {
+      error: () => {
         console.log("Error during get 2fa response")
       }
     })

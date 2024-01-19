@@ -58,7 +58,7 @@ export class AzureCalendarComponent implements OnInit {
                 this.router.navigate(['/azure/calendar']);
               })
 
-            }, error => {
+            }, () => {
               this.authService.getUrlAzureCalendar().subscribe(
                 value1 => {
                   window.location.href = <string>value1.uri
@@ -71,7 +71,7 @@ export class AzureCalendarComponent implements OnInit {
             // @ts-ignore
             this.events = events;
             this.router.navigate(['azure/calendar'])
-          }, error => {
+          }, () => {
             this.authService.getUrlAzureCalendar().subscribe(
               value1 => {
                 window.location.href = <string>value1.uri
@@ -87,7 +87,7 @@ export class AzureCalendarComponent implements OnInit {
   createEvent() {
     this.authService.createEventAzureCalendar(this.newEvent)
       .subscribe(
-        value => window.location.reload()
+        () => window.location.reload()
       )
   }
 

@@ -22,25 +22,25 @@ export class RequestRepresentationComponent implements OnInit {
 
   unlockUser(userId: any, requestId: any) {
     this.authService.changeUserStatus(userId).subscribe(
-      value => {
+      () => {
         this.authService.closeRequest(requestId).subscribe(
           value1 => {
             console.log(value1)
             window.location.reload()
           },
-          error => {
+          () => {
             console.error()
           }
         )
       },
-      error => console.error()
+      () => console.error()
     )
   }
 
   canceleUserRequest(requestId: any) {
     this.authService.cancelRequest(requestId).subscribe(
       value => console.log(value),
-      error => console.error()
+      () => console.error()
     )
   }
 }

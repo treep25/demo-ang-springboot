@@ -43,8 +43,8 @@
   <button (click)="handlePayment()">Pay $10</button>
   <div #cardElement></div>
 </div>
-<button (click)="cancelOrder(order)">Cancel order</button>
-<button (click)="paidOrder(order)">Paid</button>
+<button (click)="cancelOrder()">Cancel order</button>
+<button (click)="paidOrder()">Paid</button>
 <div *ngIf="!order || !order.tutorialsOrder || order.tutorialsOrder.length === 0">
   <p>No orders available.</p>
 </div>

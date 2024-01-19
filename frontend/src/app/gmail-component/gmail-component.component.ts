@@ -37,7 +37,7 @@ export class GmailComponentComponent implements OnInit {
                 this.router.navigate(['/google/gmail']);
               })
 
-            }, error => {
+            }, () => {
               this.authService.getUrlGoogleGmail().subscribe(
                 value1 => {
                   window.location.href = <string>value1.uri
@@ -50,7 +50,7 @@ export class GmailComponentComponent implements OnInit {
             // @ts-ignore
             this.emails = events;
             this.router.navigate(['/google/gmail'])
-          }, error => {
+          }, () => {
             this.authService.getUrlGoogleGmail().subscribe(
               value1 => {
                 window.location.href = <string>value1.uri
@@ -81,7 +81,7 @@ export class GmailComponentComponent implements OnInit {
     this.showUnreadMessages = false;
     // @ts-ignore
     this.authService.sendEmail(this.newEmail, this.attachmentFile).subscribe(
-      value => window.location.reload()
+      () => window.location.reload()
     )
   }
 

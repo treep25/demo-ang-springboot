@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
     document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
-    this.router.navigate(['/login']).then(r => window.location.reload());
+    this.router.navigate(['/login']).then(() => window.location.reload());
   }
 
 }
