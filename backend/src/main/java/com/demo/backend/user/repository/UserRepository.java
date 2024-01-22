@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByFirstNameAndLastName(String firstName, String lastName);
 
     List<User> findAllByEmailIn(List<String> email);
+
+    @Query("SELECT u FROM User u WHERE u.googleAccessTokenNotRequered IS NOT NULL OR u.azureAccessTokenNotRequered IS NOT NULL")
+    List<User> findAllUsersByOauth2TokenIfExist();
 }
