@@ -299,10 +299,35 @@
             <version>3.1.2.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.17.3</version> <!-- Версию можно обновить -->
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version> <!-- Версию можно обновить -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:3.17.3:exe:windows-x86_64</protocArtifact>
+                    <pluginId>com.google.protobuf.tools:protobuf-java:3.17.3:exe:windows-x86_64</pluginId>
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                    <outputDirectory>src/main/java</outputDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
