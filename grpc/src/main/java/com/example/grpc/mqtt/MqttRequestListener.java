@@ -31,9 +31,7 @@ public class MqttRequestListener {
 
 
             System.out.println("Listening for messages on topic: " + topic);
-            while (true) {
-                Thread.sleep(1000); // Пауза для предотвращения завершения приложения
-            }
+            while (true) Thread.sleep(1000);
 
         } catch (MqttException e) {
             System.out.println("Error: " + e.getMessage());
