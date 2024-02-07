@@ -1,5 +1,6 @@
 package com.example.grpc;
 
+import com.example.grpc.proto.*;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import org.lognet.springboot.grpc.GRpcService;
