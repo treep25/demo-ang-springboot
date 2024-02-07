@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        li button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h2>TODO List</h2>
+    <button onclick="showForm()">Create New Todo</button>
+    <form id="todoForm" style="display: none;">
+        <label for="whatToDo">What to Do:</label>
+        <input type="text" id="whatToDo" name="whatToDo" required>
+        <label for="info">Info:</label>
+        <input type="text" id="info" name="info" required>
+        <button type="button" onclick="createTodo()">Create Todo</button>
+    </form>
+    <ul id="todo-list">
+    </ul>
+</div>
+
+<script>
+    function addTodosToPage(todos) {
+        var ul = document.getElementById('todo-list');
+        ul.innerHTML = '';
+        todos.forEach(function (todo) {
+            var li = document.createElement('li');
+            li.textContent = todo.whatToDo + ' - ' + todo.info;
+
+            var button = document.createElement('button');
+            button.textContent = '❌';
+            button.onclick = function () {
+                deleteTodo(todo.id);
+            };
+
+            li.appendChild(button);
+            ul.appendChild(li);
+        });
+    }
+
+    function showForm() {
+        var form = document.getElementById('todoForm');
+        form.style.display = 'block';
+    }
+
+    function createTodo() {
+        var formData = {
+            whatToDo: document.getElementById("whatToDo").value,
+            info: document.getElementById("info").value
+        };
+
+        fetch('http://localhost:8080/api/v1/todos/new', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to create todo');
+                }
+                alert('Todo created successfully');
+                document.getElementById("todoForm").reset();
+                document.getElementById("todoForm").style.display = 'none';
+                fetch('/api/v1/todos/list')
+                    .then(response => response.json())
+                    .then(data => addTodosToPage(data));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to create todo');
+            });
+    }
+
+    function deleteTodo(id) {
+        fetch('http://localhost:8080/api/v1/todos/' + id, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete todo');
+                }
+                alert('Todo deleted successfully');
+                fetch('/api/v1/todos/list')
+                    .then(response => response.json())
+                    .then(data => addTodosToPage(data));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete todo');
+            });
+    }
+
+    window.onload = function () {
+        fetch('/api/v1/todos/list')
+            .then(response => response.json())
+            .then(data => addTodosToPage(data));
+    };
+</script>
+
+</body>
+</html>
